@@ -63,7 +63,7 @@ export function upRoleStatus(data: { id: string, isEnabled: boolean }) {
 // 获取菜单列表
 export function menuList(params?: AnyObj) {
   return request<Menu.Data[]>({
-    url: '/api/menu/treeList',
+    url: '/api/menu/list',
     method: 'get',
     params,
   });

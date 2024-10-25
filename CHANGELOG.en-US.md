@@ -1,5 +1,12 @@
 ## Changelog
 
+### 0.4.1
+
+#### Bug fixes
+
+- Fixed error messages in log files
+- Fixed wrong api address in role management
+
 ### 0.4.0
 
 _2024-10-24_
@@ -8,7 +15,7 @@ _2024-10-24_
 
 - Modify the file path of [ SearchMenu ]
 - Modify wildcard route `name` to `not-found`
--Upgrade project dependencies
+- Upgrade project dependencies
 - Split and optimize the `vite.config.ts` file
 
 #### New feature
