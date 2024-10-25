@@ -1,5 +1,12 @@
 ## Changelog
 
+### 0.4.1
+
+#### Bug fixes
+
+- Fixed error messages in log files
+- Fixed wrong api address in role management
+
 ### 0.4.0
 
 _2024-10-24_
