@@ -1,43 +1,32 @@
 <script setup lang="ts">
 import initVersionRocket from '@/config/versionRocket';
-import { Constant, elLocale } from '@/constants';
-import { useEventBus, useTheme } from '@/hooks';
-import { useAppStore, useRouteStore, useTabStore } from '@/stores';
-import { $t, setDocumentTitle } from '@/utils';
+import { elLocale } from '@/constants/locale';
+import { useTheme } from '@/hooks';
+import { useAppStore } from '@/stores';
+import { isEmbedded } from '@/utils';
 
 const appStore = useAppStore();
 
+// 配置 Element Plus 国际化
 const locale = computed(() => {
   return elLocale[appStore.locale];
 });
 
-const { initTheme } = useTheme();
-onMounted(initTheme);
-
-const tabStore = useTabStore();
-const routeStore = useRouteStore();
-const router = useRouter();
-const route = useRoute();
-
-// 监听语言变化
-const { on } = useEventBus();
-on(Constant.LOCALE_EVENT, async () => {
-  if (route.path === '/login') {
-    setDocumentTitle($t('page.login.title'));
-  }
-  else {
-    await routeStore.initAuthRoute();
-    await router.replace(route.fullPath);
-    tabStore.tabLocale();
-  }
-});
-
 // 初始化版本检测
 initVersionRocket();
+
+const { colorStore, colorMode, watchTheme } = useTheme();
+
+// 监听主题切换时更新主题色
+watch(colorMode, watchTheme);
+
+// 如果是嵌入式环境，强制使用浅色主题
+if (isEmbedded())
+  colorStore.value = 'light';
 </script>
 
 <template>
-  <el-config-provider :locale :size="appStore.size" :message="{ max: 1 }">
+  <el-config-provider :locale :size="appStore.size">
     <router-view />
   </el-config-provider>
 </template>

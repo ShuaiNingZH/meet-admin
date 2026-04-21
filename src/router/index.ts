@@ -1,69 +1,81 @@
 import type { App } from 'vue';
+import type { RouteRecordRaw } from 'vue-router';
+import { isEmpty } from 'lodash-es';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import NProgress from '@/config/nprogress';
-import { routes } from '@/router/routes.inner';
-import { useRouteStore, useTabStore, useUserStore } from '@/stores';
-import { $t, setDocumentTitle } from '@/utils';
-import { createRouter, createWebHistory } from 'vue-router';
+import remainingRouter from '@/router/modules/remainingRouter.ts';
+import { initRouter } from '@/router/utils.ts';
+import { useUserStore } from '@/stores';
+import { authorize, envJudge, setDocumentTitle } from '@/utils';
+
+// 加载所有模块路由，排除 remainingRouter.ts
+const modules: AnyObj = import.meta.glob(['./modules/*.ts', '!./modules/remainingRouter.ts'], {
+  eager: true,
+});
+
+// 路由数组
+const routes: RouteRecordRaw[] = [];
+
+// 遍历模块并添加到路由数组
+Object.keys(modules).forEach((key) => {
+  routes.push(modules[key].default);
+});
 
 export const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes,
+  history: createWebHashHistory(import.meta.env.BASE_URL),
+  routes: routes.concat(remainingRouter),
 });
 
 export async function installRouter(app: App) {
-  const routeStore = useRouteStore();
-  const tabStore = useTabStore();
-  const userStore = useUserStore();
+  router.beforeEach(async (to) => {
+    const userStore = useUserStore();
 
-  router.beforeEach(async (to, from, next) => {
     NProgress.start();
 
-    // 是否已经登录过
+    // 未登录，处理非登录页面重定向
     if (!userStore.accessToken) {
-      if (to.name === 'login') {
-        next();
+      // 如果是企业微信 PC 端，直接静默登录
+      if (envJudge() === 'com-wx-pc') {
+        const code = authorize();
+
+        if (!code)
+          return false;
+
+        await userStore.handleLogin(code);
+        // 登录成功后重新触发导航，让守卫走 initRouter 流程
+        return to.fullPath;
       }
       else {
-        next({ name: 'login' });
-      }
-      return false;
-    }
-
-    // 判断路由有无进行初始化
-    if (!routeStore.isInitAuthRoute) {
-      await routeStore.initAuthRoute();
-      // 初始化标签
-      tabStore.initTab();
-
-      // 动态路由加载完回到根路由
-      if (to.name === 'not-found') {
-        // 等待权限路由加载好了，回到之前的路由
-        next({
-          path: to.fullPath,
-          replace: true,
-          query: to.query,
-          hash: to.hash,
-        });
-        return false;
+        if (to.path !== '/login') {
+          return '/login';
+        }
+        return;
       }
     }
-    next();
-  });
+    // 已登录，访问登录页重定向到首页
+    if (to.path === '/login') {
+      return { path: import.meta.env.VITE_HOME_PATH };
+    }
 
-  router.beforeResolve((to) => {
-    // 设置菜单高亮
-    routeStore.setActiveMenu(to.meta.activeMenu || to.fullPath);
+    // 已登录，存在用户信息
+    if (!isEmpty(userStore.userInfo)) {
+      return;
+    }
 
-    // 添加 tag
-    tabStore.addTab(to);
-
-    // 设置当前激活的标签
-    tabStore.setCurrentTab(to.path);
+    // 用户信息为空，初始化路由
+    try {
+      await initRouter();
+    }
+    catch (error) {
+      console.error('初始化路由失败', error);
+      userStore.handleLogout();
+      return '/login';
+    }
   });
 
   router.afterEach((to) => {
     // 修改网页标题
-    setDocumentTitle(to.path === '/login' ? $t('page.login.title') : to.meta.title);
+    setDocumentTitle(to.meta.title);
 
     // 结束 NProgress
     NProgress.done();

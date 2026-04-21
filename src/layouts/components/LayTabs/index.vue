@@ -1,23 +1,38 @@
 <script setup lang="ts">
-import type { ContextMenuItem } from '@/components/AppDropdown/interface';
-import type { App } from '@/stores/app/types';
 import type { TabsPaneContext } from 'element-plus';
-import { navigationFailure } from '@/constants';
+import type { ContextMenuItem } from '@/components';
+import type { TabStyle } from '@/config/settings.ts';
+import type { TabsMenu } from '@/stores';
+import { navigationFailure } from '@/constants/router';
 import { useNotification } from '@/hooks';
 import { useAppStore, useTabStore } from '@/stores';
-import { $t } from '@/utils';
 
 defineOptions({ name: 'LayTabs' });
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
 const tabStore = useTabStore();
 const appStore = useAppStore();
 
-const tabsMenuValue = ref(tabStore.currentTabPath);
+const { tabs, currentTabPath } = storeToRefs(tabStore);
+const { initTab, addTab } = tabStore;
+
+onMounted(() => {
+  initTab();
+});
 
 watchEffect(() => {
-  tabsMenuValue.value = tabStore.currentTabPath;
+  currentTabPath.value = route.fullPath;
+  addTab({
+    icon: route.meta.icon!,
+    title: route.meta.title,
+    path: route.fullPath,
+    name: route.name as string,
+    keepAlive: route.meta.keepAlive!,
+    hideInTag: route.meta.hideInTag!,
+  });
 });
 
 const { notify } = useNotification();
@@ -25,8 +40,7 @@ const { notify } = useNotification();
 // 点击 tab 切换路由
 function tabClick(tabItem: TabsPaneContext) {
   const fullPath = tabItem.props.name as string;
-
-  if (fullPath === route.path)
+  if (fullPath === route.fullPath)
     return notify(navigationFailure());
 
   router.push(fullPath);
@@ -38,7 +52,7 @@ function tabRemove(name: (string | number)) {
 }
 
 // 判断是否可以关闭
-function isClosable(route: AppRoute.Route) {
+function isClosable(route: TabsMenu) {
   return route.path !== import.meta.env.VITE_HOME_PATH;
 }
 
@@ -49,11 +63,11 @@ const currentRoute = reactive({
 const contextmenuRef = ref();
 
 // 右击 tab 显示菜单
-function handleRightClickTab(e: MouseEvent, route: AppRoute.Route) {
+function handleRightClickTab(e: MouseEvent, route: TabsMenu) {
   Object.assign(currentRoute, route);
   contextmenuRef.value.onShowContextmenu(route, {
     x: e.clientX,
-    y: e.clientY,
+    y: e.clientY + 10,
   });
 }
 
@@ -70,6 +84,8 @@ function handleSelect(menuItem: ContextMenuItem) {
   actions[menuItem.key]();
 }
 
+const homePage = import.meta.env.VITE_HOME_PATH;
+
 // 右击菜单选项
 const options = computed(() => {
   const list: ContextMenuItem[] = [
@@ -80,7 +96,7 @@ const options = computed(() => {
     },
     {
       key: 'close',
-      show: currentRoute.path !== '/home',
+      show: currentRoute.path !== homePage,
       icon: 'icon-park-outline:close',
     },
     {
@@ -89,7 +105,7 @@ const options = computed(() => {
     },
     {
       key: 'closeLeft',
-      show: currentRoute.path !== '/home',
+      show: currentRoute.path !== homePage,
       icon: 'icon-park-outline:to-left',
     },
     {
@@ -105,8 +121,9 @@ const options = computed(() => {
   return list;
 });
 
+type TabMap = Record<TabStyle, string> & AnyObj;
 // 不同 tab 的样式
-const tabMap: Record<App.TabStyle, string> = {
+const tabMap: TabMap = {
   card: 'card-tab',
   dynamic: 'dynamic-tab',
   simple: 'simple-tab',
@@ -117,31 +134,31 @@ const tabClass = computed(() => tabMap[appStore.tabStyle]);
 <template>
   <div class="tabs-box" :class="tabClass">
     <div class="tabs-menu">
-      <el-tabs v-model="tabsMenuValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
+      <el-tabs v-model="currentTabPath" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane
-          v-for="item in tabStore.tabs" :key="item.path"
-          :label="item.meta.title" :name="item.path"
+          v-for="item of tabs" :key="item.path"
+          :label="item.title" :name="item.path"
           :closable="isClosable(item)"
         >
           <template #label>
             <div class="tabs-item" @contextmenu.prevent="handleRightClickTab($event, item)">
-              <app-icon v-if="item.meta.icon" class="tabs-icon" :icon="item.meta.icon" />
-              {{ item.meta.title }}
+              <app-icon v-if="item.icon" class="tabs-icon" :icon="item.icon" />
+              {{ item.title }}
             </div>
           </template>
         </el-tab-pane>
       </el-tabs>
     </div>
     <app-dropdown ref="contextmenuRef" v-slot="slotProps" :width="120" :items="options" @menu-click="handleSelect">
-      <span>{{ $t(`tab.${slotProps.item.key}`) }}</span>
+      <span>{{ t(`tab.${slotProps.item.key}`) }}</span>
     </app-dropdown>
   </div>
 </template>
 
 <style scoped lang="scss">
-@use "cardTab";
-@use "dynamicTab";
-@use "simpleTab";
+@use 'cardTab';
+@use 'dynamicTab';
+@use 'simpleTab';
 
 .tabs-box {
   .tabs-menu {

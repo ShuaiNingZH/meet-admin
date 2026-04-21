@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { localeList } from '@/constants';
+import { localeList } from '@/constants/locale';
 import { useAppStore } from '@/stores';
-import { $t } from '@/utils';
 
 defineOptions({ name: 'Locale' });
+
+const { t } = useI18n();
 
 const appStore = useAppStore();
 const { buttonTip } = storeToRefs(appStore);
@@ -14,7 +15,7 @@ const language = computed(() => appStore.locale);
 <template>
   <el-dropdown trigger="click" @command="appStore.setLocale">
     <span>
-      <el-tooltip :content="$t('tooltip.switchLocale')" placement="left" :disabled="!buttonTip">
+      <el-tooltip :content="t('tooltip.switchLocale')" placement="left" :disabled="!buttonTip">
         <div class="wrapper">
           <app-icon icon="ion:language" size="16" />
         </div>

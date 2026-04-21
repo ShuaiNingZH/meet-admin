@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { useRouteStore } from '@/stores';
-import { $t } from '@/utils';
 
 defineOptions({ name: 'SearchMenu' });
+
+const { t } = useI18n();
 
 const showModal = defineModel({
   type: Boolean,
   required: true,
 });
+
+const { VITE_HOME_PATH } = import.meta.env;
 
 const routeStore = useRouteStore();
 
@@ -18,7 +21,8 @@ const menuName = ref('');
 const getMenus = computed(() => {
   if (!menuName.value)
     return [];
-  return routeStore.rowRoutes.filter(item => item.title.includes(menuName.value));
+
+  return routeStore.searchMenus.filter(item => item.meta?.title.includes(menuName.value));
 });
 
 // 是否按下了上键或下键（用于解决和 mouseenter 事件的冲突）
@@ -79,12 +83,12 @@ function handleKeyUp() {
 
   if (index === 0) {
     // 获取最后一个菜单
-    activeMenuPath.value = getMenus.value[length - 1].path;
+    activeMenuPath.value = getMenus.value[length - 1]?.path ?? VITE_HOME_PATH;
     scrollTo(length - 1);
   }
   else {
     // 获取上一个菜单
-    activeMenuPath.value = getMenus.value[index - 1].path;
+    activeMenuPath.value = getMenus.value[index - 1]?.path ?? VITE_HOME_PATH;
     scrollTo(index - 1);
   }
 }
@@ -103,12 +107,12 @@ function handleKeyDown() {
 
   if (index === length - 1) {
     // 获取第一个菜单
-    activeMenuPath.value = getMenus.value[0].path;
+    activeMenuPath.value = getMenus.value[0]?.path ?? VITE_HOME_PATH;
     scrollTo(0);
   }
   else {
     // 获取下一个菜单
-    activeMenuPath.value = getMenus.value[index + 1].path;
+    activeMenuPath.value = getMenus.value[index + 1]?.path ?? VITE_HOME_PATH;
     scrollTo(index + 1);
   }
 }
@@ -152,7 +156,7 @@ registerShortcut();
       @closed="inputRef?.blur()"
     >
       <template #header>
-        <el-input ref="inputRef" v-model="menuName" :placeholder="$t('components.searchMenu.placeholder')" clearable>
+        <el-input ref="inputRef" v-model="menuName" :placeholder="t('components.searchMenu.placeholder')" clearable>
           <template #prefix>
             <app-icon icon="icon-park-outline:search" />
           </template>
@@ -160,27 +164,27 @@ registerShortcut();
       </template>
       <template v-if="getMenus.length">
         <div class="p-b-8 p-l-[var(--el-dialog-padding-primary)] text-[var(--el-color-primary)]">
-          {{ $t('components.searchMenu.result') }}
+          {{ t('components.searchMenu.result') }}
         </div>
         <el-scrollbar ref="scrollbarRef" view-class="p-(t-8 l-16 r-12 b-8)" max-height="400">
           <el-space style="width: 100%" :size="5" fill>
             <template v-for="item of getMenus" :key="item.path">
               <el-card
-                class="h-58 cursor-pointer"
+                class="cursor-pointer"
                 :class="{ 'menu-select': item.path === activeMenuPath }"
                 @mouseenter="onMouseenter(item.path)"
                 @click="handleKeyEnter"
               >
-                <div class="flex flex-justify-between">
-                  <span>{{ item.title }}</span>
+                <app-flex justify="space-between" align="center">
+                  <span>{{ item.meta?.title }}</span>
                   <app-icon v-show="item.path === activeMenuPath" icon="fluent:arrow-enter-left-24-regular" />
-                </div>
+                </app-flex>
               </el-card>
             </template>
           </el-space>
         </el-scrollbar>
       </template>
-      <el-empty v-else :description="$t('components.searchMenu.noData')" />
+      <el-empty v-else :description="t('components.searchMenu.noData')" />
       <template #footer>
         <el-space class="w-full" :size="15">
           <div class="flex-y-center">
@@ -190,13 +194,13 @@ registerShortcut();
             <div class="commands">
               k
             </div>
-            <span class="text-14">{{ $t('components.searchMenu.ctrl-k') }}</span>
+            <span class="text-14">{{ t('components.searchMenu.ctrl-k') }}</span>
           </div>
           <div class="flex-y-center">
             <div class="commands">
               <app-icon icon="fluent:arrow-enter-left-24-regular" />
             </div>
-            <span class="text-14">{{ $t('common.confirm') }}</span>
+            <span class="text-14">{{ t('common.confirm') }}</span>
           </div>
           <div class="flex-y-center">
             <div class="commands">
@@ -205,13 +209,13 @@ registerShortcut();
             <div class="commands">
               <app-icon icon="icon-park-outline:arrow-up" />
             </div>
-            <span class="text-14">{{ $t('common.switch') }}</span>
+            <span class="text-14">{{ t('common.switch') }}</span>
           </div>
           <div class="flex-y-center">
             <div class="commands">
               esc
             </div>
-            <span class="text-14">{{ $t('common.close') }}</span>
+            <span class="text-14">{{ t('common.close') }}</span>
           </div>
         </el-space>
       </template>
@@ -224,7 +228,8 @@ registerShortcut();
   :deep(.el-dialog) {
     padding: 0;
 
-    .el-dialog__header, .el-dialog__footer {
+    .el-dialog__header,
+    .el-dialog__footer {
       padding: var(--el-dialog-padding-primary);
     }
 

@@ -26,7 +26,7 @@
                 left: 0;
                 width: 0;
                 border-bottom: 2px solid var(--el-color-primary);
-                transition: width .2s ease;
+                transition: width 0.2s ease;
               }
 
               &:hover {
@@ -61,21 +61,21 @@
 
   @keyframes schedule-in-width {
     0% {
-      width: 0
+      width: 0;
     }
 
     to {
-      width: 100%
+      width: 100%;
     }
   }
 
   @keyframes schedule-out-width {
     0% {
-      width: 100%
+      width: 100%;
     }
 
     to {
-      width: 0
+      width: 0;
     }
   }
 }

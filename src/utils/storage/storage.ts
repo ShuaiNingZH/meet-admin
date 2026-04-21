@@ -1,19 +1,19 @@
 import localforage from 'localforage';
 
 export interface CreateStorageParams {
-  name: string
-  prefixKey: string
-  timeout: null | number
-  description: string
+  name: string;
+  prefixKey: string;
+  timeout: null | number;
+  description: string;
 }
 
 export function createStorage(params: CreateStorageParams) {
   const WebStorage = class {
     prefixKey: string;
-    store: typeof localforage;
+    store: LocalForage;
 
     constructor() {
-      this.prefixKey = params.prefixKey!;
+      this.prefixKey = params.prefixKey;
       this.store = localforage.createInstance({
         name: params.name,
         description: params.description,
@@ -35,7 +35,7 @@ export function createStorage(params: CreateStorageParams) {
       const stringData = JSON.stringify({
         value,
         time: Date.now(),
-        expire: expire ? new Date().getTime() + expire * 1000 : null,
+        expire: expire ? Date.now() + expire * 1000 : null,
       });
       return this.store.setItem(this.getKey(key), stringData);
     }
@@ -45,7 +45,7 @@ export function createStorage(params: CreateStorageParams) {
      * @param key 要获取数据的key
      * @param def 默认值
      */
-    async getItem<T = any>(key: string, def: any): Promise<T> {
+    async getItem<T = any>(key: string, def?: any): Promise<T> {
       try {
         const item = await this.store.getItem<string>(this.getKey(key));
 
@@ -53,7 +53,7 @@ export function createStorage(params: CreateStorageParams) {
         if (!item)
           return def;
 
-        const { value, expire }: { value: T, expire: number } = JSON.parse(item) || {};
+        const { value, expire }: { value: T; expire: number } = JSON.parse(item) || {};
 
         // 如果过期, 删除数据, 返回默认值
         if (expire && expire < Date.now()) {

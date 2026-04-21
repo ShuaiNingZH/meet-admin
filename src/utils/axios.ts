@@ -1,64 +1,73 @@
-import type { AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios';
-import { router } from '@/router';
-import { useUserStore } from '@/stores/user';
-import { $t, i18n } from '@/utils';
+import type {
+  AxiosRequestConfig,
+  AxiosResponse,
+  CreateAxiosDefaults,
+  InternalAxiosRequestConfig,
+} from 'axios';
 import axios from 'axios';
-import { ElLoading, ElMessage } from 'element-plus';
+import { isString } from 'lodash-es';
 import qs from 'qs';
+import { i18n } from '@/config/i18n.ts';
+import { router } from '@/router';
+import { useUserStore } from '@/stores';
+import { $t } from '@/utils';
 
 const pendingMap = new Map();
 let loading: any;
 let requestCount: number = 0;
 
-function createAxios<Data = any, T = AppAxios.ApiPromise<Data>>(axiosConfig: AxiosRequestConfig, options: AppAxios.Options = {}): T {
+function createAxios<Data = any, T = AppAxios.ApiPromise<Data>>(axiosConfig: AxiosRequestConfig, options?: AppAxios.Options): T {
   // 获取用户信息
   const userStore = useUserStore();
 
+  const { VITE_BASE_URL: baseURL } = import.meta.env;
+
   const serviceConfig: CreateAxiosDefaults = {
-    baseURL: '',
+    baseURL,
     timeout: 0,
     paramsSerializer: (params) => {
-      const filteredParams = Object.fromEntries(
-        Object.entries(params).filter(([_, value]) => value != null),
-      );
-      return qs.stringify(filteredParams, { arrayFormat: 'repeat' });
+      return qs.stringify(params, { arrayFormat: 'repeat' });
     },
   };
-  if (import.meta.env.MODE !== 'dev')
-    serviceConfig.baseURL = import.meta.env.VITE_BASE_URL;
 
   // 创建 axios
   const service = axios.create(serviceConfig);
 
   // 默认配置
-  const config: AppAxios.Options = {
+  options = Object.assign({
     cancelDuplicateRequest: true,
     loading: false,
-    loadingText: $t('axios.loadingText'),
     message: false,
-    messageText: '',
     showErrorMessage: true,
-  };
-
-  // 如果有传入配置，则合并配置，否则使用默认配置
-  options = Object.assign(config, options);
+  }, options);
 
   // 接口请求之前拦截
   service.interceptors.request.use(
     (config: InternalAxiosRequestConfig) => {
       // console.log(config, '请求拦截器');
-      removePending(config);
       // 取消重复请求
-      if (options.cancelDuplicateRequest)
+      if (options.cancelDuplicateRequest) {
+        removePending(config, true);
         addPending(config);
+      }
 
       // 显示 Loading
-      if (options.loading)
-        createLoading(options.loadingText);
+      if (options.loading) {
+        const loadingText = isString(options.loading) ? options.loading : $t('axios.loadingText');
+        createLoading(loadingText);
+      }
 
-      // 自动携带 token
+      // 自动携带参数
       if (userStore.accessToken) {
         config.headers.Authorization = `Bearer ${userStore.accessToken}`;
+
+        // 过滤空值参数
+        if (config.method === 'get' || config.method === 'delete') {
+          config.params = filterEmptyValues(config.params);
+        }
+        else {
+          config.data = filterEmptyValues(config.data);
+        }
       }
 
       // 自动携带当前语言
@@ -74,47 +83,46 @@ function createAxios<Data = any, T = AppAxios.ApiPromise<Data>>(axiosConfig: Axi
 
   // 接口请求响应后拦截
   service.interceptors.response.use(
-    async (response: AxiosResponse<any>) => {
+    async (response: AxiosResponse) => {
       // console.log(response, '响应拦截器');
       const { data, config } = response;
-      // 删除重复请求
       removePending(config);
       // 关闭loading
       if (options.loading)
         closeLoading();
 
       // 登录过期
-      if (data.code === 1) {
+      if (data.status === 401) {
+        userStore.handleLogout();
         await router.push('/login');
-        userStore.handleReset();
         ElMessage.error({
           message: data.message,
         });
         return Promise.reject(data);
       }
 
-      // 提示错误信息
-      if (data.code !== 200) {
-        ElMessage.error({
-          message: data.message,
-          duration: 5000,
-        });
-        // 不等于 0 时, 页面中具体逻辑不执行
+      // 处理新会员接口返回状态码
+      if (data.status && data.status !== 200) {
+        // 错误提示
+        ElMessage.error(data.message);
         return Promise.reject(data);
       }
 
       // 是否需要提示
       if (options.message) {
         // 自定义消息提示权重大于接口返回消息提示
-        const message = options.messageText ? options.messageText : data.message;
-        ElMessage.success(message);
+        const messageText = isString(options.message) ? options.message : data.message;
+        ElMessage.success(messageText);
       }
 
       return data;
     },
-    (error) => {
+    async (error) => {
       // console.log(error, '响应错误拦截器');
-      // 删除重复请求
+      // 取消的请求静默忽略，不走错误处理
+      if (error.name === 'CanceledError')
+        return new Promise(() => {});
+
       if (error.config)
         removePending(error.config);
 
@@ -136,6 +144,54 @@ function createAxios<Data = any, T = AppAxios.ApiPromise<Data>>(axiosConfig: Axi
 export default createAxios;
 
 /**
+ * 过滤对象中的空值
+ * @param obj 需要过滤的对象
+ * @returns 过滤后的对象
+ */
+function filterEmptyValues(obj: any): any {
+  // FormData 特殊处理
+  if (obj instanceof FormData) {
+    const newFormData = new FormData();
+    obj.forEach((value, key) => {
+      // 过滤 null、undefined、空字符串
+      if (value !== null && value !== undefined && value !== '') {
+        newFormData.append(key, value);
+      }
+    });
+    return newFormData;
+  }
+
+  // 其他特殊对象类型直接返回（File、Blob 等）
+  if (obj instanceof File || obj instanceof Blob || obj instanceof Date) {
+    return obj;
+  }
+
+  if (!obj || typeof obj !== 'object') {
+    return obj;
+  }
+
+  const result: any = Array.isArray(obj) ? [] : {};
+
+  for (const key in obj) {
+    const value = obj[key];
+
+    // 过滤条件：null、undefined、空字符串
+    // 保留：0、false、空数组、空对象
+    if (value !== null && value !== undefined && value !== '') {
+      // 如果是对象或数组，递归处理
+      if (typeof value === 'object') {
+        result[key] = filterEmptyValues(value);
+      }
+      else {
+        result[key] = value;
+      }
+    }
+  }
+
+  return result;
+}
+
+/**
  * 获取每个请求唯一的key
  */
 function getPendingKey(config: InternalAxiosRequestConfig) {
@@ -147,27 +203,26 @@ function getPendingKey(config: InternalAxiosRequestConfig) {
 }
 
 /**
- * 储存每个请求唯一值, 也就是 cancel() 方法, 用于取消请求
+ * 储存每个请求唯一值, 用于取消重复请求
  */
 function addPending(config: InternalAxiosRequestConfig) {
   const pendingKey = getPendingKey(config);
-  config.cancelToken
-    = config.cancelToken
-    || new axios.CancelToken((cancel) => {
-      if (!pendingMap.has(pendingKey)) {
-        pendingMap.set(pendingKey, cancel);
-      }
-    });
+  if (!pendingMap.has(pendingKey)) {
+    const controller = new AbortController();
+    config.signal = controller.signal;
+    pendingMap.set(pendingKey, controller);
+  }
 }
 
 /**
- * 删除重复的请求
+ * 删除请求记录，abort 为 true 时同时取消请求
  */
-function removePending(config: InternalAxiosRequestConfig) {
+function removePending(config: InternalAxiosRequestConfig, abort = false) {
   const pendingKey = getPendingKey(config);
-  if (pendingMap.get(pendingKey)) {
-    const cancelToken = pendingMap.get(pendingKey);
-    cancelToken(pendingKey);
+  if (pendingMap.has(pendingKey)) {
+    if (abort) {
+      pendingMap.get(pendingKey).abort();
+    }
     pendingMap.delete(pendingKey);
   }
 }
@@ -181,8 +236,8 @@ function createLoading(text?: string) {
       text,
       background: 'rgba(0, 0, 0, 0.7)',
     });
-    requestCount++;
   }
+  requestCount++;
 }
 
 /**
@@ -198,9 +253,6 @@ function closeLoading() {
  * 处理异常
  */
 function httpErrorStatusHandle(error: any) {
-  // 处理被取消的请求
-  if (axios.isCancel(error))
-    return console.error(`${$t('axios.errorStatus.cancel')}${error.message}`);
   let message = '';
   if (error && error.response) {
     switch (error.response.status) {

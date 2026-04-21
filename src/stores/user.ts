@@ -1,41 +1,40 @@
-import { userInfo } from '@/api';
+import { fetchUserInfo, login } from '@/api';
 import { useReset } from '@/hooks';
-
-interface UserSate {
-  userInfo: {
-    menus: AppRoute.RowRoute[]
-  }
-  accessToken: string
-}
+import { useTabStore } from '@/stores';
 
 export const useUserStore = defineStore('user-store', () => {
-  const [state, reset] = useReset<UserSate>({
-    userInfo: {
-      menus: [],
-    },
-    accessToken: '',
+  const [state, reset] = useReset({
+    userInfo: {} as AnyObj,
   });
 
-  // 设置 token
-  const setToken = (token: string) => {
-    state.value.accessToken = token;
+  const accessToken = useStorage('access-token', '');
+
+  // 登录获取 token
+  const handleLogin = async (code: string) => {
+    const res = await login(code);
+    accessToken.value = res.data.token;
   };
 
   // 获取用户信息
   const getUserInfo = async () => {
-    const res = await userInfo();
+    const res = await fetchUserInfo();
     state.value.userInfo = res.data;
-    return res;
+  };
+
+  // 退出登录
+  const handleLogout = () => {
+    const tabStore = useTabStore();
+
+    reset();
+    accessToken.value = '';
+    tabStore.handleReset();
   };
 
   return {
     ...toRefs(state.value),
-    setToken,
+    accessToken,
     getUserInfo,
-    handleReset: reset,
+    handleLogout,
+    handleLogin,
   };
-}, {
-  persist: {
-    pick: ['accessToken'],
-  },
 });

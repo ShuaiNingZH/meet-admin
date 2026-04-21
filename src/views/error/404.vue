@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { $t } from '@/utils';
-
 defineOptions({ name: '404' });
 
+const { t } = useI18n();
 const router = useRouter();
 
 // 跳转首页, 并清空历史记录
@@ -12,31 +11,31 @@ function backToHome() {
 </script>
 
 <template>
-  <div class="main-content">
+  <div class="main-container">
     <img alt="404" class="pic-404" src="@/assets/images/404-Error-amico.svg">
     <div class="bullshit">
       <div class="bullshit__oops">
-        {{ $t('page.404.title') }}
+        {{ t('page.404.title') }}
       </div>
       <div class="bullshit__info">
-        {{ $t('page.404.subtitle') }}
+        {{ t('page.404.subtitle') }}
         <a style="color: #20a0ff" href="https://blog.wjp.plus" target="_blank">Meet you</a>
       </div>
       <div class="bullshit__headline">
-        {{ $t('page.404.content') }}
+        {{ t('page.404.content') }}
       </div>
       <div class="bullshit__info">
-        {{ $t('page.404.info') }}
+        {{ t('page.404.info') }}
       </div>
       <el-button type="primary" round @click="backToHome">
-        {{ $t('page.404.button') }}
+        {{ t('page.404.button') }}
       </el-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.main-content {
+.main-container {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
@@ -106,11 +105,11 @@ function backToHome() {
 
   @keyframes slideUpImage {
     0% {
-      transform: translateY(30px);  // 从下往上
+      transform: translateY(30px); // 从下往上
       opacity: 0;
     }
     100% {
-      transform: translateY(0);  // 正常位置
+      transform: translateY(0); // 正常位置
       opacity: 1;
     }
   }

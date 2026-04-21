@@ -8,11 +8,13 @@ common:
   list: 列表
   query: 查询
   expand: 展开
+  packUp: 收起
   merge: 合并
   cancel: 取消
   save: 保存
   sure: 确定
   kindTips: 温馨提示
+  operating: 操作
   operationFailed: 操作失败
   saveLoading: 保存中，请稍等...
   deleteLoading: 删除中，请稍等...
@@ -21,6 +23,9 @@ common:
   confirm: 确认
   switch: 切换
   close: 关闭
+  edit: 编辑
+  delete: 删除
+  preview: 预览
 page:
   login:
     title: 登录
@@ -66,9 +71,25 @@ components:
     noData: 暂无数据
     result: 搜索结果
     ctrl-k: 切换搜索面板
+  upload:
+    closeTip: 按 delete 键可删除
+    clickToUpload: 点击上传
+    filesTip:
+      size: 可同时上传多个文件，每个文件大小不超过
+      type: 支持的文件类型：
+      format: 任意格式
+      dragAndDropUpload: 将文件拖放到此处或
+      clickToUpload: 点击上传
+    imageTip:
+      support: 支持上传
+      format: 格式的图片
+      size: 图片大小不超过
+      dragAndDropUpload: 将图片拖放到此处或
+      clickToUpload: 请上传图片
 hooks:
   confirm:
     whether: 是否
+    cancelled: 已取消
   table:
     index: 序号
     selection: 勾选

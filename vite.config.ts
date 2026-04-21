@@ -13,21 +13,9 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    base: './',
     server: {
-      host: '0.0.0.0',
-      proxy: {
-        '/api': {
-          target: env.VITE_BASE_URL,
-          changeOrigin: true,
-        },
-      },
-    },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
-      },
+      host: true,
     },
   };
 });

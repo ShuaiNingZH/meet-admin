@@ -11,10 +11,10 @@ const appStore = useAppStore();
 <template>
   <el-breadcrumb class="flex-center" :separator-icon="renderIcon('ArrowRight')">
     <transition-group name="breadcrumb">
-      <el-breadcrumb-item v-for="item of routeStore.breadcrumbs" :key="item.key" :to="item.key">
+      <el-breadcrumb-item v-for="item of routeStore.breadcrumbs" :key="item!.path" :to="item">
         <app-flex class="whitespace-nowrap" :size="5" align="center">
-          <app-icon v-if="appStore.breadcrumbIconShow && item.icon" :icon="item.icon" :size="16" />
-          {{ item.label }}
+          <app-icon v-if="appStore.breadcrumbIconShow && item!.meta?.icon" :icon="item!.meta!.icon" :size="16" />
+          {{ item!.meta!.title }}
         </app-flex>
       </el-breadcrumb-item>
     </transition-group>

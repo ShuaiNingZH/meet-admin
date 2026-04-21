@@ -1,5 +1,3 @@
-import { ElMessage } from 'element-plus';
-
 /**
  * @description hex颜色转rgb颜色
  * @param str 颜色值字符串

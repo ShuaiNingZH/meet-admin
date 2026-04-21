@@ -4,8 +4,8 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 
 // import piniaPluginPersist from 'pinia-plugin-persist'
 
-export * from './app/index';
-export * from './route/index';
+export * from './app';
+export * from './route';
 export * from './tab';
 export * from './user';
 

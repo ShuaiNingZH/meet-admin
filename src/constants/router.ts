@@ -1,4 +1,6 @@
-import type { NotificationParamsTyped } from 'element-plus/es/components/notification/src/notification';
+import type {
+  NotificationParamsTyped,
+} from 'element-plus/es/components/notification/src/notification';
 import { $t } from '@/utils';
 
 export function navigationFailure(): NotificationParamsTyped {

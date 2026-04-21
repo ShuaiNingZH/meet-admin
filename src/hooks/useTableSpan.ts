@@ -1,5 +1,5 @@
-import { areObjectsEqualForKeys } from '@/utils';
 import { ref } from 'vue';
+import { areObjectsEqualForKeys } from '@/utils';
 
 /**
  * 使用 Vue 的 ref 响应式引用来存储行合并信息。
@@ -22,17 +22,19 @@ export function useTableSpan() {
         currentRow = 0;
       }
       else {
-        const isSameRow = typeof keys === 'string'
-          ? item[keys] === data[index - 1][keys]
-          : areObjectsEqualForKeys(item, data[index - 1], keys);
+        const rowItem = data[index - 1];
 
-        if (isSameRow) {
-          spanList.value[currentRow]++;
-          spanList.value.push(0);
-        }
-        else {
-          spanList.value.push(1);
-          currentRow = index;
+        if (rowItem) {
+          const isSameRow = typeof keys === 'string' ? item[keys] === rowItem[keys] : areObjectsEqualForKeys(item, rowItem, keys);
+
+          if (isSameRow) {
+            spanList.value[currentRow] = (spanList.value[currentRow] ?? 0) + 1;
+            spanList.value.push(0);
+          }
+          else {
+            spanList.value.push(1);
+            currentRow = index;
+          }
         }
       }
     });
@@ -40,7 +42,7 @@ export function useTableSpan() {
     // 计算表格序号 rowIndex，只有在 spanList 中的值大于 0 的情况下递增
     let rowIndex = 1;
     data.forEach((item, index) => {
-      if (spanList.value[index] > 0) {
+      if (spanList.value[index] && spanList.value[index] > 0) {
         item.rowIndex = rowIndex++;
       }
     });

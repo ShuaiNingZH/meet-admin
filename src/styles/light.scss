@@ -1,0 +1,13 @@
+html.light {
+  //侧边栏展开按钮
+  --app-bezier: cubic-bezier(0.4, 0, 0.2, 1);
+  --app-toggle-bar-color: rgba(191, 191, 191, 1);
+  --app-toggle-bar-color-hover: rgba(153, 153, 153, 1);
+  // 侧边栏菜单
+  --el-menu-bg-color: var(--el-color-white);
+  --el-menu-hover-bg-color: #ebedf0;
+  --el-menu-text-color: var(--el-text-color-primary);
+  --el-menu-hover-text-color: var(--el-text-color-primary);
+  --el-menu-active-color: var(--el-color-primary);
+  --el-menu-active-bg-color: var(--el-color-primary-light-9);
+}

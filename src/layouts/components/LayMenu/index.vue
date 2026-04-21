@@ -5,15 +5,21 @@ import { useAppStore, useRouteStore } from '@/stores';
 
 defineOptions({ name: 'LayMenu' });
 
-const routeStore = useRouteStore();
-const { activeMenu, menus } = storeToRefs(routeStore);
-
+const route = useRoute();
 const router = useRouter();
 
 const appStore = useAppStore();
 const { collapse } = storeToRefs(appStore);
 
 const name = import.meta.env.VITE_APP_NAME;
+
+const routeStore = useRouteStore();
+const { menus } = storeToRefs(routeStore);
+
+// 默认选中的菜单
+const defaultActive = computed<string>(() =>
+  route.meta?.activeMenu ? (route.meta.activeMenu) : route.path,
+);
 </script>
 
 <template>
@@ -26,7 +32,7 @@ const name = import.meta.env.VITE_APP_NAME;
       <el-menu
         class="!b-r-0"
         :collapse
-        :default-active="activeMenu"
+        :default-active="defaultActive"
         :collapse-transition="false"
         unique-opened
       >
@@ -48,7 +54,7 @@ const name = import.meta.env.VITE_APP_NAME;
   color: var(--el-menu-text-color);
   background-color: var(--el-menu-bg-color);
   border-right: 1px solid var(--el-border-color);
-  transition: width .3s ease;
+  transition: width 0.3s ease;
 
   .logo {
     height: 55px;
@@ -66,6 +72,12 @@ const name = import.meta.env.VITE_APP_NAME;
 
     .el-menu {
       width: 100%;
+      --el-menu-item-height: 50px;
+      --el-menu-item-font-size: var(--el-font-size-medium);
+
+      :deep(.el-text) {
+        --el-text-font-size: var(--el-font-size-medium);
+      }
     }
   }
 
@@ -78,7 +90,8 @@ const name = import.meta.env.VITE_APP_NAME;
     right: -28px;
 
     &:hover {
-      .aside-toggle-bar-top,.aside-toggle-bar-bottom  {
+      .aside-toggle-bar-top,
+      .aside-toggle-bar-bottom {
         background-color: var(--app-toggle-bar-color-hover);
       }
 
@@ -90,13 +103,16 @@ const name = import.meta.env.VITE_APP_NAME;
       }
     }
 
-    &-top,&-bottom {
+    &-top,
+    &-bottom {
       position: absolute;
       width: 4px;
       border-radius: 2px;
       height: 38px;
       left: 14px;
-      transition: background-color .3s var(--app-bezier), transform .3s var(--app-bezier);
+      transition:
+        background-color 0.3s var(--app-bezier),
+        transform 0.3s var(--app-bezier);
       background-color: var(--app-toggle-bar-color);
     }
 

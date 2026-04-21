@@ -8,11 +8,13 @@ common:
   list: List
   query: Query
   expand: Expand
+  packUp: Pack up
   merge: Merge
   cancel: Cancel
   save: Save
   sure: Sure
   kindTips: Kind tips
+  operating: Operating
   operationFailed: Operation failed
   saveLoading: Saving please wait...
   deleteLoading: Deleting please wait....
@@ -21,6 +23,9 @@ common:
   confirm: Confirm
   switch: Switch
   close: Close
+  edit: Edit
+  delete: Delete
+  preview: Preview
 page:
   login:
     title: Login
@@ -66,15 +71,31 @@ components:
     noData: No data yet
     result: Search results
     ctrl-k: Toggle search panel
+  upload:
+    closeTip: Press delete to remove
+    clickToUpload: click to upload
+    filesTip:
+      size: Multiple files can be uploaded at the same time，and the size of each file does not exceed
+      type: supported file types：
+      format: any format
+      dragAndDropUpload: 'Drag and drop files here or '
+      clickToUpload: Click to upload
+    imageTip:
+      support: Support upload
+      format: format image
+      size: image size should not exceed
+      dragAndDropUpload: 'Drag and drop image here or '
+      clickToUpload: Please upload image
 hooks:
   confirm:
     whether: Whether
+    cancelled: Cancelled
   table:
     index: Index
     selection: Selection
     expand: Expand
   theme:
-    reset: " has been reset to"
+    reset: ' has been reset to'
 tooltip:
   refreshPage: Refresh Page
   menuQuery: Menu Query

@@ -1,0 +1,34 @@
+.app-icon-popup {
+  .el-dialog__body {
+    .el-scrollbar {
+      .dialog-scrollbar-view {
+        padding: 10px 5px 10px 10px !important;
+
+        .el-tabs {
+          --el-tabs-header-height: 30px;
+
+          .el-tabs__header {
+            .el-tabs__nav-wrap {
+              &.is-scrollable {
+                padding: 25px 0;
+
+                .el-tabs__nav-prev,
+                .el-tabs__nav-next {
+                  height: 25px;
+                  line-height: 25px;
+                }
+                .el-tabs__nav-scroll {
+                  .el-tabs__nav {
+                    .el-tabs__item {
+                      padding: 0 10px 0 0;
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,9 +6,10 @@ import ThemeSwitch from '@/layouts/components/LayHeader/components/ThemeSwitch.v
 import SearchMenu from '@/layouts/components/LayMenu/components/SearchMenu.vue';
 import LaySettings from '@/layouts/components/LaySettings/index.vue';
 import { useAppStore } from '@/stores';
-import { $t } from '@/utils';
 
 defineOptions({ name: 'LayHeader' });
+
+const { t } = useI18n();
 
 const appStore = useAppStore();
 const { loadFlag, breadcrumbShow, fullscreen, buttonTip } = storeToRefs(appStore);
@@ -25,11 +26,13 @@ const isShowBreadcrumb = ref(true);
 // 监听窗口大小, 自动隐藏右侧按钮
 const isShowRight = ref(true);
 
-watch(width, useDebounceFn(() => {
-  isShowBreadcrumb.value = width.value > 768;
-  isShowRight.value = width.value > 405;
-}, 100), {
-  immediate: true,
+const debouncedUpdate = useDebounceFn((width: number) => {
+  isShowBreadcrumb.value = width > 768;
+  isShowRight.value = width > 405;
+}, 100);
+
+watchEffect(() => {
+  debouncedUpdate(width.value).then();
 });
 </script>
 
@@ -37,7 +40,7 @@ watch(width, useDebounceFn(() => {
   <app-flex class="p-[5px_10px] border-b" justify="space-between" align="center">
     <!-- 左侧 -->
     <app-flex class="overflow-hidden" :size="5" align="center">
-      <el-tooltip :content="$t('tooltip.refreshPage')" :disabled="!buttonTip">
+      <el-tooltip :content="t('tooltip.refreshPage')" :disabled="!buttonTip">
         <div class="wrapper" @click="appStore.reloadPage()">
           <app-icon :class="loadFlag ? '' : 'is-loading'" icon="icon-park-outline:refresh" />
         </div>
@@ -47,13 +50,13 @@ watch(width, useDebounceFn(() => {
     <!-- 右侧 -->
     <app-flex :size="5" align="center">
       <template v-if="isShowRight">
-        <el-tooltip :content="$t('tooltip.menuQuery')" :disabled="!buttonTip">
+        <el-tooltip :content="t('tooltip.menuQuery')" :disabled="!buttonTip">
           <div class="wrapper" @click="handleSearchMenu">
             <app-icon icon="icon-park-outline:search" />
           </div>
         </el-tooltip>
         <Locale />
-        <el-tooltip :content="$t('tooltip.toggleFullScreen')" :disabled="!buttonTip">
+        <el-tooltip :content="t('tooltip.toggleFullScreen')" :disabled="!buttonTip">
           <div class="wrapper" @click="appStore.toggleFullScreen">
             <app-icon v-if="fullscreen" icon="icon-park-outline:off-screen-one" />
             <app-icon v-else icon="icon-park-outline:full-screen-one" />

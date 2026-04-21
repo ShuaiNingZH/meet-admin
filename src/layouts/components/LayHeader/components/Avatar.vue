@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { useTabStore, useUserStore } from '@/stores';
-import { renderIcon } from '@/utils';
-import { ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
+import { useUserStore } from '@/stores';
+import { renderIcon } from '@/utils';
 
 defineOptions({ name: 'Avatar' });
 
 const router = useRouter();
 const { t } = useI18n();
 const userStore = useUserStore();
-const tabStore = useTabStore();
 
 function handleSelect(val: string) {
   if (val === 'loginOut') {
@@ -18,17 +16,16 @@ function handleSelect(val: string) {
       cancelButtonText: t('confirm.cancel'),
       type: 'warning',
     }).then(async () => {
+      userStore.handleLogout();
       await router.push('/login');
-      userStore.handleReset();
-      tabStore.handleReset();
     });
   }
 }
 </script>
 
 <template>
-  <el-dropdown trigger="click" @command="handleSelect">
-    <el-avatar class="cursor-pointer" round src="https://avatars.githubusercontent.com/u/54931083?v=4" alt="头像" />
+  <el-dropdown trigger="click" :disabled="true" @command="handleSelect">
+    <el-avatar class="cursor-pointer" round :src="userStore.userInfo.avatar" alt="头像" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

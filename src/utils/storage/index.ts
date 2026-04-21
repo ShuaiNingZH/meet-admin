@@ -1,5 +1,5 @@
-import type { CreateStorageParams } from '@/utils/storage/storage';
-import { createStorage } from '@/utils/storage/storage';
+import type { CreateStorageParams } from './storage';
+import { createStorage } from './storage';
 
 type OptionType = Optional<CreateStorageParams, 'name' | 'description'>;
 

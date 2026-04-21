@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { MenuItemRegistered } from 'element-plus';
-import { navigationFailure } from '@/constants';
+import type { RouteRecordRaw } from 'vue-router';
+import { navigationFailure } from '@/constants/router';
 import { useNotification } from '@/hooks';
 
 defineOptions({ name: 'SubMenu' });
-defineProps<{ menuList: AppRoute.Menu[] }>();
+defineProps<{ menuList: RouteRecordRaw[] }>();
 
 const router = useRouter();
 const route = useRoute();
@@ -13,7 +14,7 @@ const { notify } = useNotification();
 
 // 点击菜单切换路由
 function handleClickMenu(item: MenuItemRegistered) {
-  if (item.index === route.path)
+  if (item.index === route.fullPath)
     return notify(navigationFailure());
 
   if (item.index) {
@@ -23,21 +24,21 @@ function handleClickMenu(item: MenuItemRegistered) {
 </script>
 
 <template>
-  <template v-for="menu of menuList" :key="menu.key">
-    <el-sub-menu v-if="menu.children" :index="menu.key">
+  <template v-for="menu of menuList" :key="menu.path">
+    <el-sub-menu v-if="menu.children?.length" :index="menu.path">
       <template #title>
-        <app-icon v-if="menu.icon" :icon="menu.icon" :size="20" />
-        <app-text truncated :offset="-5" placement="top">
-          {{ menu.label }}
+        <app-icon v-if="menu.meta?.icon" :icon="menu.meta.icon" :size="20" />
+        <app-text class="color-unset">
+          {{ menu.meta!.title }}
         </app-text>
       </template>
       <SubMenu :menu-list="menu.children" />
     </el-sub-menu>
-    <el-menu-item v-else :index="menu.key" @click="handleClickMenu">
-      <app-icon v-if="menu.icon" :icon="menu.icon" :size="20" />
+    <el-menu-item v-else :index="menu.path" @click="handleClickMenu">
+      <app-icon v-if="menu.meta?.icon" :icon="menu.meta.icon" :size="20" />
       <template #title>
-        <app-text truncated :offset="-5" placement="top">
-          {{ menu.label }}
+        <app-text class="color-unset">
+          {{ menu.meta!.title }}
         </app-text>
       </template>
     </el-menu-item>
@@ -69,7 +70,7 @@ function handleClickMenu(item: MenuItemRegistered) {
       left: 0;
       bottom: 0;
       width: 4px;
-      content: "";
+      content: '';
       background-color: var(--el-color-primary);
     }
   }

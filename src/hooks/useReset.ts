@@ -15,19 +15,31 @@ import { cloneDeep } from 'lodash-es';
  * value.value.foo = 'baz'; // 修改值
  * resetValue(); // 将值重置为 { foo: 'bar' }
  */
-export function useReset<T>(val: T): [Ref<T>, () => void] {
+export function useReset<T extends Record<string, any>>(val: T): [Ref<T>, () => void] {
   const _val = cloneDeep(val); // 保持深拷贝的初始状态
-  const res = ref<T>(val); // 使用深拷贝初始化 ref
+  const state = ref<T>(val); // 使用 reactive 来保持响应式状态
 
   // 重置为深拷贝的初始状态
   function reset() {
-    if (res.value !== null && typeof res.value === 'object') {
-      Object.assign(res.value, cloneDeep(_val));
+    // 如果是对象或数组（即非基本类型）
+    if (typeof _val === 'object' && _val !== null) {
+      const keys = Object.keys(_val); // 获取对象的键
+      keys.forEach((key) => {
+        state.value[key] = cloneDeep(_val[key]);
+      });
+
+      // 删除 state 中多余的属性, 防止出现多余的属性
+      for (const key in state.value) {
+        if (!keys.includes(key)) {
+          delete state.value[key];
+        }
+      }
     }
     else {
-      res.value = cloneDeep(_val);
+      // 如果是基本类型，直接重置为初始值
+      state.value = _val; // 直接赋值
     }
   }
 
-  return [res as Ref<T>, reset];
+  return [state as Ref<T>, reset];
 }
