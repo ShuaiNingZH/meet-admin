@@ -58,13 +58,13 @@
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@unocss/reset": "^66.6.8",
-    "@vue/shared": "^3.5.32",
-    "@vueuse/core": "^14.2.1",
+    "@vue/shared": "^3.5.33",
+    "@vueuse/core": "^14.3.0",
     "@wangeditor-next/editor": "^5.7.0",
     "@wangeditor-next/editor-for-vue": "^5.1.14",
-    "@wecom/jssdk": "^2.3.4",
+    "@wecom/jssdk": "^2.4.0",
     "a-calc": "^3.0.0",
-    "axios": "^1.15.1",
+    "axios": "^1.16.0",
     "csstype": "^3.2.3",
     "dayjs": "^1.11.20",
     "echarts": "^6.0.0",
@@ -85,18 +85,18 @@
     "qs": "^6.15.1",
     "uuid": "^14.0.0",
     "version-rocket": "^1.7.4",
-    "vue": "^3.5.32",
+    "vue": "^3.5.33",
     "vue-draggable-plus": "^0.6.1",
-    "vue-i18n": "^11.3.2",
-    "vue-router": "^5.0.4"
+    "vue-i18n": "^11.4.0",
+    "vue-router": "^5.0.6"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^8.2.0",
-    "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/cli": "^20.5.3",
+    "@commitlint/config-conventional": "^20.5.3",
     "@iconify/types": "^2.0.0",
     "@iconify/vue": "^5.0.0",
-    "@intlify/unplugin-vue-i18n": "^11.0.7",
+    "@intlify/unplugin-vue-i18n": "^11.1.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/file-saver": "^2.0.7",
     "@types/lodash-es": "^4.17.12",
@@ -110,9 +110,9 @@
     "@vitejs/plugin-vue": "^6.0.6",
     "@vitejs/plugin-vue-jsx": "^5.1.5",
     "@vue/tsconfig": "^0.9.1",
-    "cz-git": "^1.12.0",
-    "czg": "^1.12.0",
-    "eslint": "^10.2.1",
+    "cz-git": "^1.13.0",
+    "czg": "^1.13.0",
+    "eslint": "^10.3.0",
     "eslint-plugin-format": "^2.0.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
@@ -122,12 +122,12 @@
     "unocss": "^66.6.8",
     "unplugin-auto-import": "^21.0.0",
     "unplugin-vue-components": "^32.0.0",
-    "vite": "^8.0.9",
+    "vite": "^8.0.10",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-vue-devtools": "^8.1.1",
     "vue-tsc": "^3.2.7"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,vue,mjs,cjs,cts,mts,json,jsonc,yaml,yml,css,scss,less,html}": "eslint --fix"
+    "*.{jsx,ts,tsx,vue,json,yaml,yml,scss,html}": "eslint --fix"
   }
 }
