@@ -4,52 +4,62 @@
 
 ### Introduction
 
-Meet-Admin is an open-source admin framework based on Vue 3.4, TypeScript, Vite 5, Pinia, and Element-Plus. It uses the latest technology stack. This project also wraps common components, hooks, directives, dynamic routing, and other features.
+Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vite 8, Pinia, and Element Plus. It uses the latest technology stack and ships with a set of pre-wrapped components, hooks, directives, layouts, and a fully typed Axios layer to help you start a back-office project quickly.
 
 ### Online preview
 
-- Link：https://admin.wjp.plus
+- Link: https://admin.wjp.plus
 
 ### Code repository
 
-- GitHub：https://github.com/wjp980108/meet-admin
+- GitHub: https://github.com/wjp980108/meet-admin
 
 ### Project documentation
 
-- Project update log：[CHANGELOG.en-US.md](./CHANGELOG.en-US)
+- Project changelog: [CHANGELOG.en-US.md](./CHANGELOG.en-US.md)
 
-- Project document address：https://docs.wjp.plus
+- Project documentation: https://docs.wjp.plus
 
-### Project function
+### Features
 
-- Developed using Vue3.4 + TypeScript, single file component**<script setup>**
-- Use Vite5 as project development and packaging tool (configuration of gzip/brotli packaging, tsx syntax, cross-domain proxy...)
-- Use Pinia to replace Vuex, lightweight, simple and easy to use, integrating Pinia persistence plug-in
-- Use TypeScript to encapsulate the entire Axios secondary package (request interception, cancellation, common request encapsulation...)
-- Supports Element component size switching, dark mode, and i18n internationalization
-- Use VueRouter to configure dynamic routing and lazy loading of routes
-- Use KeepAlive to cache pages and support multi-level nested route caching
-- Use husky, lint-staged, commitlint, czg, cz-git to standardize submission information
+- Vue 3.5 + TypeScript with `<script setup>` SFCs
+- Vite 8 toolchain (gzip / brotli compression, JSX/TSX support, dev proxy, vue-devtools, …)
+- Pinia 3 for state management with `pinia-plugin-persistedstate`
+- Element Plus 2.13 with on-demand component resolution and global size / dark-mode switching
+- UnoCSS (Wind3 preset + attributify + rem-to-px) with custom shortcuts and dynamic rules
+- Type-safe Axios wrapper: bearer-token injection, duplicate-request cancellation, optional loading overlay, auto success / error toasts, 401 handling, and payload sanitization
+- Auto-imports for `vue` / `vue-router` / `pinia` / `@vueuse/core` / `vue-i18n` and any `App*` component
+- Vue I18n internationalization (Chinese / English) with precompiled YAML locales
+- File-based routing modules with menu sorting, single-child collapsing, and `<keep-alive>` cache management
+- WeCom (企业微信) silent login via `@wecom/jssdk`
+- ECharts 6, wangEditor-next, vue-draggable-plus, GSAP, JsBarcode, QRCode, Print.js, file-saver, and other commonly used integrations
+- Conventional Commits enforced via husky + lint-staged + commitlint + cz-git (`pnpm commit`)
+- Strict ESLint rules powered by `@antfu/eslint-config` (with UnoCSS and CSS/HTML formatters)
 
-### Installation and usage steps
+### Requirements
 
-- **Clone：**
+- Node.js `>= 24` (see `.nvmrc`)
+- pnpm `>= 10`
 
-```text
+### Installation and usage
+
+- **Clone:**
+
+```bash
 # GitHub
 git clone https://github.com/wjp980108/meet-admin.git
 ```
 
-- **Install：**
+- **Install:**
 
-```text
+```bash
 pnpm install
 ```
 
-- **Run：**
+- **Run:**
 
-```text
-# development
+```bash
+# development (uses .env + .env.dev)
 pnpm dev
 
 # test
@@ -59,91 +69,105 @@ pnpm dev:test
 pnpm dev:prod
 ```
 
-- **Build：**
+- **Build:**
 
-```text
-# test
+```bash
+# test (runs type-check first)
 pnpm build:test
 
-# production
+# production (runs type-check first)
 pnpm build
 ```
 
-- **Lint：**
+- **Preview built dist:**
 
-```text
-# Eslint instrumentation code
+```bash
+pnpm preview
+```
+
+- **Type check:**
+
+```bash
+pnpm type-check
+```
+
+- **Lint:**
+
+```bash
+# check
 pnpm lint
 
-# Eslint fix code
+# auto-fix
 pnpm lint:fix
 ```
 
-- **commit：**
+- **Commit:**
 
-```text
-# Submit the code (the lint:lint-staged command will be automatically executed before submission)
+```bash
+# interactive Conventional Commits prompt (lint-staged runs in pre-commit hook)
 pnpm commit
 ```
 
-### File resource directory
+### Project structure
 
 ```text
 Meet-Admin
-├─ .github                 # GitHub configuration file
-├─ .husky                  # Husky configuration file
-├─ build                   # Vite configuration file
-├─ public                  # Static resource files (this folder will not be packaged)
+├─ .github                 # GitHub workflows and issue templates
+├─ .husky                  # Husky git hooks
+├─ build                   # Vite plugin configuration
+├─ public                  # Static assets (not processed by the bundler)
 ├─ src
-│  ├─ api                  # API interface management
-│  ├─ assets               # Static resource files
-│  ├─ components           # Global components
-│  ├─ config               # Global configuration items
-│  ├─ constants            # Global constants
-│  ├─ directives           # Global directive file
-│  ├─ hooks                # Commonly used Hooks packages
-│  ├─ locales              # Language internationalization i18n
-│  ├─ layouts              # Frame layout module
-│  ├─ router               # Route management
-│  ├─ stores               # Pinia store
-│  ├─ styles               # Global style file
-│  ├─ typings              # Global ts declaration
-│  ├─ utils                # Commonly used tool library
-│  ├─ views                # All project pages
-│  ├─ App.vue              # Project main component
-│  └─ main.ts              # Project entry file
-├─ .env                    # Vite common configuration
-├─ .env.dev                # Development environment configuration
-├─ .env.prod               # Production environment configuration
-├─ .env.test               # Test environment configuration
-├─ .gitignore              # Ignore git commits
-├─ .nvmdrc                 # Node version management configuration
-├─ CHANGELOG.en-US.md      # Project update log (English)
-├─ CHANGELOG.zh-CN.md      # Project update log (Chinese)
-├─ commitlint.config.js    # Git commit specification configuration
-├─ eslint.config.js        # Eslint configuration file
-├─ index.html              # Entry html
-├─ LICENSE                 # Open source agreement document
-├─ package.json            # Dependency package management
-├─ pnpm-lock.yaml          # Pnpm dependency management
-├─ README.md               # README introduction
-├─ README.zh-CN.md         # README introduction (Chinese)
-├─ tsconfig.json           # Typescript global configuration
-├─ uno.config.ts           # UnoCss configuration file
-└─ vite.config.ts          # Vite global configuration file
+│  ├─ api                  # API request modules
+│  ├─ assets               # Static assets bundled by Vite
+│  ├─ components           # Global App* components (auto-imported)
+│  ├─ config               # Per-library setup (Element Plus, i18n, dayjs, echarts, …)
+│  ├─ constants            # Shared constants
+│  ├─ directives           # Global custom directives
+│  ├─ enums                # Shared enums (regex, common, …)
+│  ├─ hooks                # Reusable composables
+│  ├─ layouts              # Layout shell and sub-modules
+│  ├─ locales              # i18n YAML resources (precompiled)
+│  ├─ router               # Route entry, modules, and helpers
+│  ├─ stores               # Pinia stores
+│  ├─ styles               # Global styles (light/dark, Element Plus overrides)
+│  ├─ typings              # Ambient TS declarations
+│  ├─ utils                # Utility library (axios, storage, color, date, …)
+│  ├─ views                # Page components
+│  ├─ App.vue              # Root component
+│  └─ main.ts              # App entry
+├─ .editorconfig           # EditorConfig
+├─ .env                    # Shared Vite env defaults
+├─ .env.dev                # Development env
+├─ .env.prod               # Production env
+├─ .env.test               # Test env
+├─ .gitignore              # Git ignore rules
+├─ .nvmrc                  # Node version pin
+├─ CHANGELOG.en-US.md      # Changelog (English)
+├─ CHANGELOG.zh-CN.md      # Changelog (Chinese)
+├─ commitlint.config.ts    # Conventional Commits configuration
+├─ eslint.config.ts        # ESLint flat config
+├─ index.html              # HTML entry
+├─ LICENSE                 # MIT license
+├─ package.json            # Package manifest
+├─ pnpm-lock.yaml          # pnpm lockfile
+├─ README.md               # README (English)
+├─ README.zh-CN.md         # README (Chinese)
+├─ tsconfig.json           # TypeScript project references
+├─ tsconfig.app.json       # TS config for app code (with @/* alias)
+├─ tsconfig.node.json      # TS config for build/Node tooling
+├─ uno.config.ts           # UnoCSS configuration
+└─ vite.config.ts          # Vite configuration
 ```
 
 ### Browser support
 
-- For local development, it is recommended to use the latest version of Chrome browser [Download](https://www.google.com/intl/zh-CN/chrome/)。
-- The production environment supports modern browsers, IE browser is no longer supported, more browsers can view [Can I Use Es Module](https://caniuse.com/?search=ESModule)。
+- For local development, the latest Chrome is recommended ([Download](https://www.google.com/intl/en/chrome/)).
+- The production build targets modern browsers; IE is not supported. See [Can I Use Es Module](https://caniuse.com/?search=ESModule) for compatibility details.
 
 | ![IE](https://i.imgtg.com/2023/04/11/8z7ot.png) | ![Edge](https://i.imgtg.com/2023/04/11/8zr3p.png) | ![Firefox](https://i.imgtg.com/2023/04/11/8zKiU.png) | ![Chrome](https://i.imgtg.com/2023/04/11/8zNrx.png) | ![Safari](https://i.imgtg.com/2023/04/11/8zeGj.png) |
 | :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
 |                   not support                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
 
-### Project backend interface
+### License
 
-The project backend interface completely uses Mock data, thanks to the following Mock platform support:
-
-- EasyMock：https://mock.mengxuegu.com
+[MIT](./LICENSE)
