@@ -3,13 +3,11 @@ import request from '@/utils/axios';
 const { VITE_COMMON_URL } = import.meta.env;
 
 // 登录
-export function login(code: string) {
+export function login(data: AnyObj) {
   return request({
-    url: '/employee/exchangeUserIdByCode',
+    url: '/api/auth/login',
     method: 'post',
-    data: {
-      code,
-    },
+    data,
   });
 }
 

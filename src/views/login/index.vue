@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus';
-import * as ww from '@wecom/jssdk';
-import { ColorScheme, WWLoginRedirectType, WWLoginType } from '@wecom/jssdk';
 import dayjs from 'dayjs';
+import { login } from '@/api';
 import logo from '@/assets/images/logo.svg';
 import sign from '@/assets/images/sign.svg';
 import { Constant } from '@/enums/common';
@@ -13,31 +12,21 @@ import { renderIcon, storage } from '@/utils';
 
 defineOptions({ name: 'Login' });
 
+const router = useRouter();
 const { t } = useI18n();
-const { VITE_AGENT_ID, VITE_ENTERPRISE_ID } = import.meta.env;
 const userStore = useUserStore();
 
-const loading = ref(false);
+const appName = import.meta.env.VITE_APP_NAME;
 const checked = ref(false);
-const disabled = ref(false);
-
-const rules: FormRules = {
-  userName: [
-    { required: true, message: t('page.login.usernameError'), trigger: 'blur' },
-  ],
-  userPwd: [
-    { required: true, message: t('page.login.passwordError'), trigger: 'blur' },
-  ],
-};
 
 interface State {
-  userName: string;
-  userPwd: string;
+  username: string;
+  password: string;
 }
 
 const state = reactive({
-  userName: '',
-  userPwd: '',
+  username: '',
+  password: '',
 });
 
 // 获取用户账号
@@ -48,8 +37,8 @@ async function getUserConfig() {
     if (!rss)
       return;
 
-    state.userName = rss.userName;
-    state.userPwd = rss.userPwd;
+    state.username = rss.username;
+    state.password = rss.password;
     checked.value = true;
   }
   catch (e) {
@@ -59,10 +48,18 @@ async function getUserConfig() {
 
 onMounted(getUserConfig);
 
-const appName = import.meta.env.VITE_APP_NAME;
-
-const router = useRouter();
 const formRef = ref<FormInstance>();
+const rules: FormRules = {
+  username: [
+    { required: true, message: t('page.login.usernameError'), trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: t('page.login.passwordError'), trigger: 'blur' },
+  ],
+};
+
+const loading = ref(false);
+const disabled = ref(false);
 
 // 点击登录
 async function handleLogin() {
@@ -72,7 +69,8 @@ async function handleLogin() {
   disabled.value = true;
 
   try {
-    await userStore.handleLogin(state.userName);
+    const res = await login(state);
+    userStore.accessToken = res.data.token;
 
     await router.push('/');
     ElNotification.success({
@@ -98,31 +96,6 @@ async function handleLogin() {
 useEventListener('keypress', ({ code }) => {
   if (['Enter', 'NumpadEnter'].includes(code) && !disabled.value && !loading.value)
     handleLogin();
-});
-
-const isQwCode = ref(false);
-
-onMounted(() => {
-  ww.createWWLoginPanel({
-    el: '#qw-login-container',
-    params: {
-      login_type: WWLoginType.corpApp,
-      appid: VITE_ENTERPRISE_ID,
-      agentid: VITE_AGENT_ID,
-      redirect_uri: location.href,
-      redirect_type: WWLoginRedirectType.callback,
-      color_scheme: ColorScheme.Auto,
-    },
-    async onLoginSuccess(res) {
-      await userStore.handleLogin(res.code);
-      await router.push('/');
-      ElNotification.success({
-        title: t('page.login.loginSuccessful'),
-        message: t('page.login.welcomeBack'),
-        duration: 2500,
-      });
-    },
-  });
 });
 </script>
 
@@ -315,13 +288,13 @@ onMounted(() => {
           </h1>
         </div>
         <!-- 登录表单 -->
-        <el-form v-if="!isQwCode" ref="formRef" class="login-form" :model="state" :rules="rules" size="large" label-position="top">
-          <el-form-item label="用户名" prop="userName">
-            <el-input v-model="state.userName" clearable :placeholder="t('page.login.username')" :prefix-icon="renderIcon('UserFilled')" />
+        <el-form ref="formRef" class="login-form" :model="state" :rules="rules" size="large" label-position="top">
+          <el-form-item label="用户名" prop="username">
+            <el-input v-model="state.username" clearable :placeholder="t('page.login.username')" :prefix-icon="renderIcon('UserFilled')" />
           </el-form-item>
-          <el-form-item label="密码" prop="userPwd">
+          <el-form-item label="密码" prop="password">
             <el-input
-              v-model="state.userPwd" :placeholder="t('page.login.password')" :prefix-icon="renderIcon('bxs:lock')" clearable
+              v-model="state.password" :placeholder="t('page.login.password')" :prefix-icon="renderIcon('bxs:lock')" clearable
               show-password
             />
           </el-form-item>
@@ -342,19 +315,10 @@ onMounted(() => {
             <el-divider>第三方登录</el-divider>
             <app-flex class="third-party" justify="center">
               <app-icon icon="tdesign:logo-wechat" />
-              <app-icon icon="tdesign:logo-wecom" @click="isQwCode = true;" />
+              <app-icon icon="tdesign:logo-wecom" />
             </app-flex>
           </el-form-item>
         </el-form>
-        <!-- 企业微信扫码登录 -->
-        <div v-show="isQwCode" class="qrcode-panel">
-          <app-card class="w-full !p-0">
-            <div id="qw-login-container" />
-          </app-card>
-          <el-link :icon="renderIcon('ep:arrow-left')" underline="never" @click="isQwCode = false">
-            返回账号密码登录
-          </el-link>
-        </div>
         <!-- 登录页脚 -->
         <div class="login-footer">
           Copyright © 2024-{{ dayjs().year() }}
