@@ -105,7 +105,7 @@ function handleReset() {
               <el-option :label="t('systemSettings.pageConfig.effect.fade-scale')" value="fade-scale" />
               <el-option :label="t('systemSettings.pageConfig.effect.zoom-fade')" value="zoom-fade" />
               <el-option :label="t('systemSettings.pageConfig.effect.zoom-out')" value="zoom-out" />
-              <el-option :label="t('systemSettings.pageConfig.effect.no')" value=" " />
+              <el-option :label="t('systemSettings.pageConfig.effect.no')" value="none" />
             </el-select>
           </app-flex>
           <app-flex justify="space-between" align="center">

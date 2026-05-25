@@ -28,7 +28,7 @@ function setThemeMode(mode: BasicColorSchema) {
     <span>
       <el-tooltip :content="t(`theme.${colorStore}`)" placement="left" :disabled="!buttonTip">
         <div class="wrapper">
-          <app-icon v-if="colorStore === 'light'" icon="icon-park-outline:sun-one" size="16" />
+          <app-icon v-if="colorStore === 'light'" icon="icon-park-outline:sun-one" />
           <app-icon v-if="colorStore === 'dark'" icon="icon-park-outline:moon" />
           <app-icon v-if="colorStore === 'auto'" icon="icon-park-outline:laptop-computer" />
         </div>

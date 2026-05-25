@@ -24,7 +24,7 @@ function handleSelect(val: string) {
 </script>
 
 <template>
-  <el-dropdown trigger="click" :disabled="true" @command="handleSelect">
+  <el-dropdown trigger="click" @command="handleSelect">
     <el-avatar class="cursor-pointer" round :src="userStore.userInfo.avatar" alt="头像" />
     <template #dropdown>
       <el-dropdown-menu>

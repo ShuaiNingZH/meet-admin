@@ -12,6 +12,7 @@ const appStore = useAppStore();
 const { collapse } = storeToRefs(appStore);
 
 const name = import.meta.env.VITE_APP_NAME;
+const homePage = import.meta.env.VITE_HOME_PATH;
 
 const routeStore = useRouteStore();
 const { menus } = storeToRefs(routeStore);
@@ -24,7 +25,7 @@ const defaultActive = computed<string>(() =>
 
 <template>
   <el-aside :width="collapse ? '65px' : '210px'">
-    <div class="logo flex-center cursor-pointer" @click="router.push('/')">
+    <div class="logo flex-center cursor-pointer" @click="router.push(homePage)">
       <el-image class="w-28" :src="logo" alt="Logo" />
       <span v-show="!collapse" class="logo-text">{{ name }}</span>
     </div>
