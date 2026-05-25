@@ -14,8 +14,14 @@ export function login(data: AnyObj) {
 // 获取用户信息
 export function fetchUserInfo() {
   return request({
-    url: '/employee/getUserInfo',
-    method: 'post',
+    url: '/api/user',
+  });
+}
+
+// 获取用户菜单
+export function fetchUserMenu() {
+  return request<Menu.Tree[]>({
+    url: '/api/user/menus',
   });
 }
 

@@ -1,6 +1,8 @@
 import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router';
 import { cloneDeep } from 'lodash-es';
 import path from 'path-browserify';
+import { fetchUserInfo, fetchUserMenu } from '@/api';
+import { router } from '@/router';
 import { useRouteStore, useTabStore, useUserStore } from '@/stores';
 
 /**
@@ -11,13 +13,78 @@ export async function initRouter() {
   const tabStore = useTabStore();
   const routeStore = useRouteStore();
 
-  // 获取用户信息
-  await userStore.getUserInfo();
+  // 获取当前用户信息
+  const infoRes = await fetchUserInfo();
+  userStore.userInfo = infoRes.data;
+
+  // 获取当前用户菜单
+  const menuRes = await fetchUserMenu();
+
+  const dynamicRoutes = menuToRoutes(menuRes.data);
+  dynamicRoutes.forEach((dynamicRoute) => {
+    router.addRoute('Layout', dynamicRoute);
+  });
+
+  // 处理菜单数据
+  routeStore.handleMenus(dynamicRoutes);
 
   // 初始国际化标签
   tabStore.tabLocale();
-  // 处理菜单数据
-  routeStore.handleMenus();
+}
+
+/**
+ * 将后端菜单数据转换为路由并动态注册，返回转换后的路由树供菜单使用
+ * @param menus 后端返回的嵌套菜单数据
+ */
+function menuToRoutes(menus: Menu.Tree[]) {
+  return menus.map((menu) => {
+    const route = {
+      path: menu.path,
+      name: menu.routeName,
+      meta: {
+        title: menu.name,
+        icon: menu.icon,
+        sort: menu.sort,
+        keepAlive: menu.keepAlive,
+        activeMenu: menu.activeMenu,
+        hideInMenu: menu.hideInMenu,
+        hideInTag: menu.hideInTag,
+        hideParent: menu.hideParent,
+      },
+    } as RouteRecordRaw;
+
+    // 如果是目录，自动重定向到子级第一个菜单
+    if (menu.type === 0)
+      route.redirect = menu.children[0]?.path;
+
+    // 如果是菜单，解析页面组件
+    if (menu.type === 1)
+      route.component = resolveComponent(menu.componentPath);
+
+    // 如果有子级，转换子级数据
+    if (menu.children.length)
+      route.children = menuToRoutes(menu.children);
+
+    return route;
+  });
+}
+
+const viewModules = import.meta.glob('@/views/**/*.vue');
+
+/**
+ * 将路径解析成完整的组件路径
+ * @param componentPath
+ */
+function resolveComponent(componentPath: string) {
+  const key = `/src/views/${componentPath}.vue`;
+  const mod = viewModules[key];
+
+  if (!mod) {
+    console.warn(`[addRouters] 未找到组件: ${componentPath}`);
+    return () => import('@/views/error/404.vue');
+  }
+
+  return mod;
 }
 
 /**
@@ -26,15 +93,16 @@ export async function initRouter() {
  * @param parentPath 父级路由路径
  */
 export function processMenus(routes: RouteRecordRaw[], parentPath = '') {
-  const result = cloneDeep(routes).reduce<RouteRecordRaw[]>((acc, item, index) => {
+  const result = cloneDeep(routes).reduce<RouteRecordRaw[]>((acc, item) => {
     // 将父路由的 path 拼接到子路由的 path 上
     item.path = path.resolve(parentPath, item.path);
 
     // 确保每个路由的 meta 存在，并给未定义的 meta 设置默认值
     item.meta = item.meta ?? { title: '' };
 
-    // 根路由 sort 为 0, 其他路由 sort 为 index + 1
-    item.meta.sort = item.path === '/' ? 0 : item.meta.sort ?? index + 1;
+    // 根路由 sort 为 0
+    if (item.path === '/')
+      item.meta.sort = 0;
 
     if (item.children)
       item.children = processMenus(item.children, item.path);

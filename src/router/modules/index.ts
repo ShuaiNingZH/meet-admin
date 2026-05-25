@@ -4,12 +4,9 @@ const homePage = import.meta.env.VITE_HOME_PATH;
 
 export default {
   path: '/',
+  name: 'Layout',
   redirect: homePage,
   component: () => import('@/layouts/index.vue'),
-  meta: {
-    title: '首页',
-    icon: 'icon-park-outline:home',
-  },
   children: [
     {
       path: homePage,

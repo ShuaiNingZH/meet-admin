@@ -1,4 +1,3 @@
-import { fetchUserInfo } from '@/api';
 import { useReset } from '@/hooks';
 import { useTabStore } from '@/stores';
 
@@ -8,12 +7,6 @@ export const useUserStore = defineStore('user-store', () => {
   });
 
   const accessToken = useStorage('access-token', '');
-
-  // 获取用户信息
-  const getUserInfo = async () => {
-    const res = await fetchUserInfo();
-    state.value.userInfo = res.data;
-  };
 
   // 退出登录
   const handleLogout = () => {
@@ -27,7 +20,6 @@ export const useUserStore = defineStore('user-store', () => {
   return {
     ...toRefs(state.value),
     accessToken,
-    getUserInfo,
     handleLogout,
   };
 });

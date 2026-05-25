@@ -7,6 +7,7 @@ interface RoutesStatus {
   menus: RouteRecordRaw[];
   searchMenus: RouteRecordRaw[];
   keepAliveName: string[];
+  routes: RouteRecordRaw[];
 }
 
 export const useRouteStore = defineStore('route-store', () => {
@@ -17,11 +18,19 @@ export const useRouteStore = defineStore('route-store', () => {
     searchMenus: [],
     // 需要缓存的路由名称
     keepAliveName: [],
+    // 完整路由树（静态 + 动态）
+    routes: [],
   });
 
-  // 处理菜单数据
-  const handleMenus = () => {
-    state.value.menus = processMenus(router.options.routes.slice());
+  /**
+   * // 处理菜单数据
+   * @param dynamicRoutes 动态注册的路由
+   */
+  const handleMenus = (dynamicRoutes: RouteRecordRaw[] = []) => {
+    const allRoutes = [...router.options.routes, ...dynamicRoutes];
+
+    state.value.routes = allRoutes;
+    state.value.menus = processMenus(allRoutes);
     state.value.searchMenus = filterSearchMenus(state.value.menus);
   };
 
@@ -29,19 +38,18 @@ export const useRouteStore = defineStore('route-store', () => {
   const breadcrumbs = computed(() => {
     const homePath = import.meta.env.VITE_HOME_PATH;
     const route = router.currentRoute.value;
-    const routes = router.options.routes.slice();
 
-    let breadcrumbs = getBreadcrumbsByRoute(route, routes)
+    let result = getBreadcrumbsByRoute(route, state.value.routes)
       .filter(item => item.path !== '/');
 
     // 如果没有首页，则添加首页
-    if (!breadcrumbs.some(item => item.path === homePath)) {
+    if (!result.some(item => item.path === homePath)) {
       const home = state.value.menus.find(item => item.path === homePath);
       if (home)
-        breadcrumbs = [home, ...breadcrumbs];
+        result = [home, ...result];
     }
 
-    return breadcrumbs;
+    return result;
   });
 
   // 添加缓存路由

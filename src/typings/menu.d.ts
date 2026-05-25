@@ -1,8 +1,24 @@
 declare namespace Menu {
-  interface Data extends AppRoute.RowRoute {
-    id?: string;
+  interface Item {
+    id: number;
+    parentId: number;
+    name: string;
+    path: string;
+    routeName: string;
+    componentPath: string;
+    icon: string;
     sort: number;
-    isEnabled: boolean;
-    requestPath: string;
+    type: 0 | 1 | 2;
+    perm: string;
+    activeMenu: string;
+    keepAlive: boolean;
+    hideInMenu: boolean;
+    hideInTag: boolean;
+    hideParent: boolean;
+    status: boolean;
+  }
+
+  interface Tree extends Item {
+    children: Tree[];
   }
 }
