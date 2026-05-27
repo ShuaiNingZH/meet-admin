@@ -2,6 +2,7 @@ import type { ImageViewerAction, TableColumnCtx, TableProps } from 'element-plus
 import type { DefaultRow } from 'element-plus/es/components/table/src/table/defaults';
 
 export type TypeProps = 'index' | 'selection' | 'expand' | 'money' | 'date' | 'dateTime' | 'img';
+export type FixedProps = 'left' | 'right' | boolean;
 
 export interface RenderScope<T extends DefaultRow = DefaultRow> {
   row: T;
@@ -9,35 +10,32 @@ export interface RenderScope<T extends DefaultRow = DefaultRow> {
   $index: number;
 }
 
-export type ElementType<T> = T extends Array<infer U> ? U : T;
-export type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-export type UnwrapResponseData<T> = T extends AppAxios.ResponseData<infer U> ? U : never;
-
-export interface TableColumn<T extends DefaultRow = DefaultRow> extends Partial<
-  Omit<TableColumnCtx<T>, 'type' | 'children' | 'renderCell' | 'fixed' | 'formatter'>
-> {
+// 扩展后的表格列
+export interface TableColumn<T extends DefaultRow = DefaultRow>
+  extends Partial<Omit<TableColumnCtx<T>, 'type' | 'fixed' | 'children'>> {
   type?: TypeProps;
-  renderContent?: (scope: RenderScope<T>) => VNode | any;
-  formatter?: (row: T, column: TableColumnCtx<T>, cellValue: any, index: number) => VNode | any;
-  children?: TableColumns<T>;
-  fixed?: 'left' | 'right' | boolean;
+  renderContent?: (scope: RenderScope<T>) => VNode | string;
+  children?: TableColumn<T>[];
+  fixed?: FixedProps;
   show?: boolean;
   money?: Money<T>;
-  helpInfo?: string | (() => VNode | any);
-  summary?: (data: any) => VNode | any;
+  helpInfo?: string | (() => VNode | string);
+  summary?: (data: T) => VNode | string;
 }
 
 export type TableColumns<T extends DefaultRow = DefaultRow> = TableColumn<T>[];
 
+// 列设置的数据
 export interface TableColumnCheck {
   prop: string;
   label: string;
   checked: boolean;
-  fixed?: 'left' | 'right' | boolean;
+  fixed?: FixedProps;
 }
 
 export type TableColumnChecks = TableColumnCheck[];
 
+// 分页配置
 export interface Pagination {
   background?: boolean;
   pageSize?: number;
@@ -49,31 +47,73 @@ export interface Pagination {
   currentChange?: (value: number) => void;
 }
 
-export type TableApiFn = (params: any) => Promise<any>;
+/**
+ * 表格请求接口
+ * @template P 请求参数类型
+ * @template R 返回数据类型
+ * P 和 R 默认为 any，是为了在不指定泛型时保持灵活性，
+ * 同时不影响指定泛型后的类型精确推导
+ */
+export type TableApiFunc<P = any, R = any> = (params: P) => Promise<R>;
 
-export type TableApiParams<T extends TableApiFn> = NonNullable<Parameters<T>[0]>;
+/**
+ * 提取 TableApiFunc 函数类型的第一个参数类型
+ * 使用 NonNullable 防止参数为可选时引入 undefined
+ */
+export type TableApiParams<T extends TableApiFunc> = NonNullable<Parameters<T>[0]>;
 
-export type TableData<T extends TableApiFn> = ElementType<UnwrapResponseData<UnwrapPromise<ReturnType<T>>>> & {
+/**
+ * 剥掉 Promise 外壳，提取 resolved 类型，如果不是 Promise 则返回原类型
+ * @example UnwrapPromise<Promise<User[]>> => User[]
+ * @example UnwrapPromise<User[]> => User[]
+ */
+export type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
+
+/**
+ * 剥掉 ResponseData 外壳，提取业务数据类型，如果不匹配则返回 never
+ * @example UnwrapResponseData<ResponseData<User[]>> => User[]
+ */
+export type UnwrapResponseData<T> = T extends AppAxios.ResponseData<infer U> ? U : never;
+
+/**
+ * 提取数组元素类型，如果不是数组则返回原类型
+ * @example ElementType<User[]> => User
+ * @example ElementType<User> => User
+ */
+export type ElementType<T> = T extends Array<infer U> ? U : T;
+
+/**
+ * 提取 TableApiFn 函数返回的列表元素类型，并附加行索引字段
+ * 推导链：ReturnType => UnwrapPromise => UnwrapResponseData => ElementType => & { rowIndex? }
+ * @example
+ * type MyApi = (params: { page: number }) => Promise<ResponseData<User[]>>;
+ * TableData<MyApi> => User & { rowIndex?: number }
+ */
+export type TableData<T extends TableApiFunc> = ElementType<UnwrapResponseData<UnwrapPromise<ReturnType<T>>>> & {
   rowIndex?: number;
 };
 
-export interface SpanMethodParams<T extends TableApiFn> {
-  row: any;
+/**
+ * 合并单元格方法的参数类型，对应 Element Plus 表格 span-method 的回调参数
+ * @template T 表格请求函数类型
+ */
+export interface SpanMethodParams<T extends TableApiFunc> {
+  row: TableData<T>;
   column: TableColumnCtx<TableData<T>>;
   rowIndex: number;
   columnIndex: number;
 }
 
-export interface TableConfig<T extends TableApiFn> {
+export interface TableConfig<T extends TableApiFunc> {
   /**
    * 请求接口函数，用于获取表格数据。
    * T 是一个泛型，表示与表格数据相关的 API 请求函数类型。
    */
-  apiFnc?: T;
+  apiFunc?: T;
 
   /**
    * API 请求的参数，通常是 API 请求所需的查询参数。
-   * 该参数的类型由 `TableApiParams<T>` 定义，通常是根据 `apiFnc` 的类型来生成的。
+   * 该参数的类型由 `TableApiParams<T>` 定义，通常是根据 `apiFunc` 的类型来生成的。
    */
   apiParams?: TableApiParams<T>;
 
@@ -138,6 +178,12 @@ export interface TableConfig<T extends TableApiFn> {
   load?: (row: TableData<T>, treeNode: AnyObj, resolve: (data: TableData<T>[]) => void) => void;
 }
 
+/**
+ * 合并单元格方法的返回值类型，对应 Element Plus 表格的 span-method 属性
+ * - number[]：数组形式 [rowspan, colspan]
+ * - { rowspan, colspan }：对象形式
+ * - undefined：不做合并处理
+ */
 export type SpanMethodReturn = (number[] | { rowspan: number; colspan: number } | undefined);
 
 export interface Money<T extends DefaultRow = DefaultRow> {
@@ -149,12 +195,12 @@ export interface Money<T extends DefaultRow = DefaultRow> {
 }
 
 export interface AppBaseTableProps extends TableProps<any> {
-  columns: TableColumns;
+  columns: TableColumns<any>;
 }
 
 export interface AppTableProps extends AppBaseTableProps {
   title?: string;
-  loading?: boolean;
+  loading: boolean;
   loadingText?: string;
   card?: boolean;
   pagination?: Pagination | boolean;

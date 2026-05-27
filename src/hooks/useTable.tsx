@@ -2,7 +2,7 @@ import type {
   Pagination,
   SpanMethodParams,
   SpanMethodReturn,
-  TableApiFn,
+  TableApiFunc,
   TableApiParams,
   TableConfig,
   TableData,
@@ -24,7 +24,7 @@ export const PAGINATION_KEYS = ['pageIndex', 'pageSize'] as const;
  * @param config.columns 表格的列配置数组
  * @returns 返回表格相关的响应式属性和方法
  */
-export function useTable<A extends TableApiFn>(config: TableConfig<A>) {
+export function useTable<A extends TableApiFunc>(config: TableConfig<A>) {
   const { initData = true } = config;
 
   // 加载状态
@@ -75,6 +75,10 @@ export function useTable<A extends TableApiFn>(config: TableConfig<A>) {
 
   // 请求表格数据
   async function getTableData(pageIndex?: any) {
+    // 不存在时直接返回，不执行
+    if (!config.apiFunc)
+      return;
+
     loading.value = true;
 
     // 需要分页时
@@ -88,7 +92,7 @@ export function useTable<A extends TableApiFn>(config: TableConfig<A>) {
     }
 
     try {
-      const responseData = await config.apiFnc!(params.value);
+      const responseData = await config.apiFunc(params.value);
 
       response.value = responseData.data;
 
@@ -117,7 +121,7 @@ export function useTable<A extends TableApiFn>(config: TableConfig<A>) {
   }
 
   // 是否初始化数据
-  if (config.apiFnc && initData) {
+  if (config.apiFunc && initData) {
     onMounted(() => {
       getTableData().then();
 
@@ -129,7 +133,7 @@ export function useTable<A extends TableApiFn>(config: TableConfig<A>) {
   }
 
   // 合并单元格
-  function spanMethod(params: SpanMethodParams<A>): SpanMethodReturn | undefined {
+  function spanMethod(params: SpanMethodParams<A>): SpanMethodReturn {
     // 没有合并单元格配置或者不需要合并单元格时
     if (!config.spanOptions || !config.spanOptions.isSpan!(params)) {
       return;

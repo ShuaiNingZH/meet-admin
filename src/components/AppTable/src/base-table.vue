@@ -1,4 +1,4 @@
-<script setup lang="tsx">
+<script setup lang="ts">
 import type { TableInstance } from 'element-plus';
 import type { AppBaseTableProps } from './types.ts';
 import { flattenColumns, renderColumns } from './table.tsx';
