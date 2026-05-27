@@ -2,9 +2,9 @@ import { useReset } from '@/hooks';
 import { useTabStore } from '@/stores';
 
 export const useUserStore = defineStore('user-store', () => {
-  const [state, reset] = useReset({
+  const [state, reset] = useReset(() => ({
     userInfo: {} as AnyObj,
-  });
+  }));
 
   const accessToken = useStorage('access-token', '');
 

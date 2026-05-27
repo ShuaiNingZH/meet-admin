@@ -11,7 +11,7 @@ interface RoutesStatus {
 }
 
 export const useRouteStore = defineStore('route-store', () => {
-  const [state] = useReset<RoutesStatus>({
+  const [state] = useReset<RoutesStatus>(() => ({
     // 菜单数据
     menus: [],
     // 搜索菜单数据
@@ -20,7 +20,7 @@ export const useRouteStore = defineStore('route-store', () => {
     keepAliveName: [],
     // 完整路由树（静态 + 动态）
     routes: [],
-  });
+  }));
 
   /**
    * // 处理菜单数据

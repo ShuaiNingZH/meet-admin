@@ -22,10 +22,10 @@ export const useTabStore = defineStore('tab-store', () => {
   const route = useRoute();
   const routeStore = useRouteStore();
 
-  const [state, reset] = useReset<TabState>({
+  const [state, reset] = useReset<TabState>(() => ({
     tabs: [],
     currentTabPath: route.fullPath,
-  });
+  }));
 
   const homePage = import.meta.env.VITE_HOME_PATH;
 
