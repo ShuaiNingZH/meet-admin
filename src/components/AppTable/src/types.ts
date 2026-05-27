@@ -48,48 +48,13 @@ export interface Pagination {
 }
 
 /**
- * 表格请求接口
- * @template P 请求参数类型
- * @template R 返回数据类型
- * P 和 R 默认为 any，是为了在不指定泛型时保持灵活性，
- * 同时不影响指定泛型后的类型精确推导
- */
-export type TableApiFunc<P = any, R = any> = (params: P) => Promise<R>;
-
-/**
- * 提取 TableApiFunc 函数类型的第一个参数类型
- * 使用 NonNullable 防止参数为可选时引入 undefined
- */
-export type TableApiParams<T extends TableApiFunc> = NonNullable<Parameters<T>[0]>;
-
-/**
- * 剥掉 Promise 外壳，提取 resolved 类型，如果不是 Promise 则返回原类型
- * @example UnwrapPromise<Promise<User[]>> => User[]
- * @example UnwrapPromise<User[]> => User[]
- */
-export type UnwrapPromise<T> = T extends Promise<infer U> ? U : T;
-
-/**
- * 剥掉 ResponseData 外壳，提取业务数据类型，如果不匹配则返回 never
- * @example UnwrapResponseData<ResponseData<User[]>> => User[]
- */
-export type UnwrapResponseData<T> = T extends AppAxios.ResponseData<infer U> ? U : never;
-
-/**
- * 提取数组元素类型，如果不是数组则返回原类型
- * @example ElementType<User[]> => User
- * @example ElementType<User> => User
- */
-export type ElementType<T> = T extends Array<infer U> ? U : T;
-
-/**
- * 提取 TableApiFn 函数返回的列表元素类型，并附加行索引字段
+ * 提取 ApiFunc 函数返回的列表元素类型，并附加行索引字段
  * 推导链：ReturnType => UnwrapPromise => UnwrapResponseData => ElementType => & { rowIndex? }
  * @example
  * type MyApi = (params: { page: number }) => Promise<ResponseData<User[]>>;
  * TableData<MyApi> => User & { rowIndex?: number }
  */
-export type TableData<T extends TableApiFunc> = ElementType<UnwrapResponseData<UnwrapPromise<ReturnType<T>>>> & {
+export type TableData<T extends ApiFunc> = ApiData<T> & {
   rowIndex?: number;
 };
 
@@ -97,14 +62,14 @@ export type TableData<T extends TableApiFunc> = ElementType<UnwrapResponseData<U
  * 合并单元格方法的参数类型，对应 Element Plus 表格 span-method 的回调参数
  * @template T 表格请求函数类型
  */
-export interface SpanMethodParams<T extends TableApiFunc> {
+export interface SpanMethodParams<T extends ApiFunc> {
   row: TableData<T>;
   column: TableColumnCtx<TableData<T>>;
   rowIndex: number;
   columnIndex: number;
 }
 
-export interface TableConfig<T extends TableApiFunc> {
+export interface TableConfig<T extends ApiFunc> {
   /**
    * 请求接口函数，用于获取表格数据。
    * T 是一个泛型，表示与表格数据相关的 API 请求函数类型。
@@ -115,13 +80,13 @@ export interface TableConfig<T extends TableApiFunc> {
    * API 请求的参数，通常是 API 请求所需的查询参数。
    * 该参数的类型由 `TableApiParams<T>` 定义，通常是根据 `apiFunc` 的类型来生成的。
    */
-  apiParams?: TableApiParams<T>;
+  apiParams?: ApiParams<T>;
 
   /**
    * 格式化 API 请求参数的函数。
    * 用于在发送请求之前对参数进行处理，例如添加、修改或者删除某些字段。
    */
-  formatParams?: (params: TableApiParams<T>) => TableApiParams<T>;
+  formatParams?: (params: ApiParams<T>) => ApiParams<T>;
 
   /**
    * 是否需要合并单元格及其配置。

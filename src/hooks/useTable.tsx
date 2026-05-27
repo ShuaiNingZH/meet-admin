@@ -2,8 +2,6 @@ import type {
   Pagination,
   SpanMethodParams,
   SpanMethodReturn,
-  TableApiFunc,
-  TableApiParams,
   TableConfig,
   TableData,
 } from '@/components';
@@ -24,7 +22,7 @@ export const PAGINATION_KEYS = ['pageIndex', 'pageSize'] as const;
  * @param config.columns 表格的列配置数组
  * @returns 返回表格相关的响应式属性和方法
  */
-export function useTable<A extends TableApiFunc>(config: TableConfig<A>) {
+export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
   const { initData = true } = config;
 
   // 加载状态
@@ -36,7 +34,7 @@ export function useTable<A extends TableApiFunc>(config: TableConfig<A>) {
   const columns = computed(() => config.columns());
 
   // 接口请求参数
-  const [apiParams, resetParams] = useReset(config.apiParams || {} as TableApiParams<A>);
+  const [apiParams, resetParams] = useReset<ApiParams<A>>(() => (config.apiParams || {} as ApiParams<A>));
 
   // 合并单元格
   const { spanList, setSpanList } = useTableSpan();
