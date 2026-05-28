@@ -172,15 +172,15 @@ addPopup({
 
 ### Props
 
-| 参数名             | 类型             | 默认值  | 必填 | 说明                                                                 |
-| ------------------ | ---------------- | ------- | ---- | -------------------------------------------------------------------- |
+| 参数名             | 类型             | 默认值     | 必填 | 说明                                                                 |
+| ------------------ | ---------------- |---------| ---- | -------------------------------------------------------------------- |
 | v-model/modelValue | boolean          | -       | 是   | 控制弹窗的显示与隐藏                                                 |
-| title              | string           | '提示'  | 否   | 弹窗标题                                                             |
-| width              | string \| number | 600     | 否   | 弹窗宽度，单位像素                                                   |
+| title              | string           | '提示'    | 否   | 弹窗标题                                                             |
+| width              | string \| number | 700     | 否   | 弹窗宽度，单位像素                                                   |
 | height             | string \| number | -       | 否   | 弹窗内容区域高度                                                     |
-| maxHeight          | string \| number | 500     | 否   | 弹窗内容区域最大高度，超出显示滚动条                                 |
-| confirmText        | string           | '保存'  | 否   | 确认按钮文本                                                         |
-| cancelText         | string           | '取消'  | 否   | 取消按钮文本                                                         |
+| maxHeight          | string \| number | 450     | 否   | 弹窗内容区域最大高度，超出显示滚动条                                 |
+| confirmText        | string           | '保存'    | 否   | 确认按钮文本                                                         |
+| cancelText         | string           | '取消'    | 否   | 取消按钮文本                                                         |
 | showFooter         | boolean          | true    | 否   | 是否显示底部区域                                                     |
 | showConfirmButton  | boolean          | true    | 否   | 是否显示确认按钮                                                     |
 | showCancelButton   | boolean          | true    | 否   | 是否显示取消按钮                                                     |

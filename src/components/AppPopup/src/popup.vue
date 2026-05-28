@@ -7,8 +7,9 @@ import { appPopupEmits, omitKeys } from './popup.ts';
 defineOptions({ name: 'AppPopup' });
 
 const props = withDefaults(defineProps<AppPopupProps>(), {
-  width: 600,
-  maxHeight: 500,
+  top: '10vh',
+  width: 700,
+  maxHeight: 450,
   showFooter: true,
   showConfirmButton: true,
   showCancelButton: true,
@@ -35,7 +36,7 @@ const { eventHandlers } = useEventForwarder(emit, appPopupEmits);
 const popupProps = computed(() => omit(props, omitKeys));
 
 const title = computed(() => props.title || t('components.popup.title'));
-const confirmText = computed(() => props.confirmText || t('common.save'));
+const confirmText = computed(() => props.confirmText || t('common.sure'));
 const cancelText = computed(() => props.cancelText || t('common.cancel'));
 
 // 是否是翻转
@@ -102,14 +103,11 @@ onMounted(() => {
     <template v-if="showFooter" #footer>
       <slot name="footer" />
       <app-flex :size="7">
-        <el-button
-          v-if="showConfirmButton" :class="{ 'button-reverse': isReverse }" type="primary"
-          :loading @click="onConfirm"
-        >
-          {{ confirmText }}
-        </el-button>
-        <el-button v-if="showCancelButton" @click="onCancel">
+        <el-button v-if="showCancelButton" :class="{ 'button-reverse': isReverse }" @click="onCancel">
           {{ cancelText }}
+        </el-button>
+        <el-button v-if="showConfirmButton" type="primary" :loading @click="onConfirm">
+          {{ confirmText }}
         </el-button>
       </app-flex>
     </template>
