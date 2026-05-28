@@ -154,7 +154,7 @@ function filterEmptyValues(obj: any): any {
     const newFormData = new FormData();
     obj.forEach((value, key) => {
       // 过滤 null、undefined、空字符串
-      if (value !== null && value !== undefined && value !== '') {
+      if (value !== null && value !== undefined) {
         newFormData.append(key, value);
       }
     });
@@ -177,7 +177,7 @@ function filterEmptyValues(obj: any): any {
 
     // 过滤条件：null、undefined、空字符串
     // 保留：0、false、空数组、空对象
-    if (value !== null && value !== undefined && value !== '') {
+    if (value !== null && value !== undefined) {
       // 如果是对象或数组，递归处理
       if (typeof value === 'object') {
         result[key] = filterEmptyValues(value);
