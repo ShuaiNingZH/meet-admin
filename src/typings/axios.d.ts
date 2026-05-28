@@ -1,12 +1,11 @@
 declare namespace AppAxios {
   interface ResponseData<T = any> {
-    status: number;
+    code: number;
     data: T;
-    totals: number;
     message: string;
   }
 
-  type ApiPromise<T = any> = Promise<ResponseData<T>>;
+  type ApiPromise<T = any | PageData> = Promise<ResponseData<T>>;
 
   interface Options {
     // 开启取消重复请求
@@ -19,4 +18,11 @@ declare namespace AppAxios {
     showErrorMessage?: boolean;
   }
 
+  interface PageData<T> {
+    list: T[];
+    total: number;
+    summary?: Partial<PickByValue<T, number>>;
+  }
+
+  type ListOrPage<T> = T[] | AppAxios.PageData<T>;
 }

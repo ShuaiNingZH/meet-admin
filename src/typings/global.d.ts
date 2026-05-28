@@ -3,13 +3,23 @@ type AnyObj<T = any> = Record<string, T>;
 type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 
 /**
+ * 从类型 T 中提取值类型为 V 的字段
+ * @example
+ * PickByValue<{ id: number; name: string; age: number }, number>
+ * // => { id: number; age: number }
+ */
+type PickByValue<T, V> = {
+  [K in keyof T as T[K] extends V ? K : never]: T[K]
+};
+
+/**
  * 请求接口
  * @template P 请求参数类型
  * @template R 返回数据类型
  * P 和 R 默认为 any，是为了在不指定泛型时保持灵活性，
  * 同时不影响指定泛型后的类型精确推导
  */
-type ApiFunc<P = any, R = any> = (params: P) => Promise<R>;
+type ApiFunc<P = any, R = any> = (params: P) => AppAxios.ApiPromise<AppAxios.ListOrPage<R>>;
 
 /**
  * 提取 ApiFunc 函数类型的第一个参数类型
@@ -38,9 +48,15 @@ type UnwrapResponseData<T> = T extends AppAxios.ResponseData<infer U> ? U : neve
 type ElementType<T> = T extends Array<infer U> ? U : T;
 
 /**
- * 提取 ApiFunc 函数返回的列表元素类型，并附加行索引字段
- * 推导链：ReturnType => UnwrapPromise => UnwrapResponseData => ElementType => & { rowIndex? }
- * @example
- * type MyApi = (params: { page: number }) => Promise<ResponseData<User[]>>;
+ * 将 ListOrPage<T> 统一归一化为 T[]
+ * @example UnwrapListOrPage<T[] | PageData<T>> => T[]
  */
-type ApiData<T extends ApiFunc> = ElementType<UnwrapResponseData<UnwrapPromise<ReturnType<T>>>>;
+type UnwrapListOrPage<T> = T extends AppAxios.PageData<infer U> ? U[] : T;
+
+/**
+ * 提取 ApiFunc 函数返回的列表元素类型
+ * 推导链：ReturnType => UnwrapPromise => UnwrapResponseData => UnwrapListOrPage => ElementType
+ * @example
+ * type MyApi = (params: { page: number }) => ApiPromise<ListOrPage<User>>;
+ */
+type ApiData<T extends ApiFunc> = ElementType<UnwrapListOrPage<UnwrapResponseData<UnwrapPromise<ReturnType<T>>>>>;
