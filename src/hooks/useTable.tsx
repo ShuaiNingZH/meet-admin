@@ -12,7 +12,7 @@ import { useReset } from '@/hooks/useReset';
 import { isPageData, moneyThousand, renderMoney } from '@/utils';
 
 /** 分页参数字段名，导出数据时可用于 omit 过滤分页参数 */
-export const PAGINATION_KEYS = ['pageIndex', 'pageSize'] as const;
+export const PAGINATION_KEYS = ['page', 'pageSize'] as const;
 
 /**
  * 创建一个表格使用的函数
