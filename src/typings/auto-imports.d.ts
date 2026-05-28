@@ -8,10 +8,13 @@ export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
   const ElDatePicker: typeof import('element-plus/es').ElDatePicker
+  const ElInput: typeof import('element-plus/es').ElInput
   const ElLoading: typeof import('element-plus/es').ElLoading
   const ElMessage: typeof import('element-plus/es').ElMessage
   const ElMessageBox: typeof import('element-plus/es').ElMessageBox
   const ElNotification: typeof import('element-plus/es').ElNotification
+  const ElSelect: typeof import('element-plus/es').ElSelect
+  const ElTreeSelect: typeof import('element-plus/es').ElTreeSelect
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
