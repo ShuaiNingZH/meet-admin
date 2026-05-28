@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ScrollbarInstance } from 'element-plus';
 import type { APIv2CollectionResponse } from '../select-icon.ts';
 import { Icon } from '@iconify/vue';
 import { renderIcon } from '@/utils';
@@ -14,6 +15,7 @@ interface Props {
 
 const { t } = useI18n();
 
+const scrollbarRef = ref<ScrollbarInstance>();
 const searchIcon = ref('');
 const currentPage = ref(1);
 const pageSize = ref(120);
@@ -41,6 +43,10 @@ const paginatedIcons = computed(() => {
   return filterIcons.value.slice(start, end);
 });
 
+watch(currentPage, () => {
+  nextTick(() => scrollbarRef.value?.setScrollTop(0));
+});
+
 function handleIcon(val: string) {
   emits('selectIcon', val);
 }
@@ -57,14 +63,14 @@ function handleIcon(val: string) {
         {{ t('components.selectIcon.common') }} {{ filterIcons.length }}
       </el-text>
     </app-flex>
-    <el-scrollbar height="calc(470px - 14px - 8px - 32px - 32px - 8px)">
+    <el-scrollbar ref="scrollbarRef" height="calc(360px - 32px - 32px - 8px)">
       <app-flex :size="0" wrap>
         <div v-for="(icon, index) of paginatedIcons" :key="index" class="wrapper !p-8" @click="handleIcon(icon!)">
           <app-flex justify="center" align="center" class="h-26 w-26">
             <Icon :icon="icon!" class="text-26" />
           </app-flex>
         </div>
-        <el-empty v-if="!paginatedIcons.length" class="w-full" description="暂无图标" />
+        <el-empty v-if="!paginatedIcons.length" class="w-full" size="280" description="暂无图标" />
       </app-flex>
     </el-scrollbar>
     <el-pagination

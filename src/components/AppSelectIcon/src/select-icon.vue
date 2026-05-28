@@ -91,13 +91,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <el-input ref="inputRef" v-model="iconValue" :placeholder clearable @focus="handleShow" @click="handleShow">
+  <el-input
+    ref="inputRef" v-model="iconValue" :placeholder clearable @click="handleShow"
+    @keyup.enter="handleShow"
+  >
     <template #append>
-      <el-button :icon="renderIcon(iconValue, { size: 18 })" @focus="handleShow" @click="handleShow" />
+      <el-button :icon="renderIcon(iconValue, { size: 18 })" @click="handleShow" />
     </template>
   </el-input>
-  <app-popup v-model="isShow" class="app-icon-popup" :title width="650" :show-footer="false">
-    <el-tabs v-model="activeName" class="h-470" tab-position="left">
+  <app-popup v-model="isShow" class="app-icon-popup" :title width="650" max-height="400" :show-footer="false">
+    <el-tabs v-model="activeName" class="h-360" tab-position="left">
       <el-tab-pane label="All" name="all">
         <TabIconContent v-if="activeName === 'all'" :data="iconsByCollection" :active-name="activeName" @select-icon="handleIcon" />
       </el-tab-pane>
