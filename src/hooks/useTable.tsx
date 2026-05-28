@@ -5,7 +5,7 @@ import type {
   TableConfig,
   TableData,
 } from '@/components';
-import { has, isArray, isNumber } from 'lodash-es';
+import { cloneDeep, has, isArray, isNumber } from 'lodash-es';
 import { AppText } from '@/components';
 import { useTableSpan } from '@/hooks';
 import { useReset } from '@/hooks/useReset';
@@ -34,7 +34,7 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
   const columns = computed(() => config.columns());
 
   // 接口请求参数
-  const [apiParams, resetParams] = useReset<ApiParams<A>>(() => (config.apiParams || {} as ApiParams<A>));
+  const [apiParams, resetParams] = useReset<ApiParams<A>>(() => cloneDeep(config.apiParams || {} as ApiParams<A>));
 
   // 合并单元格
   const { spanList, setSpanList } = useTableSpan();
