@@ -101,3 +101,7 @@ export function rateToValue(rate: number, base = 100) {
 export function valueToRate(value: number, base = 100) {
   return div(value, base);
 }
+
+export function isPageData<T>(data: any): data is AppAxios.PageData<T> {
+  return data && typeof data === 'object' && 'list' in data;
+}

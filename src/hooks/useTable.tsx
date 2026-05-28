@@ -5,11 +5,11 @@ import type {
   TableConfig,
   TableData,
 } from '@/components';
-import { cloneDeep, has, isArray, isNumber } from 'lodash-es';
+import { cloneDeep, has, isNumber } from 'lodash-es';
 import { AppText } from '@/components';
 import { useTableSpan } from '@/hooks';
 import { useReset } from '@/hooks/useReset';
-import { moneyThousand, renderMoney } from '@/utils';
+import { isPageData, moneyThousand, renderMoney } from '@/utils';
 
 /** 分页参数字段名，导出数据时可用于 omit 过滤分页参数 */
 export const PAGINATION_KEYS = ['pageIndex', 'pageSize'] as const;
@@ -90,28 +90,30 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
     }
 
     try {
-      const responseData = await config.apiFunc(params.value);
+      const { data } = await config.apiFunc(params.value);
 
-      response.value = responseData.data;
+      response.value = data;
 
-      // 分页数据
-      pagination.total = responseData.totals || 0;
+      let list: TableData<A>[];
 
-      // 返回的是数组则是普通数据，返回的是对象的话，则是带有合计的数据
-      const list = isArray(responseData.data)
-        ? responseData.data
-        : (responseData.data?.data || []);
+      if (isPageData<TableData<A>>(data)) {
+        list = data.list;
+        // 分页数据
+        pagination.total = data.total;
 
-      // 合计数据
-      totalData.value = responseData.data?.total || {};
+        // 合计数据
+        totalData.value = data.summary || {};
+      }
+      else {
+        list = data as TableData<A>[];
+      }
 
       // 格式化返回数据
       tableData.value = config.formatData ? config.formatData(list) : list;
 
       // 处理单元格合并, 传入根据那些 key 进行合并
-      if (config.spanOptions) {
+      if (config.spanOptions)
         setSpanList(tableData.value, config.spanOptions.spanKey);
-      }
     }
     finally {
       loading.value = false;
