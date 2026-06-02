@@ -2,7 +2,7 @@ import type { UploadFile, UploadRawFile, UploadRequestOptions, UploadUserFile } 
 import type { ModelRef } from 'vue';
 import { formContextKey, formItemContextKey } from 'element-plus';
 import { isArray } from 'lodash-es';
-import { uploadFile } from '@/api';
+import { uploadImage } from '@/api';
 import { downloadFile, regex } from '@/utils';
 
 export interface AppUploadProps {
@@ -162,7 +162,7 @@ export function useUpload(
     formData.append(props.props?.key || 'file', options.file);
 
     try {
-      const api = props.api ?? uploadFile;
+      const api = props.api ?? uploadImage;
       const { data } = await api(formData);
       options.onSuccess(data);
 

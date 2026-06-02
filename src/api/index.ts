@@ -62,3 +62,19 @@ export function uploadFile(params: FormData) {
     loading: '上传中...',
   });
 }
+
+// 上传图片
+export function uploadImage(params: FormData) {
+  return request({
+    baseURL: VITE_COMMON_URL,
+    url: '/api/upload/image',
+    method: 'post',
+    data: params,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  }, {
+    cancelDuplicateRequest: false,
+    loading: '上传中...',
+  });
+}

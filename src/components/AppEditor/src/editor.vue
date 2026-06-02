@@ -2,7 +2,7 @@
 import type { AppEditorProps } from './editor.ts';
 import { Editor, Toolbar } from '@wangeditor-next/editor-for-vue';
 import { formContextKey, formItemContextKey, useZIndex } from 'element-plus';
-import { uploadFile } from '@/api';
+import { uploadFile, uploadImage } from '@/api';
 import '@wangeditor-next/editor/dist/css/style.css';
 import '@/config/wangEditor.ts';
 
@@ -89,7 +89,7 @@ props.editorConfig.MENU_CONF!.uploadImage = {
 
     const { VITE_FINANCE_URL } = import.meta.env;
     try {
-      const res = await uploadFile(formData);
+      const res = await uploadImage(formData);
       const data = res.data[0];
       // 插入图片到编辑器
       insertFn(`${VITE_FINANCE_URL}${data.savePath}`, data.alt || '', data.href || '');
