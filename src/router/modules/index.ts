@@ -17,5 +17,14 @@ export default {
         icon: 'icon-park-outline:home',
       },
     },
+    {
+      path: '/demo/grid',
+      name: 'DemoGrid',
+      component: () => import('@/views/demo/grid/index.vue'),
+      meta: {
+        title: 'Grid 组件演示',
+        icon: 'icon-park-outline:all-application',
+      },
+    },
   ],
 } satisfies RouteRecordRaw;
