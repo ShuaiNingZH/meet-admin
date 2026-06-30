@@ -1,16 +1,5 @@
 import type { LocaleType } from '@/constants/locale.ts';
-import { cloneDeep, isEmpty } from 'lodash-es';
-import { getDarkColor, getLightColor } from '@/utils';
-
-// 侧边栏菜单翻转
-export const menuInvertedTheme: AnyObj = {
-  '--el-menu-bg-color': '#2b3743',
-  '--el-menu-hover-bg-color': '#242d35',
-  '--el-menu-text-color': '#a3a7ac',
-  '--el-menu-hover-text-color': 'var(--el-color-white)',
-  '--el-menu-active-color': 'var(--el-color-primary)',
-  '--el-menu-active-bg-color': 'var(--el-color-primary-light-7)',
-};
+import { cloneDeep } from 'lodash-es';
 
 export interface ThemeColor {
   primary: string;
@@ -68,8 +57,6 @@ export interface AppConfig {
   breadcrumbShow: boolean;
   // 面包屑图标是否显示
   breadcrumbIconShow: boolean;
-  // 是否暗黑模式
-  isDark: boolean;
   // 标签页风格
   tabStyle: TabStyle;
   // 水印
@@ -91,7 +78,6 @@ export function data(): AppConfig {
     asideInverted: false,
     breadcrumbShow: true,
     breadcrumbIconShow: true,
-    isDark: false,
     tabStyle: 'dynamic',
     watermark: false,
     footer: false,
@@ -99,57 +85,22 @@ export function data(): AppConfig {
   };
 }
 
-// 初始化应用设置
+// 初始化应用设置（首屏明/暗模式与 html class 已在 index.html 的内联脚本中处理）
 export function initAppSettings() {
   const appStoreData = JSON.parse(localStorage.getItem('app-store') || '{}');
 
-  let themeColor = defaultThemeColor;
-
-  // 如果存在 appStoreData，则使用其中的主题颜色
-  if (appStoreData?.themeColor)
-    themeColor = appStoreData.themeColor;
-
-  // 是否暗黑模式
-  let isDark = appStoreData.isDark;
-
-  // 没有应用设置时，添加默认设置
-  if (isEmpty(appStoreData)) {
-    isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    localStorage.setItem('app-store', JSON.stringify({ ...data(), isDark }));
-  }
+  // 主题色：存在持久化值则用之，否则用默认色
+  const themeColor: ThemeColor = appStoreData?.themeColor ?? defaultThemeColor;
 
   const el = document.documentElement;
 
-  // 设置主题颜色
+  // 只写入基色行内变量，light-1~9 / dark-2 等变体由 CSS color-mix 自动派生（见 styles/theme.scss）
   Object.keys(themeColor).forEach((type) => {
     const color = themeColor[type];
-    if (color) {
-      const typeText = `--el-color-${type}`;
-
-      // 设置主颜色
-      el.style.setProperty(typeText, color);
-
-      // 设置深色变体
-      const darkColor = isDark ? getLightColor(color, 0.2) : getDarkColor(color, 0.3);
-      el.style.setProperty(`${typeText}-dark-2`, darkColor as string);
-
-      // 设置浅色变体
-      for (let i = 1; i <= 9; i++) {
-        const variantColor = isDark ? getDarkColor(color, i / 10) : getLightColor(color, i / 10);
-        el.style.setProperty(`${typeText}-light-${i}`, variantColor as string);
-      }
-    }
+    if (color)
+      el.style.setProperty(`--el-color-${type}`, color);
   });
 
-  // 设置侧边栏反转颜色
-  if (appStoreData?.asideInverted) {
-    for (const elKey in menuInvertedTheme) {
-      el.style.setProperty(elKey, menuInvertedTheme[elKey]);
-    }
-  }
-  else {
-    for (const elKey in menuInvertedTheme) {
-      el.style.removeProperty(elKey);
-    }
-  }
+  // 侧边栏反色：仅切换 class，具体变量在 styles/menu.scss 中定义
+  el.classList.toggle('aside-inverted', Boolean(appStoreData?.asideInverted));
 }

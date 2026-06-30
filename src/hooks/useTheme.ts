@@ -1,26 +1,17 @@
 import type { ThemeColorKey } from '@/config/settings.ts';
-import { defaultThemeColor, menuInvertedTheme } from '@/config/settings.ts';
+import { defaultThemeColor } from '@/config/settings.ts';
 import { useAppStore } from '@/stores';
-import { getDarkColor, getLightColor } from '@/utils';
 
 // 自定义 Hook 用于管理主题颜色
 export function useTheme() {
   const appStore = useAppStore();
 
-  const {
-    themeColor,
-    asideInverted,
-    isDark,
-  } = storeToRefs(appStore);
+  const { themeColor, asideInverted } = storeToRefs(appStore);
 
   const { t } = useI18n();
 
-  const { system, store: colorStore } = useColorMode();
-
-  // 颜色模式，自动根据系统设置或手动选择
-  const colorMode = computed(() => {
-    return colorStore.value === 'auto' ? system.value : colorStore.value;
-  });
+  // 调用 useColorMode 本身即会接管 html.dark / html.light 类，颜色变体随之由 CSS 自动重算
+  const { store: colorStore } = useColorMode();
 
   // 设置主题颜色
   function setThemeColor(color: string | null, type: ThemeColorKey) {
@@ -33,35 +24,10 @@ export function useTheme() {
       });
     }
 
-    const typeText = `--el-color-${type}`;
-    const el = document.documentElement;
-
-    // 设置主题颜色
-    el.style.setProperty(typeText, color);
-
-    // 设置深色变体
-    const darkColor = colorMode.value === 'dark' ? getLightColor(color, 0.2) : getDarkColor(color, 0.3);
-    el.style.setProperty(`${typeText}-dark-2`, darkColor as string);
-
-    // 设置浅色变体
-    for (let i = 1; i <= 9; i++) {
-      const variantColor = colorMode.value === 'dark' ? getDarkColor(color, i / 10) : getLightColor(color, i / 10);
-      el.style.setProperty(`${typeText}-light-${i}`, variantColor as string);
-    }
+    // 只写入基色，light-1~9 / dark-2 等变体由 CSS color-mix 自动派生（见 styles/theme.scss）
+    document.documentElement.style.setProperty(`--el-color-${type}`, color);
 
     themeColor.value[type] = color;
-  }
-
-  // 切换主题时，更新主题颜色
-  function watchTheme() {
-    // 是否是深色模式
-    isDark.value = colorMode.value === 'dark';
-
-    for (const key in defaultThemeColor) {
-      themeColor.value[key] && setThemeColor(themeColor.value[key], key);
-    }
-
-    setAsideInverted(asideInverted.value);
   }
 
   // 重置主题颜色
@@ -75,25 +41,13 @@ export function useTheme() {
     setAsideInverted(asideInverted.value);
   }
 
-  // 设置侧边栏反正色
+  // 设置侧边栏反色：仅切换 class，具体变量在 styles/menu.scss 中定义
   function setAsideInverted(inverted: string | number | boolean) {
-    const el = document.documentElement;
-    if (inverted) {
-      for (const elKey in menuInvertedTheme) {
-        el.style.setProperty(elKey, menuInvertedTheme[elKey]);
-      }
-    }
-    else {
-      for (const elKey in menuInvertedTheme) {
-        el.style.removeProperty(elKey);
-      }
-    }
+    document.documentElement.classList.toggle('aside-inverted', Boolean(inverted));
   }
 
   return {
-    colorMode,
     colorStore,
-    watchTheme,
     setThemeColor,
     resetTheme,
     setAsideInverted,

@@ -11,16 +11,13 @@
     <meta name="keywords" content="admin,meet-admin,element-plus,unocss,typescript,vue,vue3,vueuse" />
     <title>%VITE_APP_NAME%</title>
     <script>
-      // 在首屏渲染前设置主题模式，避免刷新时白色闪烁
+      // 在首屏渲染前设置主题模式，避免刷新时白色闪烁。
       (function () {
-        const globalState = JSON.parse(localStorage.getItem('app-store') || '{}');
         const html = document.documentElement;
 
-        // 第一次进入时没有主题设置，则跟随系统偏好
-        let isDark = globalState.isDark;
-        if (isDark === undefined) {
-          isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        }
+        // vueuse 以原始字符串持久化：'light' | 'dark' | 'auto'（缺省 auto，跟随系统）
+        const mode = localStorage.getItem('vueuse-color-scheme') || 'auto';
+        const isDark = mode === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : mode === 'dark';
 
         if (isDark) {
           html.classList.add('dark');
