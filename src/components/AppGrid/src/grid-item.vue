@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Properties } from 'csstype';
 import type { GridItemProps } from './types.ts';
-import { gridCollapsibleKey, gridContextKey } from './constants.ts';
+import { gridContextKey } from './constants.ts';
 
 defineOptions({ name: 'AppGridItem' });
 
@@ -13,24 +13,28 @@ const props = withDefaults(defineProps<GridItemProps>(), {
 
 const itemRef = useTemplateRef<HTMLElement>('itemRef');
 const context = inject(gridContextKey);
-const hasCollapsible = inject(gridCollapsibleKey);
+const hasCollapsible = computed(() => context?.hasCollapsible.value ?? false);
 
 // 根据网格的总列数、当前项的跨度、是否是后缀项以及偏移量，计算网格项的样式
 function getGridStyles(cols: number) {
   const styles: Partial<Properties> = {};
 
-  if (props.suffix) {
-    // 对于后缀项，始终靠右对齐
-    styles.gridColumn = `${cols - props.span + 1} / span ${props.span}`;
+  // 跨度不能超过总列数，否则会撑出隐式列，导致后续项错位
+  const span = Math.min(props.span, cols);
+
+  if (props.suffix && !context?.isSingleRow.value) {
+    // 多行时，后缀项靠右对齐
+    styles.gridColumn = `${cols - span + 1} / span ${span}`;
   }
   else if (props.offset > 0) {
     // 对于有偏移的元素，设置其起始位置和跨度
-    const start = props.offset + 1; // grid起始位置从1开始
-    styles.gridColumn = `${start} / span ${props.span}`;
+    // 起始位置同样需要约束，避免 offset + span 超出总列数撑出隐式列
+    const start = Math.min(props.offset + 1, cols - span + 1); // grid起始位置从1开始
+    styles.gridColumn = `${start} / span ${span}`;
   }
   else {
     // 没有偏移的普通元素
-    styles.gridColumn = `span ${props.span}`;
+    styles.gridColumn = `span ${span}`;
   }
 
   return styles;
@@ -64,11 +68,21 @@ const style = computed<Partial<Properties>>(() => {
 });
 
 // 注册和注销项 --- start
-onMounted(() => {
-  if (itemRef.value && context) {
-    context.registerItem(itemRef.value, props.suffix);
-  }
-});
+// 将 itemRef 一并纳入监听：挂载后 itemRef 由 null 变为元素时触发首次注册，
+// 之后 suffix / span / offset 变化时自动同步
+watch(
+  () => [itemRef.value, props.suffix, props.span, props.offset],
+  () => {
+    if (itemRef.value && context) {
+      context.registerItem(itemRef.value, {
+        isSuffix: props.suffix,
+        span: props.span,
+        offset: props.offset,
+      });
+    }
+  },
+  { immediate: true },
+);
 
 onUnmounted(() => {
   if (context && itemRef.value) {

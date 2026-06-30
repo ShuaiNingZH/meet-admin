@@ -26,11 +26,19 @@ export interface GridItemProps {
   suffix?: boolean;
 }
 
+// 网格子项注册信息
+export interface GridItemInfo {
+  isSuffix: boolean;
+  span: number;
+  offset: number;
+}
+
 // 定义上下文接口
 export interface GridContext {
   cols: ComputedRef<number>;
-  registerItem: (el: HTMLElement, isSuffix: boolean) => void;
+  registerItem: (el: HTMLElement, info: GridItemInfo) => void;
   unregisterItem: (el: HTMLElement) => void;
   hasCollapsible: ComputedRef<boolean>;
+  isSingleRow: ComputedRef<boolean>;
   isVisible: (el: HTMLElement) => boolean;
 }
