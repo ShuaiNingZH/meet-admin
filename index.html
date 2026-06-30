@@ -10,6 +10,28 @@
     />
     <meta name="keywords" content="admin,meet-admin,element-plus,unocss,typescript,vue,vue3,vueuse" />
     <title>%VITE_APP_NAME%</title>
+    <script>
+      // 在首屏渲染前设置主题模式，避免刷新时白色闪烁
+      (function () {
+        const globalState = JSON.parse(localStorage.getItem('app-store') || '{}');
+        const html = document.documentElement;
+
+        // 第一次进入时没有主题设置，则跟随系统偏好
+        let isDark = globalState.isDark;
+        if (isDark === undefined) {
+          isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        if (isDark) {
+          html.classList.add('dark');
+          html.classList.remove('light');
+          html.style.backgroundColor = '#141414';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+        }
+      })();
+    </script>
   </head>
 
   <body>
@@ -108,26 +130,6 @@
         <div class="thing"></div>
       </div>
     </div>
-    <script>
-      // 设置首次加载时主题模式
-      const globalState = JSON.parse(localStorage.getItem('app-store') || '{}');
-      const html = document.documentElement;
-
-      // 第一次进入时，检查是否有主题设置，如果没有，则根据系统偏好设置主题
-      if (globalState.isDark === undefined) {
-        const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (isDark) {
-          html.classList.replace('light', 'dark');
-          html.style.backgroundColor = '#141414';
-        }
-      }
-
-      // 根据 localStorage 中的设置应用主题
-      if (globalState.isDark) {
-        html.classList.replace('light', 'dark');
-        html.style.backgroundColor = '#141414';
-      }
-    </script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
