@@ -82,13 +82,15 @@ async function handleConfirm() {
       <app-form-item v-if="state.type !== 2" label="菜单图标" prop="icon" :span="2">
         <app-select-icon v-model="state.icon" placeholder="请选择菜单图标" />
       </app-form-item>
-      <template v-if="state.type === 1">
+      <template v-if="state.type !== 2">
         <app-form-item label="路由路径" prop="path">
           <el-input v-model="state.path" placeholder="请输入路由路径" />
         </app-form-item>
         <app-form-item label="路由名称" prop="routeName">
           <el-input v-model="state.routeName" placeholder="请输入路由名称" />
         </app-form-item>
+      </template>
+      <template v-if="state.type === 1">
         <app-form-item label="组件路径" prop="componentPath" :span="2" help-info="例：system/menu/index">
           <el-input v-model="state.componentPath" placeholder="请输入组件路径" />
         </app-form-item>
