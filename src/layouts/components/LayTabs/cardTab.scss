@@ -15,7 +15,10 @@
 
         .el-tabs__nav-wrap {
           .el-tabs__nav {
+            gap: 10px;
+
             .el-tabs__item {
+              margin: 0;
               height: 30px;
               color: var(--el-text-color-primary);
               border: 1px solid var(--el-border-color);
@@ -37,10 +40,6 @@
 
               &.is-active {
                 background-color: var(--el-color-primary-light-8);
-              }
-
-              & + .el-tabs__item {
-                margin-left: 10px;
               }
             }
           }

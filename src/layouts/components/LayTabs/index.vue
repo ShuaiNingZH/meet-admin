@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { DropdownInstance, Measurable, TabsPaneContext } from 'element-plus';
-import type { TabStyle } from '@/config/settings.ts';
 import type { TabsMenu } from '@/stores';
 import { navigationFailure } from '@/constants/router';
 import { useNotification } from '@/hooks';
@@ -26,12 +25,12 @@ onMounted(() => {
 watchEffect(() => {
   currentTabPath.value = route.fullPath;
   addTab({
-    icon: route.meta.icon!,
+    icon: route.meta.icon ?? '',
     title: route.meta.title,
     path: route.fullPath,
     name: route.name as string,
-    keepAlive: route.meta.keepAlive!,
-    hideInTag: route.meta.hideInTag!,
+    keepAlive: route.meta.keepAlive ?? false,
+    hideInTag: route.meta.hideInTag ?? false,
   });
 });
 
@@ -47,7 +46,7 @@ function tabClick(tabItem: TabsPaneContext) {
 }
 
 // 关闭 tab
-function tabRemove(name: (string | number)) {
+function tabRemove(name: string | number) {
   tabStore.closeTab(name as string);
 }
 
@@ -62,33 +61,29 @@ const contextTabPath = ref('');
 const contextmenuRef = ref<DropdownInstance>();
 
 // 虚拟触发元素：让 el-dropdown 弹层锚定到鼠标右击的坐标处
-// cursor 仅在 getBoundingClientRect 中被 Popper 命令式读取，无需响应式
 const cursor = shallowRef({ x: 0, y: 0 });
 const virtualRef: Measurable = {
   getBoundingClientRect: () => DOMRect.fromRect({ x: cursor.value.x, y: cursor.value.y, width: 0, height: 0 }),
 };
 
 // 右击 tab 显示菜单
-async function handleRightClickTab(e: MouseEvent, route: TabsMenu) {
+function handleRightClickTab(e: MouseEvent, route: TabsMenu) {
   contextTabPath.value = route.path;
-  // cursor.value.x = e.clientX;
-  // cursor.value.y = e.clientY;
   cursor.value = { x: e.clientX, y: e.clientY };
-  // 先关闭再打开，确保菜单重新定位到当前右击位置
-  // contextmenuRef.value?.handleClose();
-  // await nextTick();
   contextmenuRef.value?.handleOpen();
 }
 
+type ContextMenuKey = 'reload' | 'close' | 'closeOther' | 'closeLeft' | 'closeRight' | 'closeAll';
+
 interface ContextMenuItem {
-  key: string;
+  key: ContextMenuKey;
   icon?: string;
   disabled?: boolean;
   show?: boolean;
 }
 
 // 右击菜单各项对应的操作
-const actions: AnyObj = {
+const actions: Record<ContextMenuKey, () => void> = {
   reload: appStore.reloadPage,
   close: () => tabStore.closeTab(contextTabPath.value),
   closeOther: () => tabStore.closeOtherTabs(contextTabPath.value),
@@ -139,14 +134,8 @@ const options = computed(() => {
   return list.filter(item => item.show !== false);
 });
 
-type TabMap = Record<TabStyle, string> & AnyObj;
 // 不同 tab 的样式
-const tabMap: TabMap = {
-  card: 'card-tab',
-  dynamic: 'dynamic-tab',
-  simple: 'simple-tab',
-};
-const tabClass = computed(() => tabMap[appStore.tabStyle]);
+const tabClass = computed(() => `${appStore.tabStyle}-tab`);
 </script>
 
 <template>
@@ -190,6 +179,12 @@ const tabClass = computed(() => tabMap[appStore.tabStyle]);
 @use 'simpleTab';
 
 .tabs-box {
+  // 虚拟触发时 el-dropdown 仅作为弹层容器，其触发元素无需显示；
+  // 否则空的 .el-dropdown（默认 inline-flex）会在页面上占据一块空白
+  :deep(.el-dropdown) {
+    display: none;
+  }
+
   .tabs-menu {
     :deep(.el-tabs) {
       .el-tabs__header {
