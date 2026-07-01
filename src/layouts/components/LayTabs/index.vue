@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { TabsPaneContext } from 'element-plus';
-import type { ContextMenuItem } from '@/components';
+import type { DropdownInstance, Measurable, TabsPaneContext } from 'element-plus';
 import type { TabStyle } from '@/config/settings.ts';
 import type { TabsMenu } from '@/stores';
 import { navigationFailure } from '@/constants/router';
 import { useNotification } from '@/hooks';
 import { useAppStore, useTabStore } from '@/stores';
+import { renderIcon } from '@/utils';
 
 defineOptions({ name: 'LayTabs' });
 
@@ -56,31 +56,49 @@ function isClosable(route: TabsMenu) {
   return route.path !== import.meta.env.VITE_HOME_PATH;
 }
 
-const currentRoute = reactive({
-  path: '',
-});
+// 右击菜单当前作用的 tab 路径
+const contextTabPath = ref('');
 
-const contextmenuRef = ref();
+const contextmenuRef = ref<DropdownInstance>();
+
+// 虚拟触发元素：让 el-dropdown 弹层锚定到鼠标右击的坐标处
+// cursor 仅在 getBoundingClientRect 中被 Popper 命令式读取，无需响应式
+const cursor = shallowRef({ x: 0, y: 0 });
+const virtualRef: Measurable = {
+  getBoundingClientRect: () => DOMRect.fromRect({ x: cursor.value.x, y: cursor.value.y, width: 0, height: 0 }),
+};
 
 // 右击 tab 显示菜单
-function handleRightClickTab(e: MouseEvent, route: TabsMenu) {
-  Object.assign(currentRoute, route);
-  contextmenuRef.value.onShowContextmenu(route, {
-    x: e.clientX,
-    y: e.clientY + 10,
-  });
+async function handleRightClickTab(e: MouseEvent, route: TabsMenu) {
+  contextTabPath.value = route.path;
+  // cursor.value.x = e.clientX;
+  // cursor.value.y = e.clientY;
+  cursor.value = { x: e.clientX, y: e.clientY };
+  // 先关闭再打开，确保菜单重新定位到当前右击位置
+  // contextmenuRef.value?.handleClose();
+  // await nextTick();
+  contextmenuRef.value?.handleOpen();
 }
+
+interface ContextMenuItem {
+  key: string;
+  icon?: string;
+  disabled?: boolean;
+  show?: boolean;
+}
+
+// 右击菜单各项对应的操作
+const actions: AnyObj = {
+  reload: appStore.reloadPage,
+  close: () => tabStore.closeTab(contextTabPath.value),
+  closeOther: () => tabStore.closeOtherTabs(contextTabPath.value),
+  closeLeft: () => tabStore.closeLeftTabs(contextTabPath.value),
+  closeRight: () => tabStore.closeRightTabs(contextTabPath.value),
+  closeAll: tabStore.closeAllTabs,
+};
 
 // 点击右击菜单
 function handleSelect(menuItem: ContextMenuItem) {
-  const actions: AnyObj = {
-    reload: appStore.reloadPage,
-    close: () => tabStore.closeTab(currentRoute.path),
-    closeOther: () => tabStore.closeOtherTabs(currentRoute.path),
-    closeLeft: () => tabStore.closeLeftTabs(currentRoute.path),
-    closeRight: () => tabStore.closeRightTabs(currentRoute.path),
-    closeAll: tabStore.closeAllTabs,
-  };
   actions[menuItem.key]();
 }
 
@@ -91,12 +109,12 @@ const options = computed(() => {
   const list: ContextMenuItem[] = [
     {
       key: 'reload',
-      disabled: !(currentRoute.path === tabStore.currentTabPath),
+      disabled: !(contextTabPath.value === tabStore.currentTabPath),
       icon: 'icon-park-outline:redo',
     },
     {
       key: 'close',
-      show: currentRoute.path !== homePage,
+      show: contextTabPath.value !== homePage,
       icon: 'icon-park-outline:close',
     },
     {
@@ -105,7 +123,7 @@ const options = computed(() => {
     },
     {
       key: 'closeLeft',
-      show: currentRoute.path !== homePage,
+      show: contextTabPath.value !== homePage,
       icon: 'icon-park-outline:to-left',
     },
     {
@@ -118,7 +136,7 @@ const options = computed(() => {
     },
   ];
 
-  return list;
+  return list.filter(item => item.show !== false);
 });
 
 type TabMap = Record<TabStyle, string> & AnyObj;
@@ -136,8 +154,7 @@ const tabClass = computed(() => tabMap[appStore.tabStyle]);
     <div class="tabs-menu">
       <el-tabs v-model="currentTabPath" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane
-          v-for="item of tabs" :key="item.path"
-          :label="item.title" :name="item.path"
+          v-for="item of tabs" :key="item.path" :label="item.title" :name="item.path"
           :closable="isClosable(item)"
         >
           <template #label>
@@ -149,9 +166,21 @@ const tabClass = computed(() => tabMap[appStore.tabStyle]);
         </el-tab-pane>
       </el-tabs>
     </div>
-    <app-dropdown ref="contextmenuRef" v-slot="slotProps" :width="120" :items="options" @menu-click="handleSelect">
-      <span>{{ t(`tab.${slotProps.item.key}`) }}</span>
-    </app-dropdown>
+    <el-dropdown
+      ref="contextmenuRef" trigger="contextmenu" placement="bottom-start" virtual-triggering
+      :virtual-ref="virtualRef" @command="handleSelect"
+    >
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item
+            v-for="item of options" :key="item.key" :command="item" :disabled="item.disabled"
+            :icon="renderIcon(item.icon)"
+          >
+            {{ t(`tab.${item.key}`) }}
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
   </div>
 </template>
 
