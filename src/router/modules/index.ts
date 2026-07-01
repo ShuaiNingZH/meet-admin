@@ -1,10 +1,11 @@
 import type { RouteRecordRaw } from 'vue-router';
+import { LAYOUT_NAME } from '@/constants/router.ts';
 
 const homePage = import.meta.env.VITE_HOME_PATH;
 
 export default {
   path: '/',
-  name: 'Layout',
+  name: LAYOUT_NAME,
   redirect: homePage,
   component: () => import('@/layouts/index.vue'),
   children: [
@@ -15,15 +16,6 @@ export default {
       meta: {
         title: '首页',
         icon: 'icon-park-outline:home',
-      },
-    },
-    {
-      path: '/demo/grid',
-      name: 'DemoGrid',
-      component: () => import('@/views/demo/grid/index.vue'),
-      meta: {
-        title: 'Grid 组件演示',
-        icon: 'icon-park-outline:all-application',
       },
     },
   ],

@@ -1,4 +1,5 @@
 import type { RouteRecordRaw } from 'vue-router';
+import { LAYOUT_NAME } from '@/constants/router.ts';
 import { useReset } from '@/hooks/useReset.ts';
 import { router } from '@/router';
 import { filterSearchMenus, getBreadcrumbsByRoute, processMenus } from '@/router/utils.ts';
@@ -27,10 +28,13 @@ export const useRouteStore = defineStore('route-store', () => {
    * @param dynamicRoutes 动态注册的路由
    */
   const handleMenus = (dynamicRoutes: RouteRecordRaw[] = []) => {
-    const allRoutes = [...router.options.routes, ...dynamicRoutes];
+    // 取出 Layout 的静态子路由，与动态路由同级处理，保持静态/动态菜单结构一致
+    const layoutRoute = router.options.routes.find(item => item.name === LAYOUT_NAME);
+    const staticRoutes = layoutRoute?.children ?? [];
+    const businessRoutes = [...staticRoutes, ...dynamicRoutes];
 
-    state.value.routes = allRoutes;
-    state.value.menus = processMenus(allRoutes);
+    state.value.routes = businessRoutes;
+    state.value.menus = processMenus(businessRoutes);
     state.value.searchMenus = filterSearchMenus(state.value.menus);
   };
 
@@ -39,8 +43,7 @@ export const useRouteStore = defineStore('route-store', () => {
     const homePath = import.meta.env.VITE_HOME_PATH;
     const route = router.currentRoute.value;
 
-    let result = getBreadcrumbsByRoute(route, state.value.routes)
-      .filter(item => item.path !== '/');
+    let result = getBreadcrumbsByRoute(route, state.value.routes);
 
     // 如果没有首页，则添加首页
     if (!result.some(item => item.path === homePath)) {

@@ -3,23 +3,23 @@ import type { RouteRecordRaw } from 'vue-router';
 import { isEmpty } from 'lodash-es';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import NProgress from '@/config/nprogress';
+import Layout from '@/router/modules/index.ts';
 import remainingRouter from '@/router/modules/remainingRouter.ts';
 import { initRouter } from '@/router/utils.ts';
 import { useUserStore } from '@/stores';
 import { setDocumentTitle } from '@/utils';
 
-// 加载所有模块路由，排除 remainingRouter.ts
-const modules: AnyObj = import.meta.glob(['./modules/*.ts', '!./modules/remainingRouter.ts'], {
-  eager: true,
-});
+// 业务路由模块：自动挂载到 Layout 下（排除容器与 remaining）
+const businessModules = import.meta.glob<{ default: RouteRecordRaw }>(
+  ['./modules/*.ts', '!./modules/index.ts', '!./modules/remainingRouter.ts'],
+  { eager: true },
+);
+const businessRoutes = Object.values(businessModules).map(mod => mod.default);
 
-// 路由数组
-const routes: RouteRecordRaw[] = [];
-
-// 遍历模块并添加到路由数组
-Object.keys(modules).forEach((key) => {
-  routes.push(modules[key].default);
-});
+// Layout 作为容器，业务路由与动态路由保持同一层级挂到其 children 下
+const routes: RouteRecordRaw[] = [
+  { ...Layout, children: [...Layout.children, ...businessRoutes] },
+];
 
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),

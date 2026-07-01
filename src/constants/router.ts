@@ -3,6 +3,9 @@ import type {
 } from 'element-plus/es/components/notification/src/notification';
 import { $t } from '@/utils';
 
+/** Layout 容器路由名称（动态路由挂载、菜单查找均依赖它） */
+export const LAYOUT_NAME = 'Layout';
+
 export function navigationFailure(): NotificationParamsTyped {
   return {
     type: 'error',

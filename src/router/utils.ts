@@ -2,6 +2,7 @@ import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router';
 import { cloneDeep } from 'lodash-es';
 import path from 'path-browserify';
 import { fetchUserInfo, fetchUserMenu } from '@/api';
+import { LAYOUT_NAME } from '@/constants/router.ts';
 import { router } from '@/router';
 import { useRouteStore, useTabStore, useUserStore } from '@/stores';
 
@@ -22,7 +23,7 @@ export async function initRouter() {
 
   const dynamicRoutes = menuToRoutes(menuRes.data);
   dynamicRoutes.forEach((dynamicRoute) => {
-    router.addRoute('Layout', dynamicRoute);
+    router.addRoute(LAYOUT_NAME, dynamicRoute);
   });
 
   // 处理菜单数据
@@ -88,24 +89,28 @@ function resolveComponent(componentPath: string) {
 }
 
 /**
- * 处理菜单数据
+ * 处理菜单数据（入口：只在此深克隆一次，避免递归重复克隆）
  * @param routes 路由数据
+ */
+export function processMenus(routes: RouteRecordRaw[]) {
+  return buildMenus(cloneDeep(routes));
+}
+
+/**
+ * 递归构建菜单树
+ * @param routes 已克隆的路由数据
  * @param parentPath 父级路由路径
  */
-export function processMenus(routes: RouteRecordRaw[], parentPath = '') {
-  const result = cloneDeep(routes).reduce<RouteRecordRaw[]>((acc, item) => {
+function buildMenus(routes: RouteRecordRaw[], parentPath = '') {
+  const result = routes.reduce<RouteRecordRaw[]>((acc, item) => {
     // 将父路由的 path 拼接到子路由的 path 上
     item.path = path.resolve(parentPath, item.path);
 
     // 确保每个路由的 meta 存在，并给未定义的 meta 设置默认值
     item.meta = item.meta ?? { title: '' };
 
-    // 根路由 sort 为 0
-    if (item.path === '/')
-      item.meta.sort = 0;
-
     if (item.children)
-      item.children = processMenus(item.children, item.path);
+      item.children = buildMenus(item.children, item.path);
 
     // 过滤菜单
     if (!item.meta?.hideInMenu) {
@@ -121,7 +126,7 @@ export function processMenus(routes: RouteRecordRaw[], parentPath = '') {
     return acc;
   }, []);
 
-  // 在递归完成后再统一排序，避免每次都排序
+  // 对当前层级按 sort 排序
   return result.sort((a, b) => (a.meta?.sort ?? 0) - (b.meta?.sort ?? 0));
 }
 
