@@ -20,10 +20,11 @@ function handleSearchMenu() {
   showSearchMenu.value = true;
 }
 
-const { width } = useWindowSize();
-// 监听窗口大小, 自动隐藏面包屑
+const headerRef = useTemplateRef<HTMLElement>('headerRef');
+const { width } = useElementSize(headerRef, { width: window.innerWidth, height: 0 });
+// 自动隐藏面包屑
 const isShowBreadcrumb = ref(true);
-// 监听窗口大小, 自动隐藏右侧按钮
+// 自动隐藏右侧按钮
 const isShowRight = ref(true);
 
 const debouncedUpdate = useDebounceFn((width: number) => {
@@ -32,12 +33,12 @@ const debouncedUpdate = useDebounceFn((width: number) => {
 }, 100);
 
 watchEffect(() => {
-  debouncedUpdate(width.value).then();
+  debouncedUpdate(width.value);
 });
 </script>
 
 <template>
-  <app-flex class="p-[5px_10px] border-b" justify="space-between" align="center">
+  <app-flex ref="headerRef" class="p-[5px_10px] border-b" justify="space-between" align="center">
     <!-- 左侧 -->
     <app-flex class="overflow-hidden" :size="5" align="center">
       <el-tooltip :content="t('tooltip.refreshPage')" :disabled="!buttonTip">

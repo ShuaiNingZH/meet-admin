@@ -14,7 +14,8 @@ const {
 } = defineProps<GridProps>();
 
 // 监听窗口大小变化
-const { width } = useWindowSize();
+const gridRef = useTemplateRef<HTMLDivElement>('gridRef');
+const { width } = useElementSize(gridRef, { width: window.innerWidth, height: 0 });
 
 // 响应式断点判断与 Element Plus 保持一致
 const breakpoints: AnyObj = {
@@ -28,7 +29,7 @@ const breakpoints: AnyObj = {
 const activeBreakpoint = computed(() => {
   // 遍历断点配置对象
   for (const key in breakpoints) {
-    // 如果当前窗口宽度 >= 当前断点的最小宽度，返回当前断点名称
+    // 如果当前容器宽度 >= 当前断点的最小宽度，返回当前断点名称
     if (width.value >= breakpoints[key])
       return key;
   }
@@ -36,23 +37,29 @@ const activeBreakpoint = computed(() => {
   return 'xs';
 });
 
-// 响应式值处理
+// 响应式值处理（移动优先 + 双向回退）
 function resolveResponsiveValue(value: number | ResponsiveValue, defaultValue: number): number {
   // 如果 value 是数字，直接返回
   if (typeof value === 'number')
     return value;
 
-  // 如果 value 是对象，按优先级获取值
-  if (typeof value === 'object') {
-    // 定义断点优先级顺序
-    const breakpointPriority = ['xl', 'lg', 'md', 'sm', 'xs'];
-    // 获取当前断点的索引
-    const currentBreakpointIndex = breakpointPriority.indexOf(activeBreakpoint.value);
+  // 如果 value 是对象，按断点就近取值
+  if (typeof value === 'object' && value) {
+    // 断点从小到大排列（移动优先）
+    const order = ['xs', 'sm', 'md', 'lg', 'xl'];
+    // 当前断点索引
+    const currentIndex = order.indexOf(activeBreakpoint.value);
 
-    // 从当前断点开始，依次查找有效值（用 != null 判断，避免跳过值为 0 的断点）
-    for (let i = currentBreakpointIndex; i >= 0; i--) {
-      const breakpoint = breakpointPriority[i];
-      const breakpointValue = breakpoint ? value[breakpoint] : undefined;
+    // 优先向下取：当前及更小断点里最近的已定义值（用 != null 判断，避免跳过值为 0 的断点）
+    for (let i = currentIndex; i >= 0; i--) {
+      const breakpointValue = value[order[i]!];
+      if (breakpointValue != null)
+        return breakpointValue;
+    }
+
+    // 向下没有则向上取：更大断点里最近的已定义值，保证只写单个断点也能全屏生效
+    for (let i = currentIndex + 1; i < order.length; i++) {
+      const breakpointValue = value[order[i]!];
       if (breakpointValue != null)
         return breakpointValue;
     }
@@ -185,7 +192,7 @@ provide(gridContextKey, {
 </script>
 
 <template>
-  <div class="app-grid" :style="style">
+  <div ref="gridRef" class="app-grid" :style="style">
     <slot />
   </div>
 </template>
