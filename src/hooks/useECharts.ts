@@ -26,14 +26,14 @@ interface ZRenderEventCacheItem {
  * @param initOpts - 图表配置
  */
 export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChartsOption, initOpts: EChartOptions = {}) {
-  // Echarts 实例
+  // ECharts 实例
   let chartInstance: EChartsType | null = null;
   // 当前图表配置项
   const chartOptions = cloneDeep(option);
   // echarts 事件缓存
   const echartsEventCache: EChartsEventCacheItem[] = [];
   // ZRender 事件缓存
-  const zrenderEventCache: ZRenderEventCacheItem[] = [];
+  const zRenderEventCache: ZRenderEventCacheItem[] = [];
   // 当前图表配置
   const { autoResize = true } = initOpts;
 
@@ -77,7 +77,7 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     });
 
     // 重新绑定 ZRender 事件缓存
-    zrenderEventCache.forEach(({ event, handler }) => {
+    zRenderEventCache.forEach(({ event, handler }) => {
       chartInstance?.getZr()?.on(event, handler);
     });
   }
@@ -91,7 +91,7 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     chartInstance?.setOption(option);
   }
 
-  // 监听窗口大小变化，自动调整图表大小
+  // 监听容器尺寸变化，自动调整图表大小
   const debouncedResize = useDebounceFn(() => {
     chartInstance?.resize();
   }, 300);
@@ -153,7 +153,7 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     await nextTick();
     chartInstance?.getZr()?.on(event, handler);
     // 添加 ZRender 事件缓存
-    zrenderEventCache.push({ event, handler });
+    zRenderEventCache.push({ event, handler });
   }
 
   // 获取 DataURL
@@ -166,26 +166,19 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     return chartInstance?.getDataURL(opts) || '';
   }
 
-  // 声明 ResizeObserver 实例，用于监听容器尺寸变化
-  let ro: ResizeObserver | null = null;
+  // 自动调整大小：监听图表自身容器的尺寸变化（useResizeObserver 会自动 observe，并在组件卸载时解绑）
+  if (autoResize)
+    useResizeObserver(chartRef, debouncedResize);
 
   // 挂载时初始化
   onMounted(() => {
     initChart();
-
-    // 如果需要自动调整大小，则监听图表自身容器的尺寸变化
-    if (autoResize && chartRef.value) {
-      ro = new ResizeObserver(debouncedResize);
-      ro.observe(chartRef.value);
-    }
   });
 
   // 组件卸载时销毁图表实例
   onBeforeUnmount(() => {
     chartInstance?.dispose();
     chartInstance = null;
-    ro?.disconnect();
-    ro = null;
   });
 
   return {
