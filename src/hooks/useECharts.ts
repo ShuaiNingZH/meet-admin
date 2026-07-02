@@ -173,15 +173,10 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
   onMounted(() => {
     initChart();
 
-    // 如果需要自动调整大小，则添加窗口 resize 事件监听
-    if (autoResize) {
-      // useEventListener(window, 'resize', debouncedResize);
-
-      const el = document.querySelector('.el-main');
-      if (el) {
-        ro = new ResizeObserver(debouncedResize);
-        ro.observe(el);
-      }
+    // 如果需要自动调整大小，则监听图表自身容器的尺寸变化
+    if (autoResize && chartRef.value) {
+      ro = new ResizeObserver(debouncedResize);
+      ro.observe(chartRef.value);
     }
   });
 
