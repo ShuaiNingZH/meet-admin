@@ -16,9 +16,8 @@ const option = computed<EChartsOption>(() => ({
   xAxis: {
     type: 'category',
     data: [t('months.jan'), t('months.feb'), t('months.mar'), t('months.apr'), t('months.may'), t('months.jun')],
-    axisLine: { lineStyle: { color: '#dcdfe6' } },
   },
-  yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ebeef5' } } },
+  yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed' } } },
   series: [
     {
       name: t('chart.sales.title'),

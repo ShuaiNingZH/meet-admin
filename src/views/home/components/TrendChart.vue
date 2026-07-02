@@ -18,9 +18,8 @@ const option = computed<EChartsOption>(() => ({
     type: 'category',
     boundaryGap: false,
     data: [t('weekDays.mon'), t('weekDays.tue'), t('weekDays.wed'), t('weekDays.thu'), t('weekDays.fri'), t('weekDays.sat'), t('weekDays.sun')],
-    axisLine: { lineStyle: { color: '#dcdfe6' } },
   },
-  yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed', color: '#ebeef5' } } },
+  yAxis: { type: 'value', splitLine: { lineStyle: { type: 'dashed' } } },
   series: [
     {
       name: t('chart.trend.series0'),

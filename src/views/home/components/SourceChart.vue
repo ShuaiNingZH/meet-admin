@@ -20,7 +20,7 @@ const option = computed<EChartsOption>(() => ({
       radius: ['45%', '68%'],
       center: ['50%', '44%'],
       avoidLabelOverlap: false,
-      itemStyle: { borderRadius: 6, borderColor: '#fff', borderWidth: 2 },
+      itemStyle: { borderRadius: 6 },
       label: { show: false },
       emphasis: { scaleSize: 8 },
       data: [
