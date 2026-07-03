@@ -1,36 +1,38 @@
 <script setup lang="ts">
+import type { TimelineItemProps } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 
 defineOptions({ name: 'ActivityFeed' });
 
 const { t } = useI18n();
 
+interface ActivityType extends Partial<TimelineItemProps> {
+  user: string;
+  content: string;
+}
+
 // 动态列表
-const activities = computed(() => [
-  { id: 1, user: 'Admin', action: t('activity.actions.0'), time: t('activity.time.0'), type: 'primary' },
-  { id: 2, user: 'Vivian', action: t('activity.actions.1'), time: t('activity.time.1'), type: 'success' },
-  { id: 3, user: 'Kevin', action: t('activity.actions.2'), time: t('activity.time.2'), type: 'warning' },
-  { id: 4, user: 'System', action: t('activity.actions.3'), time: t('activity.time.3'), type: 'info' },
-  { id: 5, user: 'Lucy', action: t('activity.actions.4'), time: t('activity.time.4'), type: 'primary' },
+const activities = computed<ActivityType[]>(() => [
+  { user: 'Admin', content: t('activity.content.0'), timestamp: t('activity.time.0'), type: 'primary' },
+  { user: 'Vivian', content: t('activity.content.1'), timestamp: t('activity.time.1'), type: 'success' },
+  { user: 'Kevin', content: t('activity.content.2'), timestamp: t('activity.time.2'), type: 'warning' },
+  { user: 'System', content: t('activity.content.3'), timestamp: t('activity.time.3'), type: 'info' },
+  { user: 'Lucy', content: t('activity.content.4'), timestamp: t('activity.time.4'), type: 'primary' },
 ]);
 </script>
 
 <template>
   <app-card class="h-full">
-    <div class="chart-card__header">
-      <span class="chart-card__title">{{ t('activity.title') }}</span>
-    </div>
+    <h3 class="m0">
+      {{ t('activity.title') }}
+    </h3>
     <el-timeline class="activity">
       <el-timeline-item
-        v-for="act in activities"
-        :key="act.id"
-        :type="act.type as any"
-        :timestamp="act.time"
-        placement="top"
-        hollow
+        v-for="(item, index) in activities" :key="index" :type="item.type" :timestamp="item.timestamp"
+        placement="top" hollow
       >
-        <span class="activity__user">{{ act.user }}</span>
-        <span class="activity__action">{{ act.action }}</span>
+        <span class="activity__user">{{ item.user }}</span>
+        <span class="activity__content">{{ item.content }}</span>
       </el-timeline-item>
     </el-timeline>
   </app-card>
@@ -40,7 +42,7 @@ const activities = computed(() => [
 zh-CN:
   activity:
     title: 最新动态
-    actions:
+    content:
       - 更新了系统菜单配置
       - 新增了一个角色「运营专员」
       - 导出了本月用户数据
@@ -55,7 +57,7 @@ zh-CN:
 en-US:
   activity:
     title: Recent Activity
-    actions:
+    content:
       - Updated system menu configuration
       - Added a new role "Operator"
       - Exported this month's user data
@@ -80,7 +82,7 @@ en-US:
     color: var(--el-color-primary);
   }
 
-  &__action {
+  &__content {
     font-size: 13px;
     color: var(--el-text-color-regular);
   }

@@ -13,10 +13,9 @@ watch(() => props.option, val => updateOptions(val));
 
 <template>
   <app-card class="h-full">
-    <div class="chart-card__header">
-      <span class="chart-card__title">{{ title }}</span>
-      <slot name="extra" />
-    </div>
+    <h3 class="m0">
+      {{ title }}
+    </h3>
     <div ref="chartRef" class="chart chart--lg" />
   </app-card>
 </template>

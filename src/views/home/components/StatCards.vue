@@ -25,7 +25,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <!-- 大屏 4 列，<1200 为 2 列 -->
   <app-grid :cols="{ xs: 2, lg: 4 }" :row-gap="16" :col-gap="16">
     <app-grid-item v-for="(item, index) in stats" :key="item.key">
       <app-card shadow="hover" class="stat h-full">

@@ -44,19 +44,12 @@ const option = computed<EChartsOption>(() => ({
 </script>
 
 <template>
-  <ChartCard :title="t('chart.trend.title')" :option="option">
-    <template #extra>
-      <el-tag type="primary" effect="light" size="small">
-        {{ t('chart.thisWeek') }}
-      </el-tag>
-    </template>
-  </ChartCard>
+  <ChartCard :title="t('chart.trend.title')" :option="option" />
 </template>
 
 <i18n lang="yaml">
 zh-CN:
   chart:
-    thisWeek: 本周
     trend:
       title: 访问趋势
       series0: 访问量
@@ -71,7 +64,6 @@ zh-CN:
     sun: 周日
 en-US:
   chart:
-    thisWeek: This Week
     trend:
       title: Visit Trend
       series0: Visits

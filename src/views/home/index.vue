@@ -21,7 +21,7 @@ const remainingTodos = ref(0);
     <!-- 统计卡片 -->
     <StatCards />
 
-    <!-- 图表区：趋势 + 来源（2 : 1，<1200 堆叠为单列） -->
+    <!-- 图表区：趋势 + 来源 -->
     <app-grid :cols="{ xs: 1, lg: 3 }" :row-gap="16" :col-gap="16">
       <app-grid-item :span="2">
         <TrendChart />
@@ -31,7 +31,7 @@ const remainingTodos = ref(0);
       </app-grid-item>
     </app-grid>
 
-    <!-- 底部：柱状图 + 快捷入口/待办 + 动态（1.4 : 1 : 1 = 7 : 5 : 5 / 17 列，<1200 堆叠为单列） -->
+    <!-- 底部：柱状图 + 快捷入口/待办 + 动态 -->
     <app-grid :cols="{ xs: 1, lg: 17 }" :row-gap="16" :col-gap="16">
       <app-grid-item :span="7">
         <SalesChart />
@@ -45,9 +45,3 @@ const remainingTodos = ref(0);
     </app-grid>
   </app-flex>
 </template>
-
-<style scoped lang="scss">
-.home {
-  width: 100%;
-}
-</style>

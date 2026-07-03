@@ -35,10 +35,9 @@ watchEffect(() => {
 
 <template>
   <app-card class="h-full">
-    <div class="chart-card__header">
-      <span class="chart-card__title">{{ t('shortcuts.title') }}</span>
-    </div>
-    <!-- 大屏 4 列，<768 为 2 列 -->
+    <h3 class="m0">
+      {{ t('shortcuts.title') }}
+    </h3>
     <app-grid :cols="{ xs: 2, sm: 4 }" :row-gap="12" :col-gap="12">
       <app-grid-item v-for="s in shortcuts" :key="s.path">
         <div class="shortcut" @click="goTo(s.path)">
