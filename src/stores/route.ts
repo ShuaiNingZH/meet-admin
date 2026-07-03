@@ -12,7 +12,7 @@ interface RoutesStatus {
 }
 
 export const useRouteStore = defineStore('route-store', () => {
-  const [state] = useReset<RoutesStatus>(() => ({
+  const [state, reset] = useReset<RoutesStatus>(() => ({
     // 菜单数据
     menus: [],
     // 搜索菜单数据
@@ -23,8 +23,11 @@ export const useRouteStore = defineStore('route-store', () => {
     routes: [],
   }));
 
+  // 动态路由的卸载函数（router.addRoute 的返回值），重置时统一移除
+  let removeDynamicRoutes: (() => void)[] = [];
+
   /**
-   * // 处理菜单数据
+   * 处理菜单数据
    * @param dynamicRoutes 动态注册的路由
    */
   const handleMenus = (dynamicRoutes: RouteRecordRaw[] = []) => {
@@ -36,6 +39,25 @@ export const useRouteStore = defineStore('route-store', () => {
     state.value.routes = businessRoutes;
     state.value.menus = processMenus(businessRoutes);
     state.value.searchMenus = filterSearchMenus(state.value.menus);
+  };
+
+  /**
+   * 注册动态路由并处理菜单数据
+   * @param dynamicRoutes 动态注册的路由
+   */
+  const registerDynamicRoutes = (dynamicRoutes: RouteRecordRaw[] = []) => {
+    // 先移除上一次注册的动态路由，避免切换账号后残留
+    removeDynamicRoutes.forEach(remove => remove());
+    removeDynamicRoutes = dynamicRoutes.map(dynamicRoute => router.addRoute(LAYOUT_NAME, dynamicRoute));
+
+    handleMenus(dynamicRoutes);
+  };
+
+  // 重置
+  const handleReset = () => {
+    removeDynamicRoutes.forEach(remove => remove());
+    removeDynamicRoutes = [];
+    reset();
   };
 
   // 全局面包屑
@@ -73,10 +95,11 @@ export const useRouteStore = defineStore('route-store', () => {
 
   return {
     ...toRefs(state.value),
-    handleMenus,
+    registerDynamicRoutes,
     breadcrumbs,
     handleAddKeepAlive,
     handleRemoveKeepAlive,
     handleKeepAlive,
+    handleReset,
   };
 });

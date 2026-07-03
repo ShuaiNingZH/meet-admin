@@ -1,5 +1,5 @@
 import { useReset } from '@/hooks';
-import { useTabStore } from '@/stores';
+import { useRouteStore, useTabStore } from '@/stores';
 
 export const useUserStore = defineStore('user-store', () => {
   const [state, reset] = useReset(() => ({
@@ -11,10 +11,12 @@ export const useUserStore = defineStore('user-store', () => {
   // 退出登录
   const handleLogout = () => {
     const tabStore = useTabStore();
+    const routeStore = useRouteStore();
 
     reset();
     accessToken.value = '';
     tabStore.handleReset();
+    routeStore.handleReset();
   };
 
   return {

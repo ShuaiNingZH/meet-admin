@@ -2,8 +2,6 @@ import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router';
 import { cloneDeep } from 'lodash-es';
 import path from 'path-browserify';
 import { fetchUserInfo, fetchUserMenu } from '@/api';
-import { LAYOUT_NAME } from '@/constants/router.ts';
-import { router } from '@/router';
 import { useRouteStore, useTabStore, useUserStore } from '@/stores';
 
 /**
@@ -21,13 +19,9 @@ export async function initRouter() {
   // 获取当前用户菜单
   const menuRes = await fetchUserMenu();
 
+  // 注册动态路由并处理菜单数据
   const dynamicRoutes = menuToRoutes(menuRes.data);
-  dynamicRoutes.forEach((dynamicRoute) => {
-    router.addRoute(LAYOUT_NAME, dynamicRoute);
-  });
-
-  // 处理菜单数据
-  routeStore.handleMenus(dynamicRoutes);
+  routeStore.registerDynamicRoutes(dynamicRoutes);
 
   // 初始国际化标签
   tabStore.tabLocale();
