@@ -11,7 +11,7 @@ function backToHome() {
 </script>
 
 <template>
-  <div class="main-container">
+  <app-flex class="error-page" align="center" justify="center">
     <img alt="404" class="pic-404" src="@/assets/images/404-Error-amico.svg">
     <div class="bullshit">
       <div class="bullshit__oops">
@@ -19,7 +19,9 @@ function backToHome() {
       </div>
       <div class="bullshit__info">
         {{ t('page.404.subtitle') }}
-        <a style="color: #20a0ff" href="https://blog.wjp.plus" target="_blank">Meet you</a>
+        <el-link type="primary" href="https://blog.wjp.plus" target="_blank">
+          Meet you
+        </el-link>
       </div>
       <div class="bullshit__headline">
         {{ t('page.404.content') }}
@@ -31,16 +33,13 @@ function backToHome() {
         {{ t('page.404.button') }}
       </el-button>
     </div>
-  </div>
+  </app-flex>
 </template>
 
 <style scoped lang="scss">
-.main-container {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
+.error-page {
+  flex: 1;
+  height: 100%;
 
   .pic-404 {
     max-width: 500px;
@@ -80,9 +79,8 @@ function backToHome() {
     }
 
     &__info {
-      font-size: 13px;
       line-height: 21px;
-      color: grey;
+      color: var(--el-text-color-secondary);
       opacity: 0;
       margin-bottom: 30px;
       animation-name: slideUp;
