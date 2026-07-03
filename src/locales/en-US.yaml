@@ -147,6 +147,9 @@ systemSettings:
   isReset: Whether to reset system settings?
   footer: Footer
   buttonTip: Button tip
+  download: Download config
+  downloadTip: Download the current settings, then replace src/config/defaultSettings.json to make them the system defaults
+  downloadSuccess: Config downloaded. Replace src/config/defaultSettings.json to apply it as the defaults
 tab:
   reload: Refresh
   close: Close

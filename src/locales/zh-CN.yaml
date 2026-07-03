@@ -147,6 +147,9 @@ systemSettings:
   isReset: 是否重置系统设置?
   footer: 页脚
   buttonTip: 按钮提示
+  download: 下载配置
+  downloadTip: 下载当前配置，替换 src/config/defaultSettings.json 后即作为系统默认配置
+  downloadSuccess: 配置已下载，替换 src/config/defaultSettings.json 即可生效
 tab:
   reload: 刷新
   close: 关闭

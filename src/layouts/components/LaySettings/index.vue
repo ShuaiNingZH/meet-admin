@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { DefaultSettings } from '@/config/settings.ts';
 import { localeList } from '@/constants/locale.ts';
 import ColorSettings from '@/layouts/components/LaySettings/components/Color.vue';
 import { useAppStore } from '@/stores';
+import { downloadFile } from '@/utils';
 
 defineOptions({ name: 'LaySettings' });
 
@@ -20,6 +22,7 @@ const {
   locale,
   footer,
   buttonTip,
+  themeColor,
   colorMode,
 } = storeToRefs(appStore);
 
@@ -32,6 +35,29 @@ const colorModeOptions = [
 ];
 
 const layoutOptions = ['default', 'large', 'small'];
+
+// 下载当前配置为 defaultSettings.json
+function handleDownload() {
+  const config: DefaultSettings = {
+    colorMode: colorMode.value,
+    locale: locale.value,
+    size: size.value,
+    transitionAnimation: transitionAnimation.value,
+    themeColor: themeColor.value,
+    asideInverted: asideInverted.value,
+    breadcrumbShow: breadcrumbShow.value,
+    breadcrumbIconShow: breadcrumbIconShow.value,
+    tabStyle: tabStyle.value,
+    watermark: watermark.value,
+    footer: footer.value,
+    buttonTip: buttonTip.value,
+  };
+
+  const blob = new Blob([`${JSON.stringify(config, null, 2)}\n`], { type: 'application/json' });
+  downloadFile(blob, 'defaultSettings.json');
+
+  ElMessage.success(t('systemSettings.downloadSuccess'));
+}
 
 function handleReset() {
   ElMessageBox.confirm(t('systemSettings.isReset'), t('common.kindTips'), {
@@ -151,6 +177,11 @@ function handleReset() {
         </app-flex>
       </el-scrollbar>
       <template #footer>
+        <el-tooltip :content="t('systemSettings.downloadTip')" placement="top">
+          <el-button type="primary" @click="handleDownload">
+            {{ t('systemSettings.download') }}
+          </el-button>
+        </el-tooltip>
         <el-button type="danger" @click="handleReset">
           {{ t('common.reset') }}
         </el-button>
