@@ -1,0 +1,20 @@
+{
+  "colorMode": "auto",
+  "locale": "zh-CN",
+  "size": "default",
+  "transitionAnimation": "fade-slide",
+  "themeColor": {
+    "primary": "#4A90E2",
+    "success": "#67C231",
+    "warning": "#E6A23C",
+    "danger": "#F56C6C",
+    "info": "#909399"
+  },
+  "asideInverted": false,
+  "breadcrumbShow": true,
+  "breadcrumbIconShow": true,
+  "tabStyle": "dynamic",
+  "watermark": false,
+  "footer": false,
+  "buttonTip": false
+}

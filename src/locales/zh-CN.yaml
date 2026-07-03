@@ -94,8 +94,6 @@ hooks:
     index: 序号
     selection: 勾选
     expand: 展开
-  theme:
-    reset: 颜色已重置为
 tooltip:
   refreshPage: 刷新页面
   menuQuery: 菜单查询
@@ -111,6 +109,7 @@ theme:
     warning: 警告色
     danger: 危险色
     info: 信息色
+  reset: 颜色已重置为
 systemSettings:
   title: 系统设置
   layout:

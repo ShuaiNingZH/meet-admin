@@ -1,5 +1,6 @@
+import type { BasicColorSchema } from '@vueuse/core';
 import type { LocaleType } from '@/constants/locale.ts';
-import { cloneDeep } from 'lodash-es';
+import defaultSettingsJson from './defaultSettings.json';
 
 export interface ThemeColor {
   primary: string;
@@ -11,15 +12,6 @@ export interface ThemeColor {
 }
 
 export type ThemeColorKey = keyof ThemeColor;
-
-// 默认主题颜色
-export const defaultThemeColor: ThemeColor = {
-  primary: '#4A90E2',
-  success: '#67C231',
-  warning: '#E6A23C',
-  danger: '#F56C6C',
-  info: '#909399',
-};
 
 // 主题颜色---预定义颜色
 export const predefineColors = [
@@ -35,7 +27,7 @@ export const predefineColors = [
   '#73767a',
 ];
 
-export type TransitionAnimation = '' | 'fade' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out';
+export type TransitionAnimation = 'none' | 'fade' | 'fade-slide' | 'fade-bottom' | 'fade-scale' | 'zoom-fade' | 'zoom-out';
 export type TabStyle = 'dynamic' | 'card' | 'simple';
 
 export interface AppConfig {
@@ -63,44 +55,31 @@ export interface AppConfig {
   watermark: boolean;
   // 页脚
   footer: boolean;
-  // 页脚
+  // 按钮提示
   buttonTip: boolean;
 }
 
-export function data(): AppConfig {
-  return {
-    locale: 'zh-CN',
-    collapse: false,
-    transitionAnimation: 'fade-slide',
-    loadFlag: true,
-    themeColor: cloneDeep(defaultThemeColor),
-    size: 'default',
-    asideInverted: false,
-    breadcrumbShow: true,
-    breadcrumbIconShow: true,
-    tabStyle: 'dynamic',
-    watermark: false,
-    footer: false,
-    buttonTip: false,
-  };
+// 系统默认配置
+export interface DefaultSettings extends Omit<AppConfig, 'collapse' | 'loadFlag'> {
+  // 主题模式（明/暗/跟随系统）
+  colorMode: BasicColorSchema;
 }
+export const defaultSettings = defaultSettingsJson as DefaultSettings;
 
-// 初始化应用设置（首屏明/暗模式与 html class 已在 index.html 的内联脚本中处理）
-export function initAppSettings() {
-  const appStoreData = JSON.parse(localStorage.getItem('app-store') || '{}');
+// 默认主题颜色
+export const defaultThemeColor: ThemeColor = defaultSettings.themeColor;
 
-  // 主题色：存在持久化值则用之，否则用默认色
-  const themeColor: ThemeColor = appStoreData?.themeColor ?? defaultThemeColor;
-
+// 将主题色写入根元素行内变量，light-1~9 / dark-2 等变体由 CSS color-mix 自动派生（见 styles/theme.scss）
+export function applyThemeColor(themeColor: ThemeColor) {
   const el = document.documentElement;
-
-  // 只写入基色行内变量，light-1~9 / dark-2 等变体由 CSS color-mix 自动派生（见 styles/theme.scss）
   Object.keys(themeColor).forEach((type) => {
     const color = themeColor[type];
     if (color)
       el.style.setProperty(`--el-color-${type}`, color);
   });
+}
 
-  // 侧边栏反色：仅切换 class，具体变量在 styles/menu.scss 中定义
-  el.classList.toggle('aside-inverted', Boolean(appStoreData?.asideInverted));
+// 侧边栏反色：仅切换 class，具体变量在 styles/menu.scss 中定义
+export function applyAsideInverted(inverted: boolean) {
+  document.documentElement.classList.toggle('aside-inverted', inverted);
 }

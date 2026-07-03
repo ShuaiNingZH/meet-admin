@@ -3,6 +3,7 @@ import LayFooter from '@/layouts/components/LayFooter.vue';
 import LayHeader from '@/layouts/components/LayHeader/index.vue';
 import LayMenu from '@/layouts/components/LayMenu/index.vue';
 import LayTabs from '@/layouts/components/LayTabs/index.vue';
+import { initRouter } from '@/router/utils.ts';
 import { useAppStore, useRouteStore } from '@/stores';
 import { isEmbedded } from '@/utils';
 
@@ -18,7 +19,18 @@ const {
   loadFlag,
   watermark,
   footer,
+  locale,
+  isDark,
 } = storeToRefs(appStore);
+
+const router = useRouter();
+const currentRoute = useRoute();
+
+// 切换语言后重新拉取菜单
+watch(locale, async () => {
+  await initRouter();
+  await router.replace(currentRoute.fullPath);
+});
 
 const watermarkConfig = reactive({
   content: 'Meet you',
@@ -28,7 +40,6 @@ const watermarkConfig = reactive({
   },
 });
 
-const isDark = useDark();
 watchEffect(() => {
   watermarkConfig.font.color = isDark.value ? 'rgba(255, 255, 255, .15)' : 'rgba(0, 0, 0, .15)';
 });

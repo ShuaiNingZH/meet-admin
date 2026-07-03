@@ -94,8 +94,6 @@ hooks:
     index: Index
     selection: Selection
     expand: Expand
-  theme:
-    reset: ' has been reset to'
 tooltip:
   refreshPage: Refresh Page
   menuQuery: Menu Query
@@ -111,6 +109,7 @@ theme:
     warning: Warning color
     danger: Danger color
     info: Information color
+  reset: ' has been reset to'
 systemSettings:
   title: System settings
   layout:

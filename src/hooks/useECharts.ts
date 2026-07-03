@@ -5,6 +5,7 @@ import type { EChartOptions } from '@/config/echarts';
 import { cloneDeep, merge } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
 import echarts from '@/config/echarts';
+import { useAppStore } from '@/stores';
 
 type ElementEventName = 'click' | 'dblclick' | 'mousewheel' | 'mouseout' | 'mouseover' | 'mouseup' | 'mousedown' | 'mousemove' | 'contextmenu' | 'drag' | 'dragstart' | 'dragend' | 'dragenter' | 'dragleave' | 'dragover' | 'drop' | 'globalout';
 
@@ -37,12 +38,9 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
   // 当前图表配置
   const { autoResize = true } = initOpts;
 
-  // 图表切换主题
-  const { system, store } = useColorMode();
-  watch(store, initChart);
-  const colorMode = computed(() => {
-    return store.value === 'auto' ? system.value : store.value;
-  });
+  // 图表切换主题：跟随 app store 解析后的配色（auto 模式下系统主题变化也会触发重绘）
+  const { colorScheme } = storeToRefs(useAppStore());
+  watch(colorScheme, initChart);
 
   // 图表切换语言
   const { locale } = useI18n();
@@ -58,7 +56,7 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     chartInstance?.dispose();
 
     // 初始化图表
-    chartInstance = echarts.init(chartRef.value, colorMode.value, {
+    chartInstance = echarts.init(chartRef.value, colorScheme.value, {
       ...initOpts,
       renderer: initOpts.renderer ?? 'canvas',
       useDirtyRect: initOpts.useDirtyRect ?? false,

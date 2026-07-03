@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { localeList } from '@/constants/locale.ts';
-import { useTheme } from '@/hooks';
 import ColorSettings from '@/layouts/components/LaySettings/components/Color.vue';
 import { useAppStore } from '@/stores';
 
@@ -21,6 +20,7 @@ const {
   locale,
   footer,
   buttonTip,
+  colorMode,
 } = storeToRefs(appStore);
 
 const showSetting = ref(false);
@@ -33,8 +33,6 @@ const colorModeOptions = [
 
 const layoutOptions = ['default', 'large', 'small'];
 
-const { colorStore, resetTheme, setAsideInverted } = useTheme();
-
 function handleReset() {
   ElMessageBox.confirm(t('systemSettings.isReset'), t('common.kindTips'), {
     confirmButtonText: t('common.sure'),
@@ -43,7 +41,6 @@ function handleReset() {
     draggable: true,
   }).then(() => {
     appStore.handleAppReset();
-    resetTheme();
   });
 }
 </script>
@@ -68,7 +65,7 @@ function handleReset() {
         <el-divider>{{ t('systemSettings.themeMode.title') }}</el-divider>
         <app-flex vertical>
           <!-- 切换主题 -->
-          <el-segmented v-model="colorStore" :options="colorModeOptions" block>
+          <el-segmented v-model="colorMode" :options="colorModeOptions" block>
             <template #default="{ item }">
               <app-flex justify="center">
                 <app-icon :icon="(item as any).icon" />
@@ -81,7 +78,7 @@ function handleReset() {
               {{ t('systemSettings.themeMode.sidebar') }}
               <app-help-info :content="t('systemSettings.themeMode.sidebarHelpInfo')" />
             </app-flex>
-            <el-switch v-model="asideInverted" @change="setAsideInverted" />
+            <el-switch v-model="asideInverted" />
           </app-flex>
         </app-flex>
         <!-- 主题颜色 -->
@@ -92,7 +89,7 @@ function handleReset() {
         <app-flex vertical>
           <app-flex justify="space-between" align="center">
             {{ t('systemSettings.pageConfig.locale') }}
-            <el-select v-model="locale" class="!w-155" @change="appStore.setLocale">
+            <el-select v-model="locale" class="!w-155">
               <el-option v-for="item of localeList" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </app-flex>

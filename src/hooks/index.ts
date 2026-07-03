@@ -6,5 +6,4 @@ export * from './useNotification';
 export * from './useReset';
 export * from './useTable';
 export * from './useTableSpan';
-export * from './useTheme';
 export * from './useWindowOpen.ts';
