@@ -66,8 +66,13 @@ export function useECharts(chartRef: TemplateRef<HTMLDivElement>, option: EChart
     });
 
     // 配置图表
-    if (chartOptions)
-      chartInstance?.setOption(chartOptions, true);
+    if (chartOptions) {
+      // 因图表在深色主题下背景色是深蓝色，所以需要重置为透明
+      chartInstance?.setOption({
+        ...chartOptions,
+        backgroundColor: 'transparent',
+      }, true);
+    }
 
     // 重新绑定 echarts 事件缓存
     echartsEventCache.forEach(({ event, query, handler }) => {
