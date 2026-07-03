@@ -5,7 +5,7 @@ defineOptions({ name: 'AppFlex' });
 
 const props = withDefaults(defineProps<AppFlexProps>(), {
   justify: 'start',
-  size: () => [8, 12],
+  size: 16,
   wrap: false,
 });
 
