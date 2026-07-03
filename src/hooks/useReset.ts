@@ -5,11 +5,12 @@
  * const [form, resetForm] = useReset(() => ({ name: '', age: 0 }));
  * form.value.name = 'wjp';
  * resetForm(); // { name: '', age: 0 }
- */export function useReset<T>(factory: () => T): [Ref<T>, () => void] {
-  const state = ref<T>(factory()) as Ref<T>;
+ */
+export function useReset<T extends object>(factory: () => T): [Ref<T>, () => void] {
+  const state = ref(factory()) as Ref<T>;
 
   function reset() {
-    state.value = factory();
+    Object.assign(state.value, factory());
   }
 
   return [state, reset];
