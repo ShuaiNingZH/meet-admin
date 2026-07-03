@@ -12,15 +12,6 @@ export function setDocumentTitle(title: string) {
 }
 
 /**
- * 判断当前项目是否被嵌套在其他项目中（以iframe形式）
- * @returns 如果当前项目被嵌套则返回true，否则返回false
- */
-export function isEmbedded() {
-  // 检查 window.self !== window.top 判断是否在 iframe 中
-  return window.self !== window.top;
-}
-
-/**
  * 数字转小写中文
  * @param num 数字
  */

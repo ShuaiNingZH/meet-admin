@@ -5,7 +5,6 @@ import LayMenu from '@/layouts/components/LayMenu/index.vue';
 import LayTabs from '@/layouts/components/LayTabs/index.vue';
 import { initRouter } from '@/router/utils.ts';
 import { useAppStore, useRouteStore } from '@/stores';
-import { isEmbedded } from '@/utils';
 
 defineOptions({ name: 'Layout' });
 
@@ -48,9 +47,9 @@ watchEffect(() => {
 <template>
   <el-watermark class="watermark wh-full" :content="watermark ? watermarkConfig.content : ''" :font="watermarkConfig.font">
     <el-container>
-      <LayMenu v-if="!isEmbedded()" />
+      <LayMenu />
       <el-container>
-        <el-header v-if="!isEmbedded()">
+        <el-header>
           <LayHeader />
           <LayTabs />
         </el-header>
