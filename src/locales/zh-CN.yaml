@@ -58,6 +58,8 @@ components:
     common: 共
   popup:
     title: 弹窗
+  drawer:
+    title: 抽屉
   table:
     columnSettings: 列设置
     pinToLeft: 固定到左侧

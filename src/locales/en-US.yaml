@@ -58,6 +58,8 @@ components:
     common: Common
   popup:
     title: Popup
+  drawer:
+    title: Drawer
   table:
     columnSettings: Column settings
     pinToLeft: Pin to left

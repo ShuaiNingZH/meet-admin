@@ -1,5 +1,6 @@
 export * from './AppBatchImport';
 export * from './AppCard';
+export * from './AppDrawer';
 export * from './AppEditor';
 export * from './AppFlex';
 export * from './AppForm';
