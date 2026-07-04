@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import initVersionRocket from '@/config/versionRocket';
 import { elLocale } from '@/constants/locale';
 import { useAppStore } from '@/stores';
 
@@ -9,9 +8,6 @@ const appStore = useAppStore();
 const locale = computed(() => {
   return elLocale[appStore.locale];
 });
-
-// 初始化版本检测
-initVersionRocket();
 </script>
 
 <template>

@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import { initElementPlus } from '@/config/elementPlus.ts';
 import { installI18n } from '@/config/i18n';
+import initVersionRocket from '@/config/versionRocket';
 import { setupGlobalDirectives } from '@/directives';
 import { installRouter } from '@/router';
 import { installPinia, useAppStore } from '@/stores';
@@ -10,6 +11,8 @@ import '@/styles/index';
 async function setupApp() {
   // 初始化组件默认值
   initElementPlus();
+  // 初始化版本检测
+  initVersionRocket();
   // 创建vue实例5
   const app = createApp(App);
   // 注册模块 Pinia
