@@ -17,5 +17,7 @@ initVersionRocket();
 <template>
   <el-config-provider :locale :size="appStore.size">
     <router-view />
+    <!-- 函数式弹窗宿主 -->
+    <app-popup-host />
   </el-config-provider>
 </template>

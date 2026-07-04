@@ -58,6 +58,8 @@ components:
     common: Common
   popup:
     title: Popup
+    fullscreen: Switch to fullscreen mode
+    exitFullscreen: Exit fullscreen mode
   drawer:
     title: Drawer
   table:

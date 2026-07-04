@@ -30,18 +30,20 @@
   }
 
   .el-dialog__footer {
-    display: flex;
-    justify-content: var(--app-popup-footer-position);
-    align-items: center;
     padding: 10px;
     box-shadow: var(--el-box-shadow);
 
-    .button-reverse {
-      order: 1;
-      margin-left: 12px;
+    .app-popup__footer {
+      display: flex;
+      align-items: center;
 
-      & + .el-button {
-        margin-left: 0;
+      .button-reverse {
+        order: 1;
+        margin-left: 12px;
+
+        & + .el-button {
+          margin-left: 0;
+        }
       }
     }
   }

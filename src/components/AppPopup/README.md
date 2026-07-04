@@ -101,14 +101,14 @@ function handleCustomAction() {
 
 ### 命令式用法
 
-除了以组件方式使用外，还可以通过 `addPopup` 函数以命令式方式调用弹窗，尤其适合临时性的弹窗和表单提交场景。
+除了以组件方式使用外，还可以通过 `openPopup` 函数以命令式方式调用弹窗，尤其适合临时性的弹窗和表单提交场景。弹窗由内置于 App.vue 的宿主组件 `<AppPopupHost />` 统一渲染，支持多个弹窗同时打开。
 
 ```ts
-import { addPopup } from '@/utils/popup';
+import { openPopup } from '@/components/AppPopup';
 import UserForm from './UserForm.vue';
 
-// 简单文本弹窗
-addPopup({
+// 简单文本弹窗:onOk 正常返回后自动关闭
+openPopup({
   title: '提示',
   content: '这是一个命令式弹窗',
   onOk: () => {
@@ -116,57 +116,46 @@ addPopup({
   }
 });
 
-// 表单弹窗
-addPopup({
-  title: '编辑用户',
-  content: UserForm,
+// 组件弹窗:需要向内容组件传参时,用 h() 构造 VNode
+openPopup({
+  title: '查看详情',
+  content: h(UserDetail, { userId: 1 }),
   width: 700,
-  onOk: async ({ instance, close, formData }) => {
-    if (formData) {
-      // 处理表单数据
-      await saveUserData(formData);
-      // 关闭弹窗
-      close?.();
-    }
-  }
 });
 
-// 完整配置示例
-addPopup({
-  title: '高级配置',
-  content: ComplexForm,
-  width: 800,
-  confirmText: '提交',
-  cancelText: '关闭',
-  buttonReverse: true,
-  footerPosition: 'space-between',
-  onOk: ({ instance, close }) => {
-    // 手动处理表单验证
-    instance?.validate((valid) => {
-      if (valid) {
-        const data = instance.getData();
-        console.log('表单数据:', data);
-        close?.();
-      }
-    });
+// 保持打开:onOk 返回 false 或抛出异常时弹窗不关闭
+openPopup({
+  title: '危险操作',
+  content: '确认执行该操作吗?',
+  confirmText: '执行',
+  onOk: async () => {
+    const ok = await doAction();
+    if (!ok)
+      return false; // 失败,保持弹窗打开
   },
-  onClose: () => {
-    console.log('取消操作');
-  }
+});
+
+// 表单弹窗:表单的校验和提交由内容组件自治
+// 关闭默认底部,组件内部提交成功后通过 props 传入的回调关闭
+const { close } = openPopup({
+  title: '编辑用户',
+  content: h(UserForm, { userId: 1, onDone: () => close() }),
+  showFooter: false,
 });
 ```
 
 ## 命令式API参数说明
 
-| 参数名       | 类型                                                                      | 默认值 | 必填 | 说明                                                    |
-| ------------ | ------------------------------------------------------------------------- | ------ | ---- | ------------------------------------------------------- |
-| content      | string \| Component                                                       | -      | 是   | 弹窗内容，可以是文本或Vue组件                           |
-| onOk         | (instance:PopupFormInstance, close: () => void, formData: AnyObj) => void | -      | 否   | 确认按钮点击回调                                        |
-| onClose      | () => void                                                                | -      | 否   | 取消按钮点击回调                                        |
+| 参数名       | 类型                                | 默认值 | 必填 | 说明                                                                          |
+| ------------ | ----------------------------------- | ------ | ---- | ------------------------------------------------------------------------------ |
+| content      | string \| Component \| VNode        | -      | 是   | 弹窗内容；需要向组件传参/插槽时用 `h()` 构造 VNode                             |
+| onOk         | (context) => any \| Promise\<any\>  | -      | 否   | 确认回调；抛错或返回 false 时保持弹窗打开，否则自动关闭；执行期间按钮自动 loading |
+| onClose      | () => void                          | -      | 否   | 弹窗关闭时的回调                                                               |
+| onClosed     | () => void                          | -      | 否   | 弹窗关闭动画结束时的回调                                                       |
 
-其他参数与组件式用法的Props一致。
+其他参数与组件式用法的Props一致。`openPopup` 返回 `{ close }`，可在弹窗外部编程式关闭。`onOk` 的 `context` 包含 `close`（手动关闭函数）。
 
-当content为组件时，该组件需要实现getData方法以返回表单数据。instance参数包含表单的实例，可以调用validate等方法进行表单验证。
+弹窗渲染在主应用组件树内（App.vue 中的 `<AppPopupHost />` 宿主），路由、Pinia、i18n、全局指令以及任何组件树级 provide 均可正常使用。表单类内容组件建议自治（自己校验、提交，成功后通过 props 传入的回调关闭弹窗）。
 
 ## 参数说明
 
@@ -209,11 +198,11 @@ addPopup({
 
 ### Slots
 
-| 插槽名  | 说明           |
-| ------- | -------------- |
-| header  | 自定义头部内容 |
-| default | 弹窗主体内容   |
-| footer  | 自定义底部内容 |
+| 插槽名  | 说明                                                                 |
+| ------- | -------------------------------------------------------------------- |
+| header  | 自定义头部内容，作用域参数：`{ close, titleId, titleClass }`         |
+| default | 弹窗主体内容                                                         |
+| footer  | 自定义底部内容，提供后将替换默认的按钮区域                           |
 
 ## 注意事项
 
@@ -222,8 +211,7 @@ addPopup({
 - 取消按钮点击后会自动关闭弹窗，并触发 close 事件
 - 当内容高度超过 maxHeight 时，会自动出现滚动条
 - 全屏按钮位于右上角，点击可切换全屏显示状态
-- 使用命令式调用时，onOk回调需要手动调用close方法关闭弹窗
-- 表单组件需要实现getData方法以便命令式调用时获取表单数据
+- 使用命令式调用时，onOk 抛错或返回 false 会保持弹窗打开，其余情况自动关闭
 
 ## 内部实现
 
@@ -233,4 +221,4 @@ addPopup({
 2. 事件处理：管理确认、取消和关闭事件
 3. 全屏功能：实现弹窗的全屏切换
 4. 样式定制：自定义了弹窗的头部、内容和底部区域的样式
-5. 命令式API：通过utils/popup.tsx提供函数式调用方法
+5. 命令式API：openPopup 将配置推入实例队列，由 App.vue 中的宿主组件 AppPopupHost 统一渲染

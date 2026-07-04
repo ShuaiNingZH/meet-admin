@@ -58,6 +58,8 @@ components:
     common: 共
   popup:
     title: 弹窗
+    fullscreen: 切换到全屏模式
+    exitFullscreen: 退出全屏模式
   drawer:
     title: 抽屉
   table:

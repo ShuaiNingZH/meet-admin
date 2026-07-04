@@ -55,44 +55,48 @@ function onCancel() {
 }
 
 // 全屏 --- start
-const fullscreen = ref(false);
-const ariaLabel = computed(() => fullscreen.value ? '退出全屏模式' : '切换到全屏模式');
+const fullscreen = ref(props.fullscreen);
+const ariaLabel = computed(() => fullscreen.value ? t('components.popup.exitFullscreen') : t('components.popup.fullscreen'));
 
 function handleFullScreen() {
   fullscreen.value = !fullscreen.value;
 }
+
+// 关闭动画结束后还原全屏状态，避免下次打开时残留
+function onClosed() {
+  fullscreen.value = props.fullscreen;
+}
 // 全屏 --- end
 
 const maxHeight = computed(() => {
-  let calc = 'calc(100vh - 45px)';
+  const headerHeight = 45;
+  const footerHeight = props.showFooter ? 52 : 0;
 
-  // 如果存在
-  if (props.showFooter) {
-    calc = 'calc(100vh - 45px - 52px)';
+  if (fullscreen.value) {
+    return `calc(100vh - ${headerHeight}px - ${footerHeight}px)`;
   }
 
-  return fullscreen.value ? calc : props.maxHeight;
-});
+  // 非全屏态下，以 maxHeight 为上限，同时用视口高度兜底，避免小屏下弹窗溢出视口
+  const top = typeof props.top === 'number' ? `${props.top}px` : props.top;
+  const max = typeof props.maxHeight === 'number' ? `${props.maxHeight}px` : props.maxHeight;
 
-onMounted(() => {
-  // 底部按钮位置
-  document.documentElement.style.setProperty('--app-popup-footer-position', props.footerPosition);
+  return `min(${max}, calc(100vh - ${top} - ${headerHeight}px - ${footerHeight}px))`;
 });
 </script>
 
 <template>
-  <el-dialog v-bind="popupProps" class="app-popup" :fullscreen v-on="eventHandlers">
-    <template #header>
+  <el-dialog v-bind="popupProps" class="app-popup" :fullscreen v-on="eventHandlers" @closed="onClosed">
+    <template #header="scope">
       <div class="w-[calc(100%-55px)]">
-        <slot name="header">
-          <app-text class="text-16">
+        <slot name="header" v-bind="scope">
+          <app-text :id="scope.titleId" class="text-16">
             {{ title }}
           </app-text>
         </slot>
       </div>
       <button :aria-label="ariaLabel" type="button" class="el-dialog__headerbtn" @click="handleFullScreen">
-        <app-icon v-if="fullscreen" aria-label="" class="el-dialog__close" icon="ri:fullscreen-exit-fill" />
-        <app-icon v-else class="el-dialog__close" icon="FullScreen" />
+        <app-icon v-if="fullscreen" class="el-dialog__close" icon="ri:fullscreen-exit-fill" />
+        <app-icon v-else class="el-dialog__close" icon="ri:fullscreen-fill" />
       </button>
     </template>
     <template #default>
@@ -101,15 +105,18 @@ onMounted(() => {
       </el-scrollbar>
     </template>
     <template v-if="showFooter" #footer>
-      <slot name="footer" />
-      <app-flex :size="7">
-        <el-button v-if="showCancelButton" :class="{ 'button-reverse': isReverse }" @click="onCancel">
-          {{ cancelText }}
-        </el-button>
-        <el-button v-if="showConfirmButton" type="primary" :loading @click="onConfirm">
-          {{ confirmText }}
-        </el-button>
-      </app-flex>
+      <div class="app-popup__footer" :style="{ justifyContent: footerPosition }">
+        <slot name="footer">
+          <app-flex :size="7">
+            <el-button v-if="showCancelButton" :class="{ 'button-reverse': isReverse }" @click="onCancel">
+              {{ cancelText }}
+            </el-button>
+            <el-button v-if="showConfirmButton" type="primary" :loading @click="onConfirm">
+              {{ confirmText }}
+            </el-button>
+          </app-flex>
+        </slot>
+      </div>
     </template>
   </el-dialog>
 </template>
