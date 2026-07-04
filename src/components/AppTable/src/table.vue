@@ -15,7 +15,7 @@ const props = withDefaults(defineProps<AppTableProps>(), {
   loading: false,
   loadingText: '',
   selectOnIndeterminate: true,
-  card: true,
+  card: false,
   columns: () => [],
 });
 
@@ -93,11 +93,11 @@ defineExpose(new Proxy({}, {
     />
   </DefineTemplate>
   <!-- 带有卡片效果的表格 -->
-  <app-card v-if="card" v-loading="loading" :element-loading-text="loadingText" class="table-main">
+  <app-card v-if="card" v-loading="loading" :element-loading-text="loadingText" class="app-table">
     <ReuseTemplate />
   </app-card>
   <!-- 没有卡片效果的表格 -->
-  <div v-else v-loading="loading" :element-loading-text="loadingText" class="table-main">
+  <div v-else v-loading="loading" :element-loading-text="loadingText" class="app-table">
     <ReuseTemplate />
   </div>
 </template>

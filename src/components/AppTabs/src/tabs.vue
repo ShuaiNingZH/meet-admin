@@ -27,7 +27,7 @@ const { eventHandlers } = useEventForwarder(emit, tabsEmits);
     </el-tabs>
     <el-scrollbar view-class="app-tabs__scrollbar">
       <keep-alive>
-        <component :is="activeComponent" v-bind="$attrs" />
+        <component :is="activeComponent" class="tabs-content" v-bind="$attrs" />
       </keep-alive>
     </el-scrollbar>
   </app-card>
@@ -38,7 +38,7 @@ const { eventHandlers } = useEventForwarder(emit, tabsEmits);
   padding: 0;
 
   :deep(.el-tabs) {
-    padding: 20px 20px 0;
+    padding: 16px 16px 0;
 
     .el-tabs__header {
       margin-bottom: 0;
@@ -46,8 +46,10 @@ const { eventHandlers } = useEventForwarder(emit, tabsEmits);
   }
 
   :deep(.app-tabs__scrollbar) {
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    padding: 0 20px 20px;
+    padding: 0 16px 16px;
   }
 }
 </style>

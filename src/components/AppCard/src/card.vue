@@ -17,7 +17,7 @@ const classes = computed(() => {
 </script>
 
 <template>
-  <div class="app-card el-card p-20" :class="classes">
+  <div class="app-card el-card p-16" :class="classes">
     <slot />
   </div>
 </template>
