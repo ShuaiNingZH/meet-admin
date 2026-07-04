@@ -115,7 +115,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
         </app-form-item>
       </app-form>
     </app-card>
-    <app-table v-bind="tableProps" :data="tableProps.data" @refresh="getTableData">
+    <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
         <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增
