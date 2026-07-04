@@ -7,7 +7,6 @@ export * from './i18n';
 export * from './icon';
 export * from './money';
 export * from './object';
-export * from './popup';
 export * from './regex';
 export * from './render';
 export * from './storage/index';
