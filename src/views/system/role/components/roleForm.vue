@@ -83,7 +83,7 @@ async function handleConfirm() {
 </script>
 
 <template>
-  <app-popup v-model="showForm" :title @confirm="handleConfirm">
+  <app-drawer v-model="showForm" :title size="700" resizable @confirm="handleConfirm">
     <app-form ref="formRef" :model="state" :rules :cols="1">
       <app-form-item label="角色名称" prop="name">
         <el-input v-model="state.name" placeholder="请输入角色名称" />
@@ -115,5 +115,5 @@ async function handleConfirm() {
         <el-input v-model="state.remark" type="textarea" :rows="3" placeholder="请输入备注" />
       </app-form-item>
     </app-form>
-  </app-popup>
+  </app-drawer>
 </template>
