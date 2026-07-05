@@ -18,3 +18,6 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+/** 构建时间，由 vite.config.ts 的 define 注入 */
+declare const __BUILD_TIME__: string;

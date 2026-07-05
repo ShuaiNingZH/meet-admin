@@ -18,5 +18,15 @@ export default {
         icon: 'icon-park-outline:home',
       },
     },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('@/views/about/index.vue'),
+      meta: {
+        title: '关于',
+        icon: 'icon-park-outline:info',
+        sort: 90,
+      },
+    },
   ],
 } satisfies RouteRecordRaw;
