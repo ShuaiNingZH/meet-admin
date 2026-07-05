@@ -55,8 +55,6 @@ export interface AppConfig {
   watermark: boolean;
   // 页脚
   footer: boolean;
-  // 按钮提示
-  buttonTip: boolean;
 }
 
 // 系统默认配置

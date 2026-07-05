@@ -103,7 +103,6 @@ export const useAppStore = defineStore('app-store', () => {
       'tabStyle',
       'watermark',
       'footer',
-      'buttonTip',
     ],
   },
 });

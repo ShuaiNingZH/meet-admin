@@ -21,7 +21,6 @@ const {
   watermark,
   locale,
   footer,
-  buttonTip,
   themeColor,
   colorMode,
 } = storeToRefs(appStore);
@@ -50,7 +49,6 @@ function handleDownload() {
     tabStyle: tabStyle.value,
     watermark: watermark.value,
     footer: footer.value,
-    buttonTip: buttonTip.value,
   };
 
   const blob = new Blob([`${JSON.stringify(config, null, 2)}\n`], { type: 'application/json' });
@@ -73,11 +71,9 @@ function handleReset() {
 
 <template>
   <div class="app-setting">
-    <el-tooltip :content="t('systemSettings.title')" :disabled="!buttonTip">
-      <div class="wrapper" @click="showSetting = true">
-        <app-icon icon="icon-park-outline:setting" />
-      </div>
-    </el-tooltip>
+    <div class="wrapper" @click="showSetting = true">
+      <app-icon icon="icon-park-outline:setting" />
+    </div>
     <app-drawer v-model="showSetting" :title="t('systemSettings.title')" size="350" close-on-click-modal>
       <!-- 布局样式 -->
       <el-divider>{{ t('systemSettings.layout.title') }}</el-divider>
@@ -163,13 +159,6 @@ function handleReset() {
           {{ t('systemSettings.footer') }}
           <el-switch
             v-model="footer" :active-text="t('common.show')" :inactive-text="t('common.hide')"
-            inline-prompt
-          />
-        </app-flex>
-        <app-flex justify="space-between" align="center">
-          {{ t('systemSettings.buttonTip') }}
-          <el-switch
-            v-model="buttonTip" :active-text="t('common.show')" :inactive-text="t('common.hide')"
             inline-prompt
           />
         </app-flex>

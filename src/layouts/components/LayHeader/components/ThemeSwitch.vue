@@ -8,7 +8,7 @@ defineOptions({ name: 'ThemeSwitch' });
 const { t } = useI18n();
 
 const appStore = useAppStore();
-const { buttonTip, colorMode } = storeToRefs(appStore);
+const { colorMode } = storeToRefs(appStore);
 
 const themeList = [
   { key: 'light', icon: 'icon-park-outline:sun-one' },
@@ -24,13 +24,11 @@ function setThemeMode(mode: BasicColorSchema) {
 <template>
   <el-dropdown class="theme-switch" trigger="click" @command="setThemeMode">
     <span>
-      <el-tooltip :content="t(`theme.${colorMode}`)" placement="left" :disabled="!buttonTip">
-        <div class="wrapper">
-          <app-icon v-if="colorMode === 'light'" icon="icon-park-outline:sun-one" />
-          <app-icon v-if="colorMode === 'dark'" icon="icon-park-outline:moon" />
-          <app-icon v-if="colorMode === 'auto'" icon="icon-park-outline:laptop-computer" />
-        </div>
-      </el-tooltip>
+      <div class="wrapper">
+        <app-icon v-if="colorMode === 'light'" icon="icon-park-outline:sun-one" />
+        <app-icon v-if="colorMode === 'dark'" icon="icon-park-outline:moon" />
+        <app-icon v-if="colorMode === 'auto'" icon="icon-park-outline:laptop-computer" />
+      </div>
     </span>
     <template #dropdown>
       <el-dropdown-menu>

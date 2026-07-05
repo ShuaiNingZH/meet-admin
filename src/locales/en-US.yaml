@@ -98,11 +98,6 @@ hooks:
     index: Index
     selection: Selection
     expand: Expand
-tooltip:
-  refreshPage: Refresh Page
-  menuQuery: Menu Query
-  switchLocale: Switch Locale
-  toggleFullScreen: Toggle Full Screen
 theme:
   light: Light Theme
   dark: Dark Theme
@@ -150,7 +145,6 @@ systemSettings:
   watermark: Watermark
   isReset: Whether to reset system settings?
   footer: Footer
-  buttonTip: Button tip
   download: Download config
   downloadTip: Download the current settings, then replace src/config/defaultSettings.json to make them the system defaults
   downloadSuccess: Config downloaded. Replace src/config/defaultSettings.json to apply it as the defaults
