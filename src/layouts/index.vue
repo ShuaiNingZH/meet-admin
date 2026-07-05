@@ -76,7 +76,7 @@ watchEffect(() => {
 <style scoped lang="scss">
 .main-scrollbar {
   :deep(.main-scrollbar-view) {
-    padding: 16px;
+    padding: var(--spacing-base);
     display: flex;
     flex-direction: column;
     min-height: 100%;

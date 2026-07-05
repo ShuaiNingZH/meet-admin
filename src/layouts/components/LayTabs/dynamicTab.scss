@@ -3,7 +3,7 @@
     :deep(.el-tabs) {
       .el-tabs__header {
         &:not(:has(.is-scrollable)) {
-          padding: 0 5px;
+          padding: 0 var(--spacing-sm);
         }
 
         .el-tabs__nav-wrap {
@@ -12,7 +12,7 @@
 
           &.is-scrollable {
             width: 100%;
-            padding: 0 25px;
+            padding: 0 var(--spacing-lg);
           }
 
           .el-tabs__nav {
@@ -31,7 +31,7 @@
 
               &:hover {
                 .is-icon-close {
-                  margin-right: 5px;
+                  margin-right: var(--spacing-sm);
                 }
 
                 &::before {
@@ -40,12 +40,12 @@
               }
 
               .tabs-item {
-                padding-left: 5px;
+                padding-left: var(--spacing-sm);
               }
 
               &.is-active {
                 .tabs-item {
-                  padding-left: 10px;
+                  padding-left: var(--spacing-md);
                 }
 
                 &::before {

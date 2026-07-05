@@ -69,5 +69,6 @@ Locales are precompiled YAML under `src/locales/` (via `@intlify/unplugin-vue-i1
 - Vue SFCs use `<script setup lang="ts">`.
 - ESLint config is `@antfu/eslint-config` (flat config in `eslint.config.ts`) with **semicolons required**, plus UnoCSS linting and prettier-based CSS/HTML formatting. Run `pnpm lint:fix` before committing.
 - Styling is UnoCSS (Wind3 preset + attributify + rem-to-px), configured in `uno.config.ts`; global styles/overrides in `src/styles/`.
+- Spacing (padding/margin/gap) follows a 4px-grid scale defined as CSS custom properties in `src/styles/variables.scss`: `--spacing-xs` (4px), `--spacing-sm` (8px), `--spacing-md` (12px), `--spacing-base` (16px), `--spacing-lg` (24px), `--spacing-xl` (32px), `--spacing-xxl` (48px). Use `var(--spacing-*)` in SCSS/inline styles, or the equivalent UnoCSS utility (e.g. `p-16`, `gap-8` — the number is literally the pixel value under this project's rem-to-px config) instead of hardcoding arbitrary px values.
 - Ambient/global TS types (e.g. `AppAxios.*`, `Menu.*`, `User.*`, `AnyObj`) live in `src/typings/`.
 - Before writing a helper, check `src/utils/` for an existing one — e.g. number/money formatting already exists: `numberFormat` (千分位, no decimals) in `common.ts` vs `moneyThousand` (千分位 + 2 decimals, for amounts) in `money.ts`. Don't reimplement these.

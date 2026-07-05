@@ -38,7 +38,7 @@ const { eventHandlers } = useEventForwarder(emit, tabsEmits);
   padding: 0;
 
   :deep(.el-tabs) {
-    padding: 16px 16px 0;
+    padding: var(--spacing-base) var(--spacing-base) 0;
 
     .el-tabs__header {
       margin-bottom: 0;

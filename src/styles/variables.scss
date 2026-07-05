@@ -1,0 +1,10 @@
+// 间距规范：统一 4px 网格，避免各处随意取值（3/5/6/10/14/15/18/20/25 等）导致间距不一致
+:root {
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-base: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-xxl: 48px;
+}

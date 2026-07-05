@@ -61,7 +61,7 @@ const defaultActive = computed<string>(() =>
     height: 55px;
 
     .logo-text {
-      margin-left: 6px;
+      margin-left: var(--spacing-sm);
       font-size: 22px;
       font-weight: bold;
       white-space: nowrap;

@@ -3,7 +3,7 @@
 
   .el-drawer__header {
     margin-bottom: 0;
-    padding: 15px;
+    padding: var(--spacing-base);
     border-bottom: 1px solid var(--el-border-color);
     color: var(--el-text-color-primary);
   }
@@ -11,13 +11,13 @@
   .el-drawer__body {
     .el-scrollbar {
       .drawer-scrollbar-view {
-        padding: 15px;
+        padding: var(--spacing-base);
       }
     }
   }
 
   .el-drawer__footer {
-    padding: 15px;
+    padding: var(--spacing-base);
     border-top: 1px solid var(--el-border-color);
 
     .app-drawer__footer {
@@ -26,7 +26,7 @@
 
       .button-reverse {
         order: 1;
-        margin-left: 12px;
+        margin-left: var(--spacing-md);
 
         & + .el-button {
           margin-left: 0;

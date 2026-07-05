@@ -201,7 +201,7 @@ const tabClass = computed(() => `${appStore.tabStyle}-tab`);
 
               &:not(.is-closable) {
                 .tabs-item {
-                  padding-right: 10px;
+                  padding-right: var(--spacing-md);
                 }
               }
 
@@ -221,7 +221,7 @@ const tabClass = computed(() => `${appStore.tabStyle}-tab`);
                 color: var(--el-color-primary);
 
                 .is-icon-close {
-                  margin-right: 10px;
+                  margin-right: var(--spacing-md);
                 }
               }
             }

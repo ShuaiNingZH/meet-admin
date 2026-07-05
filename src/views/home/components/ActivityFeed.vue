@@ -77,7 +77,7 @@ en-US:
   padding-top: 4px;
 
   &__user {
-    margin-right: 6px;
+    margin-right: var(--spacing-sm);
     font-weight: 600;
     color: var(--el-color-primary);
   }

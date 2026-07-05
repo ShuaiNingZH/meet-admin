@@ -108,7 +108,7 @@ en-US:
 .welcome {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--spacing-base);
   align-items: center;
   justify-content: space-between;
   background: linear-gradient(135deg, var(--el-color-primary-light-8) 0%, var(--el-bg-color) 60%);
@@ -117,7 +117,7 @@ en-US:
   &__info {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: var(--spacing-base);
   }
 
   &__avatar {
@@ -133,7 +133,7 @@ en-US:
   }
 
   &__sub {
-    margin: 6px 0 0;
+    margin: var(--spacing-sm) 0 0;
     font-size: 13px;
     color: var(--el-text-color-secondary);
   }
@@ -141,7 +141,7 @@ en-US:
   &__mini {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: var(--spacing-sm);
   }
 
   &__mini-item {
@@ -158,7 +158,7 @@ en-US:
   }
 
   &__mini-label {
-    margin-top: 2px;
+    margin-top: var(--spacing-xs);
     font-size: 12px;
     color: var(--el-text-color-secondary);
   }

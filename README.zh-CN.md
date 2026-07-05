@@ -26,7 +26,7 @@ Meet-Admin 是一款基于 Vue 3.5、TypeScript、Vite 8、Pinia、Element Plus 
 - 采用 Vite 8 工具链（gzip / brotli 压缩、JSX/TSX 支持、开发代理、vue-devtools …）
 - 使用 Pinia 3 管理状态，集成 `pinia-plugin-persistedstate` 持久化插件
 - 集成 Element Plus 2.13，按需解析组件，支持组件大小切换与暗黑模式
-- 使用 UnoCSS（Wind3 预设 + 属性化 + rem-to-px）并预置了实用的 shortcuts 与动态规则
+- 使用 UnoCSS（Wind3 预设 + 属性化 + rem-to-px）并预置了实用的 shortcuts 与动态规则，同时提供统一的 4px 间距规范（`src/styles/variables.scss`）
 - 类型安全的 Axios 二次封装：自动注入 Bearer Token、重复请求取消、可选 Loading 遮罩、自动成功 / 错误提示、401 处理、空值清洗
 - 自动导入 `vue` / `vue-router` / `pinia` / `@vueuse/core` / `vue-i18n`，以及所有以 `App` 开头的全局组件
 - Vue I18n 国际化（中英文），YAML 文案预编译

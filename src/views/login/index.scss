@@ -92,12 +92,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 48px;
+      padding: var(--spacing-xxl);
       color: white;
 
       // 签名
       .sign {
-        margin-bottom: 20px;
+        margin-bottom: var(--spacing-lg);
       }
 
       // 仪表板预览
@@ -691,7 +691,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 32px;
+    padding: var(--spacing-xl);
 
     @media (min-width: 1024px) {
       width: 50%;
@@ -699,11 +699,11 @@
 
     .app-settings {
       position: absolute;
-      top: 16px;
-      right: 16px;
+      top: var(--spacing-base);
+      right: var(--spacing-base);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: var(--spacing-sm);
       font-size: 14px;
       color: var(--el-text-color-regular);
       cursor: pointer;
@@ -756,8 +756,8 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 16px;
-        padding: 8px 0;
+        gap: var(--spacing-base);
+        padding: var(--spacing-sm) 0;
       }
 
       // 登录页脚

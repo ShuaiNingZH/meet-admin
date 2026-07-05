@@ -26,7 +26,7 @@ Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vit
 - Vite 8 toolchain (gzip / brotli compression, JSX/TSX support, dev proxy, vue-devtools, …)
 - Pinia 3 for state management with `pinia-plugin-persistedstate`
 - Element Plus 2.13 with on-demand component resolution and global size / dark-mode switching
-- UnoCSS (Wind3 preset + attributify + rem-to-px) with custom shortcuts and dynamic rules
+- UnoCSS (Wind3 preset + attributify + rem-to-px) with custom shortcuts and dynamic rules, plus a shared 4px spacing scale (`src/styles/variables.scss`)
 - Type-safe Axios wrapper: bearer-token injection, duplicate-request cancellation, optional loading overlay, auto success / error toasts, 401 handling, and payload sanitization
 - Auto-imports for `vue` / `vue-router` / `pinia` / `@vueuse/core` / `vue-i18n` and any `App*` component
 - Vue I18n internationalization (Chinese / English) with precompiled YAML locales

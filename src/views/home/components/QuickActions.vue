@@ -112,9 +112,9 @@ en-US:
 .shortcut {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--spacing-sm);
   align-items: center;
-  padding: 14px 8px;
+  padding: var(--spacing-md) var(--spacing-sm);
   cursor: pointer;
   border-radius: 10px;
   transition: background-color 0.2s;
@@ -139,7 +139,7 @@ en-US:
 }
 
 .todo-divider {
-  margin: 18px 0 12px;
+  margin: var(--spacing-base) 0 var(--spacing-md);
 }
 
 /* 待办 */
@@ -153,7 +153,7 @@ en-US:
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: var(--spacing-sm) 0;
 
   &__text--done {
     color: var(--el-text-color-placeholder);

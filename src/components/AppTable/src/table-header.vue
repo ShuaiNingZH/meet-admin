@@ -107,15 +107,15 @@ function handleCustomUpdate(event: SortableEvent) {
 </script>
 
 <template>
-  <app-flex class="table-header" align="center" justify="space-between" :size="6" wrap>
-    <app-flex :size="6" wrap>
+  <app-flex class="table-header" align="center" justify="space-between" :size="8" wrap>
+    <app-flex :size="8" wrap>
       <slot name="title">
         <div class="text-16 font-600">
           {{ title }}
         </div>
       </slot>
     </app-flex>
-    <app-flex :size="6" wrap align="center">
+    <app-flex :size="8" wrap align="center">
       <slot name="button" />
       <!-- 刷新 -->
       <el-button @click="handleRefresh">
@@ -131,7 +131,7 @@ function handleCustomUpdate(event: SortableEvent) {
             {{ t('components.table.columnSettings') }}
           </el-button>
         </template>
-        <div class="flex-y-center justify-between p-[2px_10px_0] border-b">
+        <div class="flex-y-center justify-between p-[2px_12px_0] border-b">
           <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">
             {{ t('common.selectAll') }}
           </el-checkbox>
@@ -141,9 +141,9 @@ function handleCustomUpdate(event: SortableEvent) {
         </div>
         <el-scrollbar max-height="36vh">
           <VueDraggable v-model="columnChecks" handle=".handle" :animation="300" draggable=".noFixed" :custom-update="handleCustomUpdate">
-            <div v-for="item in columnChecks" :key="item.prop" :class="item.fixed ? '' : 'noFixed'" class="p-[5px_12px]">
+            <div v-for="item in columnChecks" :key="item.prop" :class="item.fixed ? '' : 'noFixed'" class="p-[8px_12px]">
               <app-flex align="center" justify="space-between">
-                <app-flex class="overflow-hidden" align="center" :size="6">
+                <app-flex class="overflow-hidden" align="center" :size="8">
                   <app-icon class="handle" :class="item.fixed ? 'cursor-not-allowed' : 'cursor-move'" icon="Rank" size="16" />
                   <el-checkbox v-model="item.checked" class="column-popover-checkbox overflow-hidden">
                     <app-text>
@@ -151,7 +151,7 @@ function handleCustomUpdate(event: SortableEvent) {
                     </app-text>
                   </el-checkbox>
                 </app-flex>
-                <app-flex :size="2">
+                <app-flex :size="4">
                   <el-tooltip :content="t('components.table.pinToLeft')">
                     <app-icon
                       class="cursor-pointer" icon="icon-park-outline:to-left"

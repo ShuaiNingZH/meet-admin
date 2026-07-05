@@ -8,7 +8,7 @@
           .el-tabs__header {
             .el-tabs__nav-wrap {
               &.is-scrollable {
-                padding: 25px 0;
+                padding: var(--spacing-lg) 0;
 
                 .el-tabs__nav-prev,
                 .el-tabs__nav-next {
@@ -18,7 +18,7 @@
                 .el-tabs__nav-scroll {
                   .el-tabs__nav {
                     .el-tabs__item {
-                      padding: 0 10px 0 0;
+                      padding: 0 var(--spacing-md) 0 0;
                     }
                   }
                 }

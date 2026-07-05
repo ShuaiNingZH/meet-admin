@@ -1,9 +1,9 @@
 .card-tab {
-  padding: 5px 0;
+  padding: var(--spacing-sm) 0;
   border-bottom: 1px solid var(--el-border-color);
 
   &:not(:has(.is-scrollable)) {
-    padding: 5px;
+    padding: var(--spacing-sm);
   }
 
   .tabs-menu {
@@ -15,7 +15,7 @@
 
         .el-tabs__nav-wrap {
           .el-tabs__nav {
-            gap: 10px;
+            gap: var(--spacing-md);
 
             .el-tabs__item {
               margin: 0;
@@ -25,16 +25,16 @@
               border-radius: 3px;
 
               .tabs-item {
-                padding-left: 10px;
+                padding-left: var(--spacing-md);
               }
 
               .is-icon-close {
-                margin-right: 5px;
+                margin-right: var(--spacing-sm);
               }
 
               &:hover {
                 .is-icon-close {
-                  margin-right: 10px;
+                  margin-right: var(--spacing-md);
                 }
               }
 

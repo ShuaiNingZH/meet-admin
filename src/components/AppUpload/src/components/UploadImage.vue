@@ -163,7 +163,7 @@ defineExpose(new Proxy({}, {
 
       .el-upload--picture-card {
         flex-direction: column;
-        row-gap: 3px;
+        row-gap: var(--spacing-xs);
         width: v-bind(width);
         height: v-bind(height);
         border-radius: v-bind(borderRadius);
@@ -243,7 +243,7 @@ defineExpose(new Proxy({}, {
             cursor: pointer;
             flex-direction: column;
             align-items: center;
-            row-gap: 5px;
+            row-gap: var(--spacing-sm);
             font-size: 12px;
 
             .app-icon {

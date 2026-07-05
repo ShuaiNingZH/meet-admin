@@ -4,7 +4,7 @@
   .el-dialog__header {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: var(--spacing-md);
     border-bottom: 1px solid var(--el-border-color);
 
     .el-dialog__headerbtn {
@@ -16,7 +16,7 @@
       position: unset;
 
       & + .el-dialog__headerbtn {
-        right: 10px;
+        right: var(--spacing-md);
       }
     }
   }
@@ -24,13 +24,13 @@
   .el-dialog__body {
     .el-scrollbar {
       .dialog-scrollbar-view {
-        padding: 20px;
+        padding: var(--spacing-lg);
       }
     }
   }
 
   .el-dialog__footer {
-    padding: 10px;
+    padding: var(--spacing-md);
     box-shadow: var(--el-box-shadow);
 
     .app-popup__footer {
@@ -39,7 +39,7 @@
 
       .button-reverse {
         order: 1;
-        margin-left: 12px;
+        margin-left: var(--spacing-md);
 
         & + .el-button {
           margin-left: 0;

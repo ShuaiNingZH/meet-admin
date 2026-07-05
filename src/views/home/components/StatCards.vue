@@ -96,13 +96,13 @@ en-US:
   }
 
   &__value {
-    margin: 8px 0;
+    margin: var(--spacing-sm) 0;
   }
 
   &__delta {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--spacing-xs);
     margin: 0;
     font-size: 12px;
     font-weight: 600;

@@ -167,7 +167,7 @@ registerShortcut();
           {{ t('components.searchMenu.result') }}
         </div>
         <el-scrollbar ref="scrollbarRef" view-class="p-(t-8 l-16 r-12 b-8)" max-height="400">
-          <el-space style="width: 100%" :size="5" fill>
+          <el-space style="width: 100%" :size="8" fill>
             <template v-for="item of getMenus" :key="item.path">
               <el-card
                 class="cursor-pointer"
@@ -186,7 +186,7 @@ registerShortcut();
       </template>
       <el-empty v-else :description="t('components.searchMenu.noData')" />
       <template #footer>
-        <el-space class="w-full" :size="15">
+        <el-space class="w-full" :size="16">
           <div class="flex-y-center">
             <div class="commands">
               ctrl

@@ -107,7 +107,7 @@ const maxHeight = computed(() => {
     <template v-if="showFooter" #footer>
       <div class="app-popup__footer" :style="{ justifyContent: footerPosition }">
         <slot name="footer">
-          <app-flex :size="7">
+          <app-flex :size="8">
             <el-button v-if="showCancelButton" :class="{ 'button-reverse': isReverse }" @click="onCancel">
               {{ cancelText }}
             </el-button>

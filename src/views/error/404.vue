@@ -60,7 +60,7 @@ function backToHome() {
       line-height: 40px;
       color: var(--el-color-primary);
       opacity: 0;
-      margin-bottom: 20px;
+      margin-bottom: var(--spacing-lg);
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-fill-mode: forwards;
@@ -71,7 +71,7 @@ function backToHome() {
       line-height: 24px;
       font-weight: bold;
       opacity: 0;
-      margin-bottom: 10px;
+      margin-bottom: var(--spacing-md);
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-delay: 0.1s;
@@ -82,7 +82,7 @@ function backToHome() {
       line-height: 21px;
       color: var(--el-text-color-secondary);
       opacity: 0;
-      margin-bottom: 30px;
+      margin-bottom: var(--spacing-xl);
       animation-name: slideUp;
       animation-duration: 0.5s;
       animation-delay: 0.2s;

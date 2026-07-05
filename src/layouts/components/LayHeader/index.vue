@@ -38,9 +38,9 @@ watchEffect(() => {
 </script>
 
 <template>
-  <app-flex ref="headerRef" class="p-[5px_10px] border-b" justify="space-between" align="center">
+  <app-flex ref="headerRef" class="p-[8px_12px] border-b" justify="space-between" align="center">
     <!-- 左侧 -->
-    <app-flex class="overflow-hidden" :size="5" align="center">
+    <app-flex class="overflow-hidden" :size="8" align="center">
       <el-tooltip :content="t('tooltip.refreshPage')" :disabled="!buttonTip">
         <div class="wrapper" @click="appStore.reloadPage()">
           <app-icon :class="loadFlag ? '' : 'is-loading'" icon="icon-park-outline:refresh" />
@@ -49,7 +49,7 @@ watchEffect(() => {
       <Breadcrumb v-if="isShowBreadcrumb && breadcrumbShow" />
     </app-flex>
     <!-- 右侧 -->
-    <app-flex :size="5" align="center">
+    <app-flex :size="8" align="center">
       <template v-if="isShowRight">
         <el-tooltip :content="t('tooltip.menuQuery')" :disabled="!buttonTip">
           <div class="wrapper" @click="handleSearchMenu">

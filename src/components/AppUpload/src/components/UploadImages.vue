@@ -156,7 +156,7 @@ defineExpose(new Proxy({}, {
         }
 
         .el-upload-list__item-actions {
-          column-gap: 15px;
+          column-gap: var(--spacing-base);
 
           &:hover {
             div {
@@ -169,7 +169,7 @@ defineExpose(new Proxy({}, {
             cursor: pointer;
             flex-direction: column;
             align-items: center;
-            row-gap: 5px;
+            row-gap: var(--spacing-sm);
             font-size: 12px;
 
             .app-icon {
@@ -181,7 +181,7 @@ defineExpose(new Proxy({}, {
 
       .el-upload--picture-card {
         flex-direction: column;
-        row-gap: 3px;
+        row-gap: var(--spacing-xs);
         width: v-bind(dragWidth);
         height: v-bind(height);
         border-radius: v-bind(borderRadius);

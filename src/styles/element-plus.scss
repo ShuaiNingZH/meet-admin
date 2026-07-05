@@ -29,7 +29,7 @@
         // 处理表格单元格内的表单元素
         &:has(.el-form-item) {
           .el-form-item {
-            margin: 18px 0;
+            margin: var(--spacing-base) 0;
           }
         }
 
@@ -45,7 +45,7 @@
 
           .row-span {
             &-item {
-              padding: 12px;
+              padding: var(--spacing-md);
 
               & + .row-span-item {
                 border-top: var(--el-table-border);
