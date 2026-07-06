@@ -2,25 +2,25 @@
 
 <p>English | <a href="README.zh-CN.md">中文</a></p>
 
-### Introduction
+## Introduction
 
 Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vite 8, Pinia, and Element Plus. It uses the latest technology stack and ships with a set of pre-wrapped components, hooks, directives, layouts, and a fully typed Axios layer to help you start a back-office project quickly.
 
-### Online preview
+## Online preview
 
 - Link: https://admin.wjp.plus
 
-### Code repository
+## Code repository
 
 - GitHub: https://github.com/wjp980108/meet-admin
 
-### Project documentation
+## Project documentation
 
 - Project changelog: [CHANGELOG.en-US.md](./CHANGELOG.en-US.md)
 
 - Project documentation: https://docs.wjp.plus
 
-### Features
+## Features
 
 - Vue 3.5 + TypeScript with `<script setup>` SFCs
 - Vite 8 toolchain (gzip / brotli compression, JSX/TSX support, dev proxy, vue-devtools, …)
@@ -36,12 +36,12 @@ Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vit
 - Conventional Commits enforced via husky + lint-staged + commitlint + cz-git (`pnpm commit`)
 - Strict ESLint rules powered by `@antfu/eslint-config` (with UnoCSS and CSS/HTML formatters)
 
-### Requirements
+## Requirements
 
 - Node.js `>= 24` (see `.nvmrc`)
-- pnpm `>= 10`
+- pnpm `>= 11`
 
-### Installation and usage
+## Installation and usage
 
 - **Clone:**
 
@@ -72,10 +72,10 @@ pnpm dev:prod
 - **Build:**
 
 ```bash
-# test (runs type-check first)
+# test (runs type-check in parallel)
 pnpm build:test
 
-# production (runs type-check first)
+# production (runs type-check in parallel)
 pnpm build
 ```
 
@@ -108,7 +108,7 @@ pnpm lint:fix
 pnpm commit
 ```
 
-### Project structure
+## Project structure
 
 ```text
 Meet-Admin
@@ -159,7 +159,7 @@ Meet-Admin
 └─ vite.config.ts          # Vite configuration
 ```
 
-### Browser support
+## Browser support
 
 - For local development, the latest Chrome is recommended ([Download](https://www.google.com/intl/en/chrome/)).
 - The production build targets modern browsers; IE is not supported. See [Can I Use Es Module](https://caniuse.com/?search=ESModule) for compatibility details.
@@ -168,6 +168,6 @@ Meet-Admin
 | :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
 |                   not support                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
 
-### License
+## License
 
 [MIT](./LICENSE)

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-Meet-Admin is a Vue 3.5 + TypeScript + Vite 8 admin framework using Element Plus, Pinia, UnoCSS, and Vue I18n. Package manager is **pnpm** (`>= 10`), Node `>= 24`. There is no test suite — verification is type-check + lint.
+Meet-Admin is a Vue 3.5 + TypeScript + Vite 8 admin framework using Element Plus, Pinia, UnoCSS, and Vue I18n. Package manager is **pnpm** (`>= 11`), Node `>= 24`. There is no test suite — verification is type-check + lint.
 
 ## Commands
 
@@ -15,10 +15,12 @@ pnpm dev:prod       # dev against prod env (.env.prod)
 pnpm type-check     # vue-tsc --build (run this to validate types)
 pnpm lint           # eslint .
 pnpm lint:fix       # eslint . --fix
-pnpm build          # type-check → vite build --mode prod → version file
-pnpm build:test     # type-check → vite build --mode test → version file
+pnpm build          # type-check + vite build --mode prod (parallel via run-p)
+pnpm build:test     # type-check + vite build --mode test (parallel via run-p)
 pnpm commit         # interactive Conventional Commits prompt (czg); required commit format
 ```
+
+Builds emit `version.json` into the output dir via the custom `versionFilePlugin` in `build/plugins.ts`; version-rocket (`src/config/versionRocket.ts`) polls it to detect new releases.
 
 Commits are validated by commitlint (Conventional Commits) and lint-staged auto-fixes staged files via a husky pre-commit hook. Follow the existing commit style, e.g. `fix(components): [lay-tabs] ...`.
 

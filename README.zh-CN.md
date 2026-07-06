@@ -2,25 +2,25 @@
 
 <p><a href="README.md">English</a> | 中文</p>
 
-### 介绍
+## 介绍
 
 Meet-Admin 是一款基于 Vue 3.5、TypeScript、Vite 8、Pinia、Element Plus 的开源后台管理框架，使用目前最新的技术栈构建。项目内置了一组常用的封装组件、Hooks、指令、布局以及完整类型化的 Axios 请求层，帮助你快速开启一个后台项目。
 
-### 在线预览
+## 在线预览
 
 - Link：https://admin.wjp.plus
 
-### 代码仓库
+## 代码仓库
 
 - GitHub：https://github.com/wjp980108/meet-admin
 
-### 项目文档
+## 项目文档
 
 - 项目更新日志：[CHANGELOG.zh-CN.md](./CHANGELOG.zh-CN.md)
 
 - 项目文档地址：https://docs.wjp.plus
 
-### 项目功能
+## 项目功能
 
 - 使用 Vue 3.5 + TypeScript 开发，全部基于 `<script setup>` 单文件组件
 - 采用 Vite 8 工具链（gzip / brotli 压缩、JSX/TSX 支持、开发代理、vue-devtools …）
@@ -36,12 +36,12 @@ Meet-Admin 是一款基于 Vue 3.5、TypeScript、Vite 8、Pinia、Element Plus 
 - 使用 husky + lint-staged + commitlint + cz-git 规范提交信息（`pnpm commit`）
 - 使用 `@antfu/eslint-config` 严格 lint（包含 UnoCSS、CSS/HTML 格式化）
 
-### 环境要求
+## 环境要求
 
 - Node.js `>= 24`（见 `.nvmrc`）
-- pnpm `>= 10`
+- pnpm `>= 11`
 
-### 安装使用步骤
+## 安装使用步骤
 
 - **Clone：**
 
@@ -72,10 +72,10 @@ pnpm dev:prod
 - **Build：**
 
 ```bash
-# 测试环境（先执行 type-check）
+# 测试环境（并行执行 type-check）
 pnpm build:test
 
-# 生产环境（先执行 type-check）
+# 生产环境（并行执行 type-check）
 pnpm build
 ```
 
@@ -108,7 +108,7 @@ pnpm lint:fix
 pnpm commit
 ```
 
-### 文件资源目录
+## 文件资源目录
 
 ```text
 Meet-Admin
@@ -159,7 +159,7 @@ Meet-Admin
 └─ vite.config.ts          # Vite 配置
 ```
 
-### 浏览器支持
+## 浏览器支持
 
 - 本地开发推荐使用最新版 Chrome 浏览器 [Download](https://www.google.com/intl/zh-CN/chrome/)。
 - 生产环境支持现代浏览器，不再支持 IE，更多浏览器兼容性信息可查看 [Can I Use Es Module](https://caniuse.com/?search=ESModule)。
@@ -168,6 +168,6 @@ Meet-Admin
 | :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
 |                   not support                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
 
-### 开源协议
+## 开源协议
 
 [MIT](./LICENSE)
