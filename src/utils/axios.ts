@@ -9,8 +9,8 @@ import { isString } from 'lodash-es';
 import qs from 'qs';
 import { i18n } from '@/config/i18n.ts';
 import { router } from '@/router';
-import { useUserStore } from '@/stores';
-import { $t } from '@/utils';
+import { useUserStore } from '@/stores/user';
+import { $t } from './i18n';
 
 const pendingMap = new Map();
 let loading: any;

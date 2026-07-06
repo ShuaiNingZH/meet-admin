@@ -2,7 +2,9 @@ import type { RouteLocationNormalizedLoaded, RouteRecordRaw } from 'vue-router';
 import { cloneDeep } from 'lodash-es';
 import path from 'path-browserify';
 import { fetchUserInfo, fetchUserMenu } from '@/api';
-import { useRouteStore, useTabStore, useUserStore } from '@/stores';
+import { useRouteStore } from '@/stores/route';
+import { useTabStore } from '@/stores/tab';
+import { useUserStore } from '@/stores/user';
 
 /**
  * 初始化路由

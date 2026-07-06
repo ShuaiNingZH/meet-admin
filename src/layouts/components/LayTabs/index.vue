@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import type { DropdownInstance, Measurable, TabsPaneContext } from 'element-plus';
-import type { TabsMenu } from '@/stores';
+import type { TabsMenu } from '@/stores/tab';
 import { navigationFailure } from '@/constants/router';
-import { useNotification } from '@/hooks';
-import { useAppStore, useTabStore } from '@/stores';
-import { renderIcon } from '@/utils';
+import { useNotification } from '@/hooks/useNotification';
+import { useAppStore } from '@/stores/app';
+import { useTabStore } from '@/stores/tab';
+import { renderIcon } from '@/utils/icon';
 
 defineOptions({ name: 'LayTabs' });
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { useUserStore } from '@/stores';
+import { useUserStore } from '@/stores/user';
 
 defineOptions({ name: 'WelcomeBanner' });
 

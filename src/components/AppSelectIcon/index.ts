@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import SelectIcon from './src/select-icon.vue';
 
 export const AppSelectIcon = withInstall<typeof SelectIcon>(SelectIcon);

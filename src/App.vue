@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { elLocale } from '@/constants/locale';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 

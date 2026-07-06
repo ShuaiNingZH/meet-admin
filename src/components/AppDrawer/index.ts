@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Drawer from './src/drawer.vue';
 
 export const AppDrawer = withInstall<typeof Drawer>(Drawer);

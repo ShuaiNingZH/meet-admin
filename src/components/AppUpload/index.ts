@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Upload from './src/upload.vue';
 
 export const AppUpload = withInstall<typeof Upload>(Upload);

@@ -1,5 +1,5 @@
 import { pick } from 'lodash-es';
-import { useReset } from '@/hooks';
+import { useReset } from '@/hooks/useReset';
 
 export const useState = createSharedComposable(() => {
   const [state, reset] = useReset<Role.Item>(() => ({

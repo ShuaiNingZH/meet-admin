@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { timeFormat } from '@/utils';
+import { timeFormat } from '@/utils/date';
 import pkg from '../../../package.json';
 
 defineOptions({ name: 'About' });

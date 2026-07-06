@@ -2,7 +2,7 @@
 import type { FormInstance } from 'element-plus';
 import type { AppFormProps } from './types.ts';
 import { omit } from 'lodash-es';
-import { renderIcon } from '@/utils';
+import { renderIcon } from '@/utils/icon';
 import AppFormItem from './form-item.vue';
 
 defineOptions({ name: 'AppForm' });

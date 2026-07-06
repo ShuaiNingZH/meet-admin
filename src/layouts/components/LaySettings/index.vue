@@ -2,8 +2,8 @@
 import type { DefaultSettings } from '@/config/settings.ts';
 import { localeList } from '@/constants/locale.ts';
 import ColorSettings from '@/layouts/components/LaySettings/components/Color.vue';
-import { useAppStore } from '@/stores';
-import { downloadFile } from '@/utils';
+import { useAppStore } from '@/stores/app';
+import { downloadFile } from '@/utils/download';
 
 defineOptions({ name: 'LaySettings' });
 

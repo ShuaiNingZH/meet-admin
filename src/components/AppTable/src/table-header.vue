@@ -3,7 +3,7 @@ import type { SortableEvent } from 'vue-draggable-plus';
 import type { TableColumnCheck, TableColumnChecks, TableColumns } from './types.ts';
 import { cloneDeep } from 'lodash-es';
 import { VueDraggable } from 'vue-draggable-plus';
-import { renderIcon } from '@/utils';
+import { renderIcon } from '@/utils/icon';
 import { getColumnChecks } from './utils.ts';
 
 defineOptions({ name: 'TableHeader', inheritAttrs: false });

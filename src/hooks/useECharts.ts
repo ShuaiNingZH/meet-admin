@@ -5,7 +5,7 @@ import type { EChartOptions } from '@/config/echarts';
 import { cloneDeep, merge } from 'lodash-es';
 import { useI18n } from 'vue-i18n';
 import echarts from '@/config/echarts';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 
 type ElementEventName = 'click' | 'dblclick' | 'mousewheel' | 'mouseout' | 'mouseover' | 'mouseup' | 'mousedown' | 'mousemove' | 'contextmenu' | 'drag' | 'dragstart' | 'dragend' | 'dragenter' | 'dragleave' | 'dragover' | 'drop' | 'globalout';
 

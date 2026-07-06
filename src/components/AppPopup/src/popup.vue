@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AppPopupProps } from './popup.ts';
 import { omit } from 'lodash-es';
-import { useEventForwarder } from '@/hooks';
+import { useEventForwarder } from '@/hooks/useEventForwarder';
 import { appPopupEmits, omitKeys } from './popup.ts';
 
 defineOptions({ name: 'AppPopup' });

@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Icon from './src/icon.vue';
 
 export const AppIcon = withInstall<typeof Icon>(Icon);

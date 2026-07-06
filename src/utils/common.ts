@@ -1,6 +1,6 @@
 import { div, fmt, mul } from 'a-calc';
 import nzhCn from 'nzh/cn';
-import { regex } from '@/utils';
+import { regex } from './regex';
 
 /**
  * 设置文档标题

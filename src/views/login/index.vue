@@ -7,8 +7,9 @@ import sign from '@/assets/images/sign.svg';
 import { Constant } from '@/enums/common';
 import Locale from '@/layouts/components/LayHeader/components/Locale.vue';
 import ThemeSwitch from '@/layouts/components/LayHeader/components/ThemeSwitch.vue';
-import { useUserStore } from '@/stores';
-import { renderIcon, storage } from '@/utils';
+import { useUserStore } from '@/stores/user';
+import { renderIcon } from '@/utils/icon';
+import { storage } from '@/utils/storage';
 
 defineOptions({ name: 'Login' });
 

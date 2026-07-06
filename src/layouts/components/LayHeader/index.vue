@@ -5,7 +5,7 @@ import Locale from '@/layouts/components/LayHeader/components/Locale.vue';
 import ThemeSwitch from '@/layouts/components/LayHeader/components/ThemeSwitch.vue';
 import SearchMenu from '@/layouts/components/LayMenu/components/SearchMenu.vue';
 import LaySettings from '@/layouts/components/LaySettings/index.vue';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: 'LayHeader' });
 

@@ -6,8 +6,8 @@ import NProgress from '@/config/nprogress';
 import Layout from '@/router/modules/index.ts';
 import remainingRouter from '@/router/modules/remainingRouter.ts';
 import { initRouter } from '@/router/utils.ts';
-import { useUserStore } from '@/stores';
-import { setDocumentTitle } from '@/utils';
+import { useUserStore } from '@/stores/user';
+import { setDocumentTitle } from '@/utils/common';
 
 // 业务路由模块：自动挂载到 Layout 下（排除容器与 remaining）
 const businessModules = import.meta.glob<{ default: RouteRecordRaw }>(

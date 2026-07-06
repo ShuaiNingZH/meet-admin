@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ThemeColorKey } from '@/config/settings.ts';
 import { defaultThemeColor, predefineColors } from '@/config/settings.ts';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: 'ColorSettings' });
 

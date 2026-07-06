@@ -1,4 +1,4 @@
-import { withInstall, withNoopInstall } from '@/utils';
+import { withInstall, withNoopInstall } from '@/utils/withInstall';
 import BaseTable from './src/base-table.vue';
 import Table from './src/table.vue';
 

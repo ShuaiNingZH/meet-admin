@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { BasicColorSchema } from '@vueuse/core';
-import { useAppStore } from '@/stores';
-import { renderIcon } from '@/utils';
+import { useAppStore } from '@/stores/app';
+import { renderIcon } from '@/utils/icon';
 
 defineOptions({ name: 'ThemeSwitch' });
 

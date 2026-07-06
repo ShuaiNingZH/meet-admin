@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import logo from '@/assets/images/logo.svg';
 import SubMenu from '@/layouts/components/LayMenu/components/SubMenu.vue';
-import { useAppStore, useRouteStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
+import { useRouteStore } from '@/stores/route';
 
 defineOptions({ name: 'LayMenu' });
 

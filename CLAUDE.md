@@ -59,7 +59,7 @@ export function createUser(data: UserCreateForm) {
 The wrapper handles, per `options`: `cancelDuplicateRequest` (AbortController keyed by url+method+params+data; on by default), `loading` (Element Plus overlay, refcounted; pass a string for custom text), `message` (success toast; string overrides backend message), `showErrorMessage` (i18n'd HTTP-status error toasts). It injects `Bearer` token from the user store, sets `Accept-Language`, strips empty values (`null`/`undefined`/`''`) from params/body via `filterEmptyValues`, and on `status === 401` logs out + redirects to `/login`. Backend success is `data.status === 200`.
 
 ### State — Pinia (`src/stores/`)
-Setup-store style (`defineStore('...', () => { ... })`), persisted via `pinia-plugin-persistedstate`. Stores: `user` (auth token via `useStorage('access-token')`, user info), `route`, `tab`, `app`. Re-exported from `src/stores/index.ts`. Note `accessToken` is persisted through VueUse `useStorage`, not the pinia plugin.
+Setup-store style (`defineStore('...', () => { ... })`), persisted via `pinia-plugin-persistedstate`. Stores: `user` (auth token via `useStorage('access-token')`, user info), `route`, `tab`, `app`. Import stores by deep path (`@/stores/user`, ...); `src/stores/index.ts` only exposes `installPinia`. Note `accessToken` is persisted through VueUse `useStorage`, not the pinia plugin.
 
 ### Library setup — `src/config/`
 Each third-party lib has an init/config module (`elementPlus.ts`, `i18n.ts`, `dayjs.ts`, `echarts.ts`, `wangEditor.ts`, `versionRocket.ts`, `weiXin.ts` for WeCom login, `nprogress.ts`, `settings.ts`). App bootstrap wiring is in `src/main.ts` (`installPinia` → `installRouter` → `setupGlobalDirectives` → `installI18n`).

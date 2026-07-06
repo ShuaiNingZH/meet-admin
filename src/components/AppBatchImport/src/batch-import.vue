@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { UploadRawFile, UploadRequestOptions } from 'element-plus';
 import type { AppBatchImportProps } from './type.ts';
-import { downloadFile } from '@/utils';
+import { downloadFile } from '@/utils/download';
 
 defineOptions({ name: 'AppBatchImport' });
 

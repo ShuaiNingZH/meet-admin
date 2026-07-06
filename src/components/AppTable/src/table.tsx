@@ -2,7 +2,7 @@ import type { AppTableProps, RenderScope, TableColumn, TableColumns } from './ty
 import { ElTableColumn } from 'element-plus';
 import { cloneDeep, omit } from 'lodash-es';
 import { AppHelpInfo } from '@/components';
-import { $t } from '@/utils';
+import { $t } from '@/utils/i18n';
 import { dateFormatter, getColumnChecks, renderDefault, setColumns } from './utils.ts';
 
 /**

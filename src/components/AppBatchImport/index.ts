@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import BatchImport from './src/batch-import.vue';
 
 export const AppBatchImport = withInstall<typeof BatchImport>(BatchImport);

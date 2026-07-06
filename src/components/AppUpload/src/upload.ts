@@ -3,7 +3,8 @@ import type { ModelRef } from 'vue';
 import { formContextKey, formItemContextKey } from 'element-plus';
 import { isArray } from 'lodash-es';
 import { uploadImage } from '@/api';
-import { downloadFile, regex } from '@/utils';
+import { downloadFile } from '@/utils/download';
+import { regex } from '@/utils/regex';
 
 export interface AppUploadProps {
   /**

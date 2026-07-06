@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Card from './src/card.vue';
 
 export const AppCard = withInstall<typeof Card>(Card);

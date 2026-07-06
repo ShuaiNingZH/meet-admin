@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Editor from './src/editor.vue';
 
 export const AppEditor = withInstall<typeof Editor>(Editor);

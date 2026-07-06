@@ -1,4 +1,4 @@
-import { withInstall, withNoopInstall } from '@/utils';
+import { withInstall, withNoopInstall } from '@/utils/withInstall';
 import FormItem from './src/form-item.vue';
 import Form from './src/form.vue';
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { useUserStore } from '@/stores';
-import { renderIcon } from '@/utils';
+import { useUserStore } from '@/stores/user';
+import { renderIcon } from '@/utils/icon';
 
 defineOptions({ name: 'Avatar' });
 

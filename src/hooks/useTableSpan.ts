@@ -1,5 +1,5 @@
 import { ref } from 'vue';
-import { areObjectsEqualForKeys } from '@/utils';
+import { areObjectsEqualForKeys } from '@/utils/object';
 
 /**
  * 使用 Vue 的 ref 响应式引用来存储行合并信息。

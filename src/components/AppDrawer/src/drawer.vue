@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AppDrawerProps } from './drawer.ts';
 import { omit } from 'lodash-es';
-import { useEventForwarder } from '@/hooks';
+import { useEventForwarder } from '@/hooks/useEventForwarder';
 import { appDrawerEmits, omitKeys } from './drawer.ts';
 
 defineOptions({ name: 'AppDrawer' });

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { AppTabsProps } from './types.ts';
 import { tabsEmits } from 'element-plus/es/components/tabs/src/tabs';
-import { useEventForwarder } from '@/hooks';
+import { useEventForwarder } from '@/hooks/useEventForwarder';
 
 defineOptions({ name: 'AppTabs' });
 

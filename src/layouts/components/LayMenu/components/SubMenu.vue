@@ -2,7 +2,7 @@
 import type { MenuItemRegistered } from 'element-plus';
 import type { RouteRecordRaw } from 'vue-router';
 import { navigationFailure } from '@/constants/router';
-import { useNotification } from '@/hooks';
+import { useNotification } from '@/hooks/useNotification';
 
 defineOptions({ name: 'SubMenu' });
 defineProps<{ menuList: RouteRecordRaw[] }>();

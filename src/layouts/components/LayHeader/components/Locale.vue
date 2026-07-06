@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { localeList } from '@/constants/locale';
-import { useAppStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
 
 defineOptions({ name: 'Locale' });
 

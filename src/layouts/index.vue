@@ -4,7 +4,8 @@ import LayHeader from '@/layouts/components/LayHeader/index.vue';
 import LayMenu from '@/layouts/components/LayMenu/index.vue';
 import LayTabs from '@/layouts/components/LayTabs/index.vue';
 import { initRouter } from '@/router/utils.ts';
-import { useAppStore, useRouteStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
+import { useRouteStore } from '@/stores/route';
 
 defineOptions({ name: 'Layout' });
 

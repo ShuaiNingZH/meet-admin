@@ -4,7 +4,8 @@ import { installI18n } from '@/config/i18n';
 import initVersionRocket from '@/config/versionRocket';
 import { setupGlobalDirectives } from '@/directives';
 import { installRouter } from '@/router';
-import { installPinia, useAppStore } from '@/stores';
+import { installPinia } from '@/stores';
+import { useAppStore } from '@/stores/app';
 import App from './App.vue';
 import '@/styles/index';
 

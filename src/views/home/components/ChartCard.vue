@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { EChartsOption } from 'echarts';
-import { useECharts } from '@/hooks';
+import { useECharts } from '@/hooks/useECharts';
 
 defineOptions({ name: 'ChartCard' });
 

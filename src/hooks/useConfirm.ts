@@ -1,5 +1,5 @@
 import type { VNode } from 'vue';
-import { $t } from '@/utils';
+import { $t } from '@/utils/i18n';
 
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error';
 

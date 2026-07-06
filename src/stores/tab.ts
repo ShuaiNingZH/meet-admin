@@ -1,6 +1,6 @@
-import { useReset } from '@/hooks';
+import { useReset } from '@/hooks/useReset';
 import { router } from '@/router';
-import { useRouteStore } from '@/stores';
+import { useRouteStore } from './route';
 
 export interface TabsMenu {
   icon: string;

@@ -1,4 +1,4 @@
-import { withInstall } from '@/utils';
+import { withInstall } from '@/utils/withInstall';
 import Text from './src/text.vue';
 
 export const AppText = withInstall<typeof Text>(Text);

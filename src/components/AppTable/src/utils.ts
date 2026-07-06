@@ -1,7 +1,9 @@
 import type { RenderScope, TableColumn, TableColumnChecks, TableColumns } from './types.ts';
 import dayjs from 'dayjs';
 import { has } from 'lodash-es';
-import { $t, moneyThousand, timeFormat } from '@/utils';
+import { timeFormat } from '@/utils/date';
+import { $t } from '@/utils/i18n';
+import { moneyThousand } from '@/utils/money';
 import { handleImgRender, handleMoneyRender } from './render.tsx';
 
 /**

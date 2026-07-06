@@ -1,5 +1,6 @@
-import { useReset } from '@/hooks';
-import { useRouteStore, useTabStore } from '@/stores';
+import { useReset } from '@/hooks/useReset';
+import { useRouteStore } from './route';
+import { useTabStore } from './tab';
 
 export const useUserStore = defineStore('user-store', () => {
   const [state, reset] = useReset(() => ({

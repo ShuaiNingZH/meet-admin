@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRouteStore } from '@/stores';
+import { useRouteStore } from '@/stores/route';
 
 defineOptions({ name: 'SearchMenu' });
 

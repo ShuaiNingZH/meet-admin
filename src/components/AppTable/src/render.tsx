@@ -2,7 +2,8 @@ import type { ImageToolbar, Money, RenderScope } from './types.ts';
 import { ElImage } from 'element-plus';
 import { has, isArray } from 'lodash-es';
 import { AppFlex, AppIcon } from '@/components';
-import { downloadFile, renderMoney } from '@/utils';
+import { downloadFile } from '@/utils/download';
+import { renderMoney } from '@/utils/render';
 
 /**
  * 处理金额数据的渲染
