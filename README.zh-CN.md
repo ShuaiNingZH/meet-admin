@@ -4,7 +4,7 @@
 
 ## 介绍
 
-Meet-Admin 是一款基于 Vue 3.5、TypeScript、Vite 8、Pinia、Element Plus 的开源后台管理框架，使用目前最新的技术栈构建。项目内置了一组常用的封装组件、Hooks、指令、布局以及完整类型化的 Axios 请求层，帮助你快速开启一个后台项目。
+Meet-Admin 是一款基于 Vue 3、TypeScript、Vite 8、Pinia、Element Plus 的开源后台管理框架，使用目前最新的技术栈构建。项目内置了一组常用的封装组件、Hooks、指令、布局以及完整类型化的 Axios 请求层，帮助你快速开启一个后台项目。
 
 ## 在线预览
 
@@ -22,10 +22,10 @@ Meet-Admin 是一款基于 Vue 3.5、TypeScript、Vite 8、Pinia、Element Plus 
 
 ## 项目功能
 
-- 使用 Vue 3.5 + TypeScript 开发，全部基于 `<script setup>` 单文件组件
+- 使用 Vue 3 + TypeScript 开发，全部基于 `<script setup>` 单文件组件
 - 采用 Vite 8 工具链（gzip / brotli 压缩、JSX/TSX 支持、开发代理、vue-devtools …）
 - 使用 Pinia 3 管理状态，集成 `pinia-plugin-persistedstate` 持久化插件
-- 集成 Element Plus 2.13，按需解析组件，支持组件大小切换与暗黑模式
+- 集成 Element Plus，按需解析组件，支持组件大小切换与暗黑模式
 - 使用 UnoCSS（Wind3 预设 + 属性化 + rem-to-px）并预置了实用的 shortcuts 与动态规则，同时提供统一的 4px 间距规范（`src/styles/variables.scss`）
 - 类型安全的 Axios 二次封装：自动注入 Bearer Token、重复请求取消、可选 Loading 遮罩、自动成功 / 错误提示、401 处理、空值清洗
 - 自动导入 `vue` / `vue-router` / `pinia` / `@vueuse/core` / `vue-i18n`，以及所有以 `App` 开头的全局组件
@@ -144,12 +144,14 @@ Meet-Admin
 ├─ .nvmrc                  # Node 版本锁定
 ├─ CHANGELOG.en-US.md      # 项目更新日志（英文）
 ├─ CHANGELOG.zh-CN.md      # 项目更新日志（中文）
+├─ CLAUDE.md               # Claude Code 项目说明
 ├─ commitlint.config.ts    # Git 提交规范配置
 ├─ eslint.config.ts        # ESLint 扁平配置
 ├─ index.html              # 入口 HTML
 ├─ LICENSE                 # MIT 开源协议
 ├─ package.json            # 依赖管理
 ├─ pnpm-lock.yaml          # pnpm 锁文件
+├─ pnpm-workspace.yaml     # pnpm 配置（构建白名单、信任策略）
 ├─ README.md               # README（英文）
 ├─ README.zh-CN.md         # README（中文）
 ├─ tsconfig.json           # TypeScript 项目引用
@@ -164,9 +166,9 @@ Meet-Admin
 - 本地开发推荐使用最新版 Chrome 浏览器 [Download](https://www.google.com/intl/zh-CN/chrome/)。
 - 生产环境支持现代浏览器，不再支持 IE，更多浏览器兼容性信息可查看 [Can I Use Es Module](https://caniuse.com/?search=ESModule)。
 
-| ![IE](https://i.imgtg.com/2023/04/11/8z7ot.png) | ![Edge](https://i.imgtg.com/2023/04/11/8zr3p.png) | ![Firefox](https://i.imgtg.com/2023/04/11/8zKiU.png) | ![Chrome](https://i.imgtg.com/2023/04/11/8zNrx.png) | ![Safari](https://i.imgtg.com/2023/04/11/8zeGj.png) |
-| :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
-|                   not support                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
+| ![IE](https://raw.githubusercontent.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png) |
+| :-------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+|                                                                not support                                                                |                                                  last 2 versions                                  |                                                     last 2 versions                                      |                                                     last 2 versions                                      |                                                     last 2 versions                                      |
 
 ## 开源协议
 

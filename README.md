@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vite 8, Pinia, and Element Plus. It uses the latest technology stack and ships with a set of pre-wrapped components, hooks, directives, layouts, and a fully typed Axios layer to help you start a back-office project quickly.
+Meet-Admin is an open-source admin framework built with Vue 3, TypeScript, Vite 8, Pinia, and Element Plus. It uses the latest technology stack and ships with a set of pre-wrapped components, hooks, directives, layouts, and a fully typed Axios layer to help you start a back-office project quickly.
 
 ## Online preview
 
@@ -22,10 +22,10 @@ Meet-Admin is an open-source admin framework built with Vue 3.5, TypeScript, Vit
 
 ## Features
 
-- Vue 3.5 + TypeScript with `<script setup>` SFCs
+- Vue 3 + TypeScript with `<script setup>` SFCs
 - Vite 8 toolchain (gzip / brotli compression, JSX/TSX support, dev proxy, vue-devtools, …)
 - Pinia 3 for state management with `pinia-plugin-persistedstate`
-- Element Plus 2.13 with on-demand component resolution and global size / dark-mode switching
+- Element Plus with on-demand component resolution and global size / dark-mode switching
 - UnoCSS (Wind3 preset + attributify + rem-to-px) with custom shortcuts and dynamic rules, plus a shared 4px spacing scale (`src/styles/variables.scss`)
 - Type-safe Axios wrapper: bearer-token injection, duplicate-request cancellation, optional loading overlay, auto success / error toasts, 401 handling, and payload sanitization
 - Auto-imports for `vue` / `vue-router` / `pinia` / `@vueuse/core` / `vue-i18n` and any `App*` component
@@ -144,12 +144,14 @@ Meet-Admin
 ├─ .nvmrc                  # Node version pin
 ├─ CHANGELOG.en-US.md      # Changelog (English)
 ├─ CHANGELOG.zh-CN.md      # Changelog (Chinese)
+├─ CLAUDE.md               # Claude Code project instructions
 ├─ commitlint.config.ts    # Conventional Commits configuration
 ├─ eslint.config.ts        # ESLint flat config
 ├─ index.html              # HTML entry
 ├─ LICENSE                 # MIT license
 ├─ package.json            # Package manifest
 ├─ pnpm-lock.yaml          # pnpm lockfile
+├─ pnpm-workspace.yaml     # pnpm configuration (build allowlist, trust policy)
 ├─ README.md               # README (English)
 ├─ README.zh-CN.md         # README (Chinese)
 ├─ tsconfig.json           # TypeScript project references
@@ -164,9 +166,9 @@ Meet-Admin
 - For local development, the latest Chrome is recommended ([Download](https://www.google.com/intl/en/chrome/)).
 - The production build targets modern browsers; IE is not supported. See [Can I Use Es Module](https://caniuse.com/?search=ESModule) for compatibility details.
 
-| ![IE](https://i.imgtg.com/2023/04/11/8z7ot.png) | ![Edge](https://i.imgtg.com/2023/04/11/8zr3p.png) | ![Firefox](https://i.imgtg.com/2023/04/11/8zKiU.png) | ![Chrome](https://i.imgtg.com/2023/04/11/8zNrx.png) | ![Safari](https://i.imgtg.com/2023/04/11/8zeGj.png) |
-| :---------------------------------------------: | :-----------------------------------------------: | :--------------------------------------------------: | :-------------------------------------------------: | :-------------------------------------------------: |
-|                   not support                   |                  last 2 versions                  |                   last 2 versions                    |                   last 2 versions                   |                   last 2 versions                   |
+| ![IE](https://raw.githubusercontent.com/alrra/browser-logos/master/src/archive/internet-explorer_9-11/internet-explorer_9-11_48x48.png) | ![Edge](https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png) | ![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png) | ![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png) | ![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png) |
+| :-------------------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: |
+|                                                                not support                                                                |                                                  last 2 versions                                  |                                                     last 2 versions                                      |                                                     last 2 versions                                      |                                                     last 2 versions                                      |
 
 ## License
 
