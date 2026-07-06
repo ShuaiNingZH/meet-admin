@@ -27,7 +27,7 @@ export function createMenu(data: MenuCreateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -39,7 +39,7 @@ export function updateMenu(data: MenuUpdateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -63,6 +63,6 @@ export function updateMenuStatus(data: MenuUpdateStatus) {
     },
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }

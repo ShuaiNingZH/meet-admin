@@ -47,16 +47,18 @@ Two sources of routes, both mounted under a single `Layout` container (`src/rout
 
 The global `beforeEach` guard enforces auth: no `accessToken` → redirect to `/login`; empty `userInfo` → run `initRouter()` then replay the target route.
 
-### HTTP layer — `src/utils/axios.ts`
-All API calls go through the `request<T>(axiosConfig, options?)` wrapper (default export). API modules live in `src/api/**` and are re-exported from `src/api/index.ts`; each function returns `request<ResponseDataType>({ url, method, params/data }, options)`. Pattern for a call:
+### HTTP layer — `src/utils/axios/`
+All API calls go through the `request<T>(axiosConfig, options?)` wrapper (default export of `src/utils/axios/index.ts`; internally split into `instance.ts` for the singleton Axios instance + interceptors, `dedupe.ts`, `loading.ts`, `filterEmptyValues.ts`, `errorMessage.ts`, `auth.ts`, `requestError.ts`). API modules live in `src/api/**` and are re-exported from `src/api/index.ts`; each function returns `request<ResponseDataType>({ url, method, params/data }, options)`. Pattern for a call:
 
 ```ts
 export function createUser(data: UserCreateForm) {
-  return request({ url: '/api/users', method: 'post', data }, { loading: true, message: true });
+  return request({ url: '/api/users', method: 'post', data }, { loading: true, successMessage: true });
 }
 ```
 
-The wrapper handles, per `options`: `cancelDuplicateRequest` (AbortController keyed by url+method+params+data; on by default), `loading` (Element Plus overlay, refcounted; pass a string for custom text), `message` (success toast; string overrides backend message), `showErrorMessage` (i18n'd HTTP-status error toasts). It injects `Bearer` token from the user store, sets `Accept-Language`, strips empty values (`null`/`undefined`/`''`) from params/body via `filterEmptyValues`, and on `status === 401` logs out + redirects to `/login`. Backend success is `data.status === 200`.
+The wrapper handles, per `options`: `cancelDuplicateRequest` (AbortController keyed by url+method+params+data; on by default), `loading` (Element Plus overlay, refcounted; pass a string for custom text), `successMessage` (success toast; string overrides backend message), `errorMessage` (error toast, on by default; string overrides the resolved error message). It injects `Bearer` token from the user store, sets `Accept-Language`, strips empty values (`null`/`undefined`/`''`) from params/body via `filterEmptyValues`, and on HTTP 401 or business `data.code === 401` logs out + redirects to `/login`. Backend success is `data.code === 200`.
+
+Every rejection (network error, HTTP error status, or business `data.code !== 200`) is normalized into a single `RequestError` (`code`, `message`, `raw`), so calling code can `catch` one shape regardless of failure origin — no need to branch on whether the failure came from Axios or from the business body.
 
 ### State — Pinia (`src/stores/`)
 Setup-store style (`defineStore('...', () => { ... })`), persisted via `pinia-plugin-persistedstate`. Stores: `user` (auth token via `useStorage('access-token')`, user info), `route`, `tab`, `app`. Import stores by deep path (`@/stores/user`, ...); `src/stores/index.ts` only exposes `installPinia`. Note `accessToken` is persisted through VueUse `useStorage`, not the pinia plugin.

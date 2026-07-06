@@ -38,7 +38,7 @@ export function createRole(data: RoleCreateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -50,7 +50,7 @@ export function updateRole(data: RoleUpdateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -74,6 +74,6 @@ export function updateRoleStatus(data: RoleUpdateStatus) {
     },
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }

@@ -36,7 +36,7 @@ export function createUser(data: UserCreateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -48,7 +48,7 @@ export function updateUser(data: UserUpdateForm) {
     data,
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
 
@@ -72,6 +72,6 @@ export function updateUserStatus(data: UserUpdateStatus) {
     },
   }, {
     loading: true,
-    message: true,
+    successMessage: true,
   });
 }
