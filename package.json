@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "private": true,
-  "description": "meet-admin open source management system",
+  "description": "Meet-Admin is an admin management framework built with Vue 3.5, TypeScript and Vite 8, integrating Element Plus, Pinia, UnoCSS and Vue I18n. It ships with dynamic routing, permission-based menus and i18n out of the box, helping teams quickly build admin systems.",
   "author": {
     "name": "Meet you",
     "email": "wjp_github@163.com",
@@ -13,7 +13,7 @@
   "homepage": "https://admin.wjp.plus",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wjp980108/meet-admin.git"
+    "url": "git+https://github.com/wjp980108/meet-admin.git"
   },
   "bugs": {
     "url": "https://github.com/wjp980108/meet-admin/issues"
@@ -40,7 +40,7 @@
   ],
   "engines": {
     "node": ">=24",
-    "pnpm": ">=10"
+    "pnpm": ">=11"
   },
   "scripts": {
     "dev": "vite --mode dev",
@@ -58,6 +58,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@iconify/vue": "^5.0.1",
     "@unocss/reset": "^66.7.3",
     "@vue/shared": "^3.5.39",
     "@vueuse/core": "^14.3.0",
@@ -96,7 +97,6 @@
     "@commitlint/cli": "^21.1.0",
     "@commitlint/config-conventional": "^21.1.0",
     "@iconify/types": "^2.0.0",
-    "@iconify/vue": "^5.0.1",
     "@intlify/unplugin-vue-i18n": "^11.2.4",
     "@tsconfig/node24": "^24.0.4",
     "@types/file-saver": "^2.0.7",
@@ -129,6 +129,6 @@
     "vue-tsc": "^3.3.5"
   },
   "lint-staged": {
-    "*.{jsx,ts,tsx,vue,json,yaml,yml,scss,html}": "eslint --fix"
+    "*": "eslint --fix"
   }
 }
