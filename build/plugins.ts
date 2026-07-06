@@ -1,4 +1,6 @@
 import type { ComponentResolver } from 'unplugin-vue-components';
+import type { Plugin } from 'vite';
+import fs from 'node:fs';
 import path from 'node:path';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vue from '@vitejs/plugin-vue';
@@ -55,6 +57,30 @@ function configCompressPlugin(compress: string) {
 };
 
 /**
+ * 生成版本文件插件
+ * 功能：构建时向产物目录写入 version.json（内容为 package.json 的 version），
+ * 供 version-rocket 的 checkVersion 轮询比对，检测线上是否发布了新版本
+ * 替代 version-rocket 的 generate-version-file 命令行工具，且输出目录自动跟随 outDir 配置
+ */
+function versionFilePlugin(): Plugin {
+  return {
+    name: 'generate-version-file',
+    // 仅在 build 时生效，dev 不需要
+    apply: 'build',
+    generateBundle() {
+      const { version } = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8'));
+
+      this.emitFile({
+        type: 'asset',
+        fileName: 'version.json',
+        // external 字段保持与 generate-version-file 的输出格式一致
+        source: JSON.stringify({ version, external: '' }),
+      });
+    },
+  };
+}
+
+/**
  * 创建自定义组件解析器，用于 unplugin-vue-components 插件
  * 功能：自动导入所有以 App 开头的组件（如 <AppHeader />、<AppFooter /> 等）
  * 要求：这些组件需要在 @/components/index.ts 中按名称导出
@@ -99,6 +125,7 @@ export default function createVitePlugins(env: any) {
       include: path.resolve(__dirname, '../src/locales/**'),
     }),
     configCompressPlugin(env.VITE_COMPRESSION),
+    versionFilePlugin(),
     vueDevTools(),
   ];
 }

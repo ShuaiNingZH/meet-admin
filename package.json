@@ -47,13 +47,14 @@
     "dev:test": "vite --mode test",
     "dev:prod": "vite --mode prod",
     "preview": "vite preview",
+    "build": "run-p type-check build-only --mode prod",
+    "build:test": "run-p type-check build-only --mode test",
+    "build-only": "vite build",
     "type-check": "vue-tsc --build",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "commit": "czg",
-    "prepare": "husky",
-    "build:test": "run-s type-check && vite build --mode test && generate-version-file",
-    "build": "run-s type-check && vite build --mode prod && generate-version-file"
+    "prepare": "husky"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
