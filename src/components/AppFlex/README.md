@@ -16,9 +16,8 @@ Flex 布局属性，使得在项目中可以更加便捷地实现水平布局、
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppFlex} from '@/components/AppFlex';
+import { AppFlex } from '@/components/AppFlex';
 </script>
 
 <template>

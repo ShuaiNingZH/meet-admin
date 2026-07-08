@@ -20,49 +20,48 @@ AppTreeFilter 是一个基于 Element Plus
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppTreeFilter} from '@/components/AppTreeFilter';
-  import {ref} from 'vue';
+import { ref } from 'vue';
+import { AppTreeFilter } from '@/components/AppTreeFilter';
 
-  // 单选模式
-  const selectedNode = ref('');
+// 单选模式
+const selectedNode = ref('');
 
-  // 多选模式
-  const selectedNodes = ref([]);
+// 多选模式
+const selectedNodes = ref([]);
 
-  // 返回完整对象
-  const selectedNodeObject = ref({});
+// 返回完整对象
+const selectedNodeObject = ref({});
 
-  // 树形数据
-  const treeData = ref([
-    {
-      id: '1',
-      label: '一级节点',
-      children: [
-        {
-          id: '1-1',
-          label: '二级节点 1',
-          code: 'A001'
-        },
-        {
-          id: '1-2',
-          label: '二级节点 2',
-          code: 'A002'
-        }
-      ]
-    },
-    {
-      id: '2',
-      label: '一级节点 2',
-      code: 'B001'
-    }
-  ]);
-
-  // 节点变化事件处理
-  function handleNodeChange(val) {
-    console.log('选中的节点变化了', val);
+// 树形数据
+const treeData = ref([
+  {
+    id: '1',
+    label: '一级节点',
+    children: [
+      {
+        id: '1-1',
+        label: '二级节点 1',
+        code: 'A001'
+      },
+      {
+        id: '1-2',
+        label: '二级节点 2',
+        code: 'A002'
+      }
+    ]
+  },
+  {
+    id: '2',
+    label: '一级节点 2',
+    code: 'B001'
   }
+]);
+
+// 节点变化事件处理
+function handleNodeChange(val) {
+  console.log('选中的节点变化了', val);
+}
 </script>
 
 <template>

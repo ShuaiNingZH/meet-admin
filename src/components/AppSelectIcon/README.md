@@ -17,28 +17,27 @@ AppSelectIcon 是一个图标选择器组件，基于 Iconify API
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppIcon, AppSelectIcon} from '@/components';
-  import {reactive, ref} from 'vue';
+import { reactive, ref } from 'vue';
+import { AppIcon, AppSelectIcon } from '@/components';
 
-  // 单独使用
-  const selectedIcon = ref('');
-  const customIcon = ref('mdi:home');
+// 单独使用
+const selectedIcon = ref('');
+const customIcon = ref('mdi:home');
 
-  // 在表单中使用
-  const form = reactive({
-    icon: ''
-  });
+// 在表单中使用
+const form = reactive({
+  icon: ''
+});
 
-  function submitForm() {
-    console.log('提交的图标:', form.icon);
-  }
+function submitForm() {
+  console.log('提交的图标:', form.icon);
+}
 </script>
 
 <template>
   <!-- 基础用法 -->
-  <AppSelectIcon v-model="selectedIcon"/>
+  <AppSelectIcon v-model="selectedIcon" />
 
   <!-- 自定义占位符和标题 -->
   <AppSelectIcon
@@ -50,7 +49,7 @@ AppSelectIcon 是一个图标选择器组件，基于 Iconify API
   <!-- 在表单中使用 -->
   <el-form :model="form" label-width="100px">
     <el-form-item label="菜单图标">
-      <AppSelectIcon v-model="form.icon"/>
+      <AppSelectIcon v-model="form.icon" />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm">
@@ -62,7 +61,7 @@ AppSelectIcon 是一个图标选择器组件，基于 Iconify API
   <!-- 显示选中的图标 -->
   <div v-if="selectedIcon">
     <p>已选图标：{{ selectedIcon }}</p>
-    <AppIcon :icon="selectedIcon" size="24"/>
+    <AppIcon :icon="selectedIcon" size="24" />
   </div>
 </template>
 ```

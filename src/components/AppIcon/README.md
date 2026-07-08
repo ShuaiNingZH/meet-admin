@@ -15,29 +15,28 @@ AppIcon 是一个通用的图标组件，整合了 Element Plus 图标库和 Ico
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppIcon} from '@/components/AppIcon';
+import { AppIcon } from '@/components/AppIcon';
 </script>
 
 <template>
   <!-- 使用 Element Plus 内置图标 -->
-  <AppIcon icon="Edit"/>
-  <AppIcon icon="Delete"/>
-  <AppIcon icon="Search"/>
+  <AppIcon icon="Edit" />
+  <AppIcon icon="Delete" />
+  <AppIcon icon="Search" />
 
   <!-- 使用 Iconify 图标库中的图标 -->
-  <AppIcon icon="mdi:home"/>
-  <AppIcon icon="fa:user"/>
-  <AppIcon icon="icon-park-outline:help"/>
+  <AppIcon icon="mdi:home" />
+  <AppIcon icon="fa:user" />
+  <AppIcon icon="icon-park-outline:help" />
 
   <!-- 自定义颜色和大小 -->
-  <AppIcon icon="Warning" color="#E6A23C" size="24"/>
-  <AppIcon icon="mdi:alert" color="red" size="32px"/>
+  <AppIcon icon="Warning" color="#E6A23C" size="24" />
+  <AppIcon icon="mdi:alert" color="red" size="32px" />
 
   <!-- 在按钮中使用 -->
   <el-button type="primary">
-    <AppIcon icon="Plus"/>
+    <AppIcon icon="Plus" />
     添加
   </el-button>
 </template>

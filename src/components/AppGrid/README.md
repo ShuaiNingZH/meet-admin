@@ -16,12 +16,11 @@ AppGrid 是一个基于 CSS Grid
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppGrid} from '@/components/AppGrid';
-  import {ref} from 'vue';
+import { ref } from 'vue';
+import { AppGrid } from '@/components/AppGrid';
 
-  const isCollapsed = ref(true);
+const isCollapsed = ref(true);
 </script>
 
 <template>
@@ -74,10 +73,10 @@ AppGrid 是一个基于 CSS Grid
 
 <style scoped>
   .grid-item {
-    padding: 20px;
-    background-color: #f5f7fa;
-    border-radius: 4px;
-  }
+  padding: 20px;
+  background-color: #f5f7fa;
+  border-radius: 4px;
+}
 </style>
 ```
 

@@ -14,9 +14,8 @@ AppCard 是一个基于 Element Plus
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppCard} from '@/components/AppCard';
+import { AppCard } from '@/components/AppCard';
 </script>
 
 <template>

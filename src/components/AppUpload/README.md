@@ -20,40 +20,39 @@ AppUpload 是一个功能强大的文件上传组件，基于 Element Plus 的 U
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppUpload} from '@/components/AppUpload';
-  import {ref} from 'vue';
+import { ref } from 'vue';
+import { AppUpload } from '@/components/AppUpload';
 
-  // 文件上传模式
-  const fileList = ref([]);
+// 文件上传模式
+const fileList = ref([]);
 
-  // 单图上传模式
-  const imageUrl = ref('');
+// 单图上传模式
+const imageUrl = ref('');
 
-  // 多图上传模式
-  const imageList = ref([]);
+// 多图上传模式
+const imageList = ref([]);
 
-  // 头像
-  const avatar = ref('');
+// 头像
+const avatar = ref('');
 
-  // 表单数据
-  const form = ref({
-    idCard: '',
-    attachments: []
-  });
+// 表单数据
+const form = ref({
+  idCard: '',
+  attachments: []
+});
 
-  // 表单验证规则
-  const rules = {
-    idCard: [{required: true, message: '请上传证件照片', trigger: 'change'}],
-    attachments: [{required: true, message: '请上传附件材料', trigger: 'change'}]
-  };
+// 表单验证规则
+const rules = {
+  idCard: [{ required: true, message: '请上传证件照片', trigger: 'change' }],
+  attachments: [{ required: true, message: '请上传附件材料', trigger: 'change' }]
+};
 
-  // 自定义上传接口
-  function customUploadApi(formData: FormData) {
-    // 实现自定义的上传逻辑
-    return yourUploadFunction(formData);
-  }
+// 自定义上传接口
+function customUploadApi(formData: FormData) {
+  // 实现自定义的上传逻辑
+  return yourUploadFunction(formData);
+}
 </script>
 
 <template>
@@ -100,10 +99,10 @@ AppUpload 是一个功能强大的文件上传组件，基于 Element Plus 的 U
   <!-- 表单中使用 -->
   <el-form :model="form" :rules="rules">
     <el-form-item label="证件照片" prop="idCard">
-      <AppUpload v-model="form.idCard" type="image"/>
+      <AppUpload v-model="form.idCard" type="image" />
     </el-form-item>
     <el-form-item label="附件材料" prop="attachments">
-      <AppUpload v-model="form.attachments" type="files"/>
+      <AppUpload v-model="form.attachments" type="files" />
     </el-form-item>
   </el-form>
 </template>
@@ -142,20 +141,19 @@ AppUpload 是一个功能强大的文件上传组件，基于 Element Plus 的 U
 组件暴露了 Element Plus Upload 组件的所有方法，可以通过 ref 引用来调用：
 
 ```vue
-
 <script setup>
-  import {ref} from 'vue';
+import { ref } from 'vue';
 
-  const uploadRef = ref(null);
-  const fileList = ref([]);
+const uploadRef = ref(null);
+const fileList = ref([]);
 
-  function clearFiles() {
-    uploadRef.value.clearFiles();
-  }
+function clearFiles() {
+  uploadRef.value.clearFiles();
+}
 </script>
 
 <template>
-  <AppUpload ref="uploadRef" v-model="fileList"/>
+  <AppUpload ref="uploadRef" v-model="fileList" />
   <el-button @click="clearFiles">
     清空文件
   </el-button>

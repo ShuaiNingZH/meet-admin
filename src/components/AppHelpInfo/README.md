@@ -15,16 +15,15 @@ AppHelpInfo 是一个轻量级的帮助提示组件，基于 Element Plus 的 To
 ## 使用方法
 
 ```vue
-
 <script setup lang="ts">
-  import {AppHelpInfo} from '@/components/AppHelpInfo';
+import { AppHelpInfo } from '@/components/AppHelpInfo';
 </script>
 
 <template>
   <!-- 基础用法 -->
   <div class="field-label">
     用户名
-    <AppHelpInfo content="请输入2-20个字符的用户名"/>
+    <AppHelpInfo content="请输入2-20个字符的用户名" />
   </div>
 
   <!-- 主题 -->
@@ -59,10 +58,10 @@ AppHelpInfo 是一个轻量级的帮助提示组件，基于 Element Plus 的 To
 
 <style scoped>
   .field-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-  }
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
 </style>
 ```
 
