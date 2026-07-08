@@ -66,6 +66,7 @@ components:
     columnSettings: 列设置
     pinToLeft: 固定到左侧
     pinToRight: 固定到右侧
+    more: 更多
   treeFilter:
     placeholder: 请输入关键字进行过滤
     expand: 展开全部

@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { timeFormat } from '@/utils/date';
 import { $t } from '@/utils/i18n';
 import { moneyThousand } from '@/utils/money';
-import { handleImgRender, handleMoneyRender } from './render.tsx';
+import { handleImgRender, handleMoneyRender, handleOperationRender } from './render.tsx';
 
 /**
  * 处理日期和时间格式的函数
@@ -137,5 +137,10 @@ export function renderDefault(scope: RenderScope<AnyObj>, column: TableColumn) {
   // 处理图片类型
   if (type === 'img') {
     return handleImgRender(scope, prop);
+  }
+
+  // 处理操作按钮类型
+  if (type === 'operation') {
+    return handleOperationRender(scope, column);
   }
 }

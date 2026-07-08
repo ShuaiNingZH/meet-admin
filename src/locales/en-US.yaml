@@ -66,6 +66,7 @@ components:
     columnSettings: Column settings
     pinToLeft: Pin to left
     pinToRight: Pin to right
+    more: More
   treeFilter:
     placeholder: Please enter keywords to filter
     expand: Expand all

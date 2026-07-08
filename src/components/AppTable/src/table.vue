@@ -85,3 +85,25 @@ defineExpose(createTableExpose(baseTableRef));
     />
   </component>
 </template>
+
+<style lang="scss">
+.app-table-operation-popper.el-popover.el-popper {
+  min-width: auto;
+  padding: var(--spacing-xs);
+
+  .app-table-operation-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    .el-button {
+      justify-content: flex-start;
+      padding: var(--spacing-xs) var(--spacing-sm);
+
+      & + .el-button {
+        margin-left: 0;
+      }
+    }
+  }
+}
+</style>

@@ -1,8 +1,18 @@
-import type { ImageViewerAction, TableColumnCtx, TableProps } from 'element-plus';
+import type { ButtonType, ImageViewerAction, TableColumnCtx, TableProps } from 'element-plus';
 import type { DefaultRow } from 'element-plus/es/components/table/src/table/defaults';
 
-export type TypeProps = 'index' | 'selection' | 'expand' | 'money' | 'date' | 'dateTime' | 'img';
+export type TypeProps = 'index' | 'selection' | 'expand' | 'money' | 'date' | 'dateTime' | 'img' | 'operation';
 export type FixedProps = 'left' | 'right' | boolean;
+
+export interface OperationButton<T extends DefaultRow = DefaultRow> {
+  label?: string | ((scope: RenderScope<T>) => string);
+  type?: ButtonType;
+  icon?: string | ((scope: RenderScope<T>) => string);
+  show?: boolean | ((scope: RenderScope<T>) => boolean);
+  disabled?: boolean | ((scope: RenderScope<T>) => boolean);
+  onClick?: (scope: RenderScope<T>) => void;
+  render?: (scope: RenderScope<T>) => VNode | string;
+}
 
 export interface RenderScope<T extends DefaultRow = DefaultRow> {
   row: T;
@@ -22,6 +32,10 @@ export interface TableColumn<T extends DefaultRow = DefaultRow>
   helpInfo?: string | (() => VNode | string);
   /** 自定义该列合计行内容，参数为后端返回的该列合计值 */
   summary?: (value: any) => VNode | string;
+  /** 操作按钮配置（type 为 'operation' 时生效），可传函数按行数据动态生成 */
+  buttons?: OperationButton<T>[] | ((scope: RenderScope<T>) => OperationButton<T>[]);
+  /** 操作列最多直接展示的按钮数量，超出部分收进「更多」下拉，默认 3 */
+  maxButtons?: number;
 }
 
 export type TableColumns<T extends DefaultRow = DefaultRow> = TableColumn<T>[];

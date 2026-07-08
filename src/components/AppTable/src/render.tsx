@@ -1,8 +1,9 @@
-import type { ImageToolbar, Money, RenderScope } from './types.ts';
-import { ElImage } from 'element-plus';
+import type { ImageToolbar, Money, OperationButton, RenderScope, TableColumn } from './types.ts';
+import { ElButton, ElImage, ElPopover } from 'element-plus';
 import { has, isArray } from 'lodash-es';
 import { AppFlex, AppIcon } from '@/components';
 import { downloadFile } from '@/utils/download';
+import { $t } from '@/utils/i18n';
 import { renderMoney } from '@/utils/render';
 
 /**
@@ -105,4 +106,92 @@ function handleDownload(src: string[], index: number) {
 
   const fileName = new URL(url).pathname.split('/').pop()?.split('?')[0];
   downloadFile(url, fileName || `图${index}`);
+}
+
+/**
+ * 渲染单个操作按钮
+ * @param scope 渲染作用域对象
+ * @param button 操作按钮配置
+ * @returns 渲染后的按钮内容
+ */
+function renderOperationButton(scope: RenderScope<AnyObj>, button: OperationButton<AnyObj>) {
+  // 完全自定义渲染，优先级最高
+  if (button.render)
+    return button.render(scope);
+
+  const label = typeof button.label === 'function' ? button.label(scope) : button.label;
+  const disabled = typeof button.disabled === 'function' ? button.disabled(scope) : button.disabled;
+  const icon = typeof button.icon === 'function' ? button.icon(scope) : button.icon;
+
+  return (
+    <ElButton
+      link
+      type={button.type ?? 'primary'}
+      disabled={disabled}
+      icon={icon ? () => <AppIcon icon={icon}></AppIcon> : undefined}
+      onClick={() => button.onClick?.(scope)}
+    >
+      {label}
+    </ElButton>
+  );
+}
+
+/**
+ * 处理操作列的渲染
+ *
+ * 渲染规则：先按 `show` 过滤掉无权限的按钮，再判断剩余数量——未超过
+ * `maxButtons`（默认 3）时全部直接展示；超过时只直接展示前 `maxButtons` 个，
+ * 其余收进「更多」下拉，鼠标悬浮三个点即可展开。由于过滤发生在截断之前，
+ * 某个按钮因权限消失时，会自动由后面的按钮补位，始终展示满 `maxButtons` 个。
+ *
+ * @param scope 渲染作用域对象
+ * @param column 表格列配置
+ * @returns 渲染后的操作列内容
+ */
+export function handleOperationRender(scope: RenderScope<AnyObj>, column: TableColumn) {
+  const rawButtons = (typeof column.buttons === 'function'
+    ? column.buttons(scope)
+    : column.buttons ?? []) as OperationButton<AnyObj>[];
+
+  // 权限过滤：show 显式为 false（或函数返回 false）的按钮不渲染
+  const visibleButtons = rawButtons.filter((button) => {
+    const show = typeof button.show === 'function' ? button.show(scope) : button.show;
+    return show !== false;
+  });
+
+  if (!visibleButtons.length)
+    return null;
+
+  const max = column.maxButtons ?? 3;
+  const isOverflow = visibleButtons.length > max;
+  const inlineButtons = isOverflow ? visibleButtons.slice(0, max) : visibleButtons;
+  const moreButtons = isOverflow ? visibleButtons.slice(max) : [];
+
+  return (
+    <AppFlex size={8} justify="center" align="center">
+      {inlineButtons.map(button => renderOperationButton(scope, button))}
+      {moreButtons.length > 0 && (
+        <ElPopover
+          trigger="hover"
+          placement="bottom"
+          width="auto"
+          show-arrow={false}
+          popper-class="app-table-operation-popper"
+        >
+          {{
+            reference: () => (
+              <ElButton link type="primary" class="app-table-operation-more" {...{ title: $t('components.table.more') }}>
+                <AppIcon icon="More"></AppIcon>
+              </ElButton>
+            ),
+            default: () => (
+              <div class="app-table-operation-menu">
+                {moreButtons.map(button => renderOperationButton(scope, button))}
+              </div>
+            ),
+          }}
+        </ElPopover>
+      )}
+    </AppFlex>
+  );
 }
