@@ -718,8 +718,7 @@
         text-align: center;
 
         .logo-icon {
-          height: 64px;
-          width: 64px;
+          width: 90px;
           transition: transform 300ms;
 
           &:hover {
@@ -728,6 +727,7 @@
         }
 
         .logo-title {
+          margin-top: 0;
           font-size: 20px;
           font-weight: 700;
         }

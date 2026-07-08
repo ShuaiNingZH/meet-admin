@@ -2,7 +2,7 @@
 import type { FormInstance, FormRules } from 'element-plus';
 import dayjs from 'dayjs';
 import { login } from '@/api';
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import sign from '@/assets/images/sign.svg';
 import { Constant } from '@/enums/common';
 import Locale from '@/layouts/components/LayHeader/components/Locale.vue';
@@ -332,6 +332,4 @@ useEventListener('keypress', ({ code }) => {
   </div>
 </template>
 
-<style lang="scss" scoped>
-@use 'index';
-</style>
+<style src="./index.scss" lang="scss" scoped />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import SubMenu from '@/layouts/components/LayMenu/components/SubMenu.vue';
 import { useAppStore } from '@/stores/app';
 import { useRouteStore } from '@/stores/route';
@@ -27,7 +27,7 @@ const defaultActive = computed<string>(() =>
 <template>
   <el-aside :width="collapse ? '65px' : '210px'">
     <div class="logo flex-center cursor-pointer" @click="router.push(homePage)">
-      <el-image class="w-28" :src="logo" alt="Logo" />
+      <el-image class="w-50" :src="logo" alt="Logo" />
       <span v-show="!collapse" class="logo-text">{{ name }}</span>
     </div>
     <el-scrollbar>
