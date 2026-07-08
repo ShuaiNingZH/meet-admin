@@ -56,48 +56,35 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     { prop: 'remark', label: '备注', minWidth: 160, showOverflowTooltip: true },
     {
       label: '操作',
+      type: 'operation',
       fixed: 'right',
       width: 190,
       align: 'center',
-      renderContent: ({ row }) => {
-        return (
-          <>
-            <ElButton
-              type="primary"
-              icon={renderIcon('EditPen')}
-              link
-              onClick={() => setState(row)}
-            >
-              编辑
-            </ElButton>
-            <ElButton
-              type="warning"
-              icon={renderIcon(`healthicons:${row.status ? 'no' : 'yes'}-outline`)}
-              link
-              onClick={async () => {
-                await updateUserStatus({
-                  id: row.id,
-                  status: !row.status,
-                });
-                await getTableData();
-              }}
-            >
-              {row.status ? '禁用' : '启用'}
-            </ElButton>
-            <ElButton
-              type="danger"
-              icon={renderIcon('Delete')}
-              link
-              onClick={async () => {
-                await useConfirm(deleteUser, row.id, '删除用户');
-                await getTableData();
-              }}
-            >
-              删除
-            </ElButton>
-          </>
-        );
-      },
+      buttons: [
+        {
+          label: '编辑',
+          icon: 'EditPen',
+          onClick: ({ row }) => setState(row),
+        },
+        {
+          label: ({ row }) => (row.status ? '禁用' : '启用'),
+          type: 'warning',
+          icon: ({ row }) => `healthicons:${row.status ? 'no' : 'yes'}-outline`,
+          onClick: async ({ row }) => {
+            await updateUserStatus({ id: row.id, status: !row.status });
+            await getTableData();
+          },
+        },
+        {
+          label: '删除',
+          type: 'danger',
+          icon: 'Delete',
+          onClick: async ({ row }) => {
+            await useConfirm(deleteUser, row.id, '删除用户');
+            await getTableData();
+          },
+        },
+      ],
     },
   ],
 });
