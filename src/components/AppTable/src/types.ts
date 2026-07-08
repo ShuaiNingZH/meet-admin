@@ -20,7 +20,8 @@ export interface TableColumn<T extends DefaultRow = DefaultRow>
   show?: boolean;
   money?: Money<T>;
   helpInfo?: string | (() => VNode | string);
-  summary?: (data: T) => VNode | string;
+  /** 自定义该列合计行内容，参数为后端返回的该列合计值 */
+  summary?: (value: any) => VNode | string;
 }
 
 export type TableColumns<T extends DefaultRow = DefaultRow> = TableColumn<T>[];
@@ -152,7 +153,7 @@ export interface TableConfig<T extends ApiFunc> {
 export type SpanMethodReturn = (number[] | { rowspan: number; colspan: number } | undefined);
 
 export interface Money<T extends DefaultRow = DefaultRow> {
-  value?: (scope: RenderScope<T>) => void;
+  value?: (scope: RenderScope<T>) => number;
   highlightNegativeAmounts?: boolean;
   link?: boolean | ((scope: RenderScope<T>) => boolean);
   callBack?: (scope: RenderScope<T>) => void;

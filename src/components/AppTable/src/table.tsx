@@ -1,27 +1,31 @@
 import type { AppTableProps, RenderScope, TableColumn, TableColumns } from './types.ts';
 import { ElTableColumn } from 'element-plus';
-import { cloneDeep, omit } from 'lodash-es';
+import { omit } from 'lodash-es';
 import { AppHelpInfo } from '@/components';
 import { $t } from '@/utils/i18n';
 import { dateFormatter, getColumnChecks, renderDefault, setColumns } from './utils.ts';
 
 /**
- * 表格功能的组合式函数
+ * 表格列配置的组合式函数（列的显示/隐藏、排序等列设置能力）
  * @param props 表格属性配置
- * @returns 表格相关的响应式状态和方法
+ * @returns 列配置相关的响应式状态
  */
-export function useTable(props?: AppTableProps) {
+export function useColumns(props: AppTableProps) {
   // 配置可选列
-  const columnChecks = ref(getColumnChecks(props!.columns));
+  const columnChecks = ref(getColumnChecks(props.columns));
 
-  // 初始化列配置
-  const initColumns = computed(() => {
-    columnChecks.value = getColumnChecks(props!.columns);
-    return props!.columns;
+  // 初始列配置（列设置弹窗的重置功能使用）
+  const initColumns = computed(() => props.columns);
+
+  // 列配置变化时（如父组件重建了列数组），重新生成可选列
+  watch(initColumns, (val) => {
+    columnChecks.value = getColumnChecks(val);
   });
 
   // 获取经过处理后的列配置
-  const columns = computed(() => setColumns(cloneDeep(initColumns.value), columnChecks.value));
+  const columns = computed(() =>
+    setColumns(initColumns.value.map(column => ({ ...column })), columnChecks.value),
+  );
 
   return {
     columns,
@@ -55,21 +59,21 @@ function renderColumn(column: TableColumn) {
   if (column.type === 'index') {
     props.label = props.label || $t('hooks.table.index');
     props.width = props.width || 60;
-    props.align = 'center';
+    props.align = props.align || 'center';
   }
 
   if (column.type === 'money') {
-    column.minWidth = column.minWidth || 120;
-    column.align = 'right';
+    props.minWidth = props.minWidth || 120;
+    props.align = props.align || 'right';
   }
 
   if (column.type === 'date') {
-    column.minWidth = column.minWidth || 100;
+    props.minWidth = props.minWidth || 100;
     props.formatter = (row: any, column: any) => dateFormatter(row, column);
   }
 
   if (column.type === 'dateTime') {
-    column.minWidth = column.minWidth || 160;
+    props.minWidth = props.minWidth || 160;
     props.formatter = (row: any, column: any) => dateFormatter(row, column, 'YYYY-MM-DD HH:mm:ss');
   }
 

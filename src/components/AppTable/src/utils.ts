@@ -1,6 +1,7 @@
+import type { TableInstance } from 'element-plus';
+import type { ShallowRef } from 'vue';
 import type { RenderScope, TableColumn, TableColumnChecks, TableColumns } from './types.ts';
 import dayjs from 'dayjs';
-import { has } from 'lodash-es';
 import { timeFormat } from '@/utils/date';
 import { $t } from '@/utils/i18n';
 import { moneyThousand } from '@/utils/money';
@@ -14,7 +15,12 @@ import { handleImgRender, handleMoneyRender } from './render.tsx';
  * @returns 格式化后的日期字符串
  */
 export function dateFormatter(row: any, column: any, format: string = 'YYYY-MM-DD') {
-  return dayjs(row[column.property]).isValid() ? timeFormat(row[column.property], format) : row[column.property];
+  const value = row[column.property];
+
+  if (value == null || value === '')
+    return value;
+
+  return dayjs(value).isValid() ? timeFormat(value, format) : value;
 }
 
 /**
@@ -69,10 +75,12 @@ export function setColumns(columns: TableColumns, columnChecks: TableColumnCheck
 export function getColumnChecks(columns: TableColumns): TableColumnChecks {
   return columns.map((column) => {
     const label = column.label || getColumnDefaultLabel(column.type);
+    const prop = column.prop || column.type || label;
+
     return {
-      prop: column.prop || column.type || label,
+      prop,
       label,
-      checked: has(column, 'show') ? column.show! : true,
+      checked: column.show ?? true,
       fixed: column.fixed,
     };
   });
@@ -90,6 +98,22 @@ export function getColumnDefaultLabel(type?: string): string {
     case 'expand': return $t('hooks.table.expand');
     default: return '';
   }
+}
+
+/**
+ * 创建透传内部表格实例的 expose 代理
+ * @param tableRef 内部表格实例的模板引用
+ * @returns 代理对象，属性访问会转发到内部表格实例
+ */
+export function createTableExpose(tableRef: Readonly<ShallowRef<TableInstance | null>>) {
+  return new Proxy({}, {
+    get(_target, key) {
+      return tableRef.value?.[key as keyof TableInstance];
+    },
+    has(_target, key) {
+      return tableRef.value ? key in tableRef.value : false;
+    },
+  });
 }
 
 /**

@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { SortableEvent } from 'vue-draggable-plus';
 import type { TableColumnCheck, TableColumnChecks, TableColumns } from './types.ts';
-import { cloneDeep } from 'lodash-es';
 import { VueDraggable } from 'vue-draggable-plus';
 import { renderIcon } from '@/utils/icon';
 import { getColumnChecks } from './utils.ts';
@@ -51,7 +50,7 @@ const isIndeterminate = computed<boolean>(() => {
 
 // 重置列设置
 function handleRepossess() {
-  columnChecks.value = getColumnChecks(cloneDeep(props.initColumns));
+  columnChecks.value = getColumnChecks(props.initColumns);
 }
 
 /**
@@ -110,7 +109,7 @@ function handleCustomUpdate(event: SortableEvent) {
   <app-flex class="table-header" align="center" justify="space-between" :size="8" wrap>
     <app-flex :size="8" wrap>
       <slot name="title">
-        <div class="text-16 font-600">
+        <div v-if="title" class="text-16 font-600">
           {{ title }}
         </div>
       </slot>

@@ -6,6 +6,14 @@ import { downloadFile } from '@/utils/download';
 import { renderMoney } from '@/utils/render';
 
 /**
+ * 判断金额是否无查看权限（需要打码显示为 ***）
+ * @param money 金额配置对象
+ */
+export function isMoneyHidden(money?: Money<AnyObj>) {
+  return has(money, 'auth') && !money.auth;
+}
+
+/**
  * 处理金额数据的渲染
  * @param scope 渲染作用域对象
  * @param money 金额配置对象
@@ -13,16 +21,16 @@ import { renderMoney } from '@/utils/render';
  * @returns 格式化后的金额或特殊显示内容
  */
 export function handleMoneyRender(scope: RenderScope<AnyObj>, money?: Money<AnyObj>, prop?: string) {
-  if (has(money, 'auth') && !money.auth)
+  if (isMoneyHidden(money))
     return '***';
 
-  const linkResult = typeof money?.link === 'function' ? money?.link(scope) : money?.link;
+  const linkResult = typeof money?.link === 'function' ? money.link(scope) : money?.link;
 
   return renderMoney({
     value: money?.value ? money.value(scope) : scope.row[prop!],
     highlightNegativeAmounts: money?.highlightNegativeAmounts || false,
-    link: typeof linkResult === 'boolean' ? linkResult : !!linkResult,
-    callBack: money?.callBack ? () => money?.callBack!(scope) : undefined,
+    link: !!linkResult,
+    callBack: money?.callBack ? () => money.callBack!(scope) : undefined,
   });
 }
 

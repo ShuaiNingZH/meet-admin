@@ -2,9 +2,11 @@
 import type { TableInstance } from 'element-plus';
 import type { AppBaseTableProps, AppTableProps } from './types.ts';
 import { omit } from 'lodash-es';
+import { AppCard } from '@/components/AppCard';
 import BaseTable from './base-table.vue';
 import TableHeader from './table-header.vue';
-import { useTable } from './table.tsx';
+import { useColumns } from './table.tsx';
+import { createTableExpose } from './utils.ts';
 
 defineOptions({ name: 'AppTable', inheritAttrs: false });
 
@@ -19,7 +21,8 @@ const props = withDefaults(defineProps<AppTableProps>(), {
   columns: () => [],
 });
 
-const emits = defineEmits(['refresh']);
+// refresh 携带页码 1，配合 useTable 的 getTableData(pageIndex) 使刷新回到第一页
+const emits = defineEmits<{ refresh: [page: number] }>();
 
 const { t } = useI18n();
 
@@ -28,7 +31,7 @@ function handleRefresh() {
   emits('refresh', 1);
 }
 
-const { columns, initColumns, columnChecks } = useTable(props);
+const { columns, initColumns, columnChecks } = useColumns(props);
 
 // 处理 loadingText 的默认值
 const loadingText = computed(() => {
@@ -46,38 +49,27 @@ const tableProps = computed(() => {
 
 const baseTableRef = useTemplateRef<TableInstance>('baseTableRef');
 
-// 复用模板
-const [DefineTemplate, ReuseTemplate] = createReusableTemplate();
-
-defineExpose(new Proxy({}, {
-  get(_target, key) {
-    return baseTableRef.value?.[key as keyof TableInstance];
-  },
-  has(_target, key) {
-    return key in baseTableRef.value!;
-  },
-}));
+defineExpose(createTableExpose(baseTableRef));
 </script>
 
 <template>
-  <!-- 复用模板 -->
-  <DefineTemplate>
+  <component :is="card ? AppCard : 'div'" v-loading="loading" :element-loading-text="loadingText" class="app-table">
     <!-- 表格头部 -->
     <TableHeader v-model="columnChecks" :title :loading :init-columns="initColumns" @refresh="handleRefresh">
-      <template #title>
+      <template v-if="$slots.title" #title>
         <slot name="title" />
       </template>
-      <template #button>
+      <template v-if="$slots.button" #button>
         <slot name="button" :data="data" />
       </template>
     </TableHeader>
     <slot name="header" />
     <!-- 表格主体 -->
     <BaseTable ref="baseTableRef" v-bind="tableProps" :columns="columns">
-      <template #append>
+      <template v-if="$slots.append" #append>
         <slot name="append" />
       </template>
-      <template #empty>
+      <template v-if="$slots.empty" #empty>
         <slot name="empty" />
       </template>
     </BaseTable>
@@ -91,13 +83,5 @@ defineExpose(new Proxy({}, {
       @size-change="pagination.sizeChange!"
       @current-change="pagination.currentChange!"
     />
-  </DefineTemplate>
-  <!-- 带有卡片效果的表格 -->
-  <app-card v-if="card" v-loading="loading" :element-loading-text="loadingText" class="app-table">
-    <ReuseTemplate />
-  </app-card>
-  <!-- 没有卡片效果的表格 -->
-  <div v-else v-loading="loading" :element-loading-text="loadingText" class="app-table">
-    <ReuseTemplate />
-  </div>
+  </component>
 </template>
