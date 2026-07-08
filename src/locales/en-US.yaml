@@ -98,6 +98,7 @@ hooks:
     index: Index
     selection: Selection
     expand: Expand
+    total: Total
 theme:
   light: Light Theme
   dark: Dark Theme

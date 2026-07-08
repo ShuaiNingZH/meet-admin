@@ -4,17 +4,21 @@ import type {
   SpanMethodReturn,
   TableConfig,
   TableData,
-} from '@/components';
-import { cloneDeep, has, isNumber } from 'lodash-es';
-import { AppText } from '@/components';
+} from './types.ts';
+import { cloneDeep, isNumber } from 'lodash-es';
+import { AppText } from '@/components/AppText';
 import { useReset } from '@/hooks/useReset';
 import { isPageData } from '@/utils/common';
+import { $t } from '@/utils/i18n';
 import { moneyThousand } from '@/utils/money';
 import { renderMoney } from '@/utils/render';
-import { useTableSpan } from './useTableSpan';
+import { isMoneyHidden } from './render.tsx';
+import { useTableSpan } from './useTableSpan.ts';
 
 /** 分页参数字段名，导出数据时可用于 omit 过滤分页参数 */
 export const PAGINATION_KEYS = ['page', 'pageSize'] as const;
+
+const [PAGE_KEY, PAGE_SIZE_KEY] = PAGINATION_KEYS;
 
 /**
  * 创建一个表格使用的函数
@@ -43,19 +47,17 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
 
   // 分页配置
   const pagination = reactive<Pagination>({
-    ...{
-      background: false,
-      pageSize: 20,
-      total: 0,
-      currentPage: 1,
-      layout: 'sizes, total, slot, ->, prev, pager, next, jumper',
-      pageSizes: [20, 50, 100, 200],
-      sizeChange: () => {
-        getTableData().then();
-      },
-      currentChange: () => {
-        getTableData(pagination.currentPage).then();
-      },
+    background: false,
+    pageSize: 20,
+    total: 0,
+    currentPage: 1,
+    layout: 'sizes, total, slot, ->, prev, pager, next, jumper',
+    pageSizes: [20, 50, 100, 200],
+    sizeChange: () => {
+      getTableData();
+    },
+    currentChange: () => {
+      getTableData(pagination.currentPage);
     },
     ...config.pagination,
   });
@@ -66,19 +68,23 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
   // 表格请求参数
   const params = computed(() => {
     const { formatParams } = config;
-    // 格式化请求参数
-    return formatParams ? formatParams(apiParams.value) : apiParams.value;
+    // 传入浅拷贝，避免 formatParams 内部修改参数（如追加派生字段）污染搜索表单的原始参数
+    return formatParams ? formatParams({ ...apiParams.value }) : apiParams.value;
   });
 
   // 合计数据
   const totalData = ref<AnyObj>({});
 
+  // 请求序号，用于丢弃过期响应（如快速翻页时旧请求晚于新请求返回）
+  let requestId = 0;
+
   // 请求表格数据
-  async function getTableData(pageIndex?: any) {
+  async function getTableData(pageIndex?: unknown) {
     // 不存在时直接返回，不执行
     if (!config.apiFunc)
       return;
 
+    const currentId = ++requestId;
     loading.value = true;
 
     // 需要分页时
@@ -87,12 +93,16 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
       if (pageIndex && isNumber(pageIndex))
         pagination.currentPage = pageIndex;
 
-      apiParams.value[PAGINATION_KEYS[1]] = pagination.pageSize;
-      apiParams.value[PAGINATION_KEYS[0]] = pagination.currentPage;
+      apiParams.value[PAGE_SIZE_KEY] = pagination.pageSize;
+      apiParams.value[PAGE_KEY] = pagination.currentPage;
     }
 
     try {
       const { data } = await config.apiFunc(params.value);
+
+      // 期间已发起新请求，丢弃本次过期响应
+      if (currentId !== requestId)
+        return;
 
       response.value = data;
 
@@ -117,19 +127,24 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
       if (config.spanOptions)
         setSpanList(tableData.value, config.spanOptions.spanKey);
     }
+    catch {
+      // 错误提示已由 axios 请求层统一处理，这里吞掉异常避免 unhandled rejection
+    }
     finally {
-      loading.value = false;
+      // 存在更新的请求时，loading 交由新请求管理
+      if (currentId === requestId)
+        loading.value = false;
     }
   }
 
   // 是否初始化数据
   if (config.apiFunc && initData) {
     onMounted(() => {
-      getTableData().then();
+      getTableData();
 
-      // 被激活时重新获取数据   嵌套的原因是是因为首次加载时会触发 activated
+      // 嵌套注册是因为首次加载时也会触发 activated，避免重复请求
       onActivated(() => {
-        getTableData().then();
+        getTableData();
       });
     });
   }
@@ -137,7 +152,7 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
   // 合并单元格
   function spanMethod(params: SpanMethodParams<A>): SpanMethodReturn {
     // 没有合并单元格配置或者不需要合并单元格时
-    if (!config.spanOptions || !config.spanOptions.isSpan!(params)) {
+    if (!config.spanOptions || !config.spanOptions.isSpan(params)) {
       return;
     }
 
@@ -154,7 +169,7 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
     const { columns } = params;
     return columns.map((item: any, index: number) => {
       if (index === 0) {
-        return '合计';
+        return $t('hooks.table.total');
       }
 
       const property = totalData.value[item.prop!] ?? '';
@@ -165,11 +180,12 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
 
       // 处理金额类型
       if (item.type === 'money') {
-        if (!property)
+        // 后端未返回该列的合计时显示为空；0 是合法的合计值，需正常展示
+        if (property === '')
           return '';
 
-        // 没有金额查看权限是返回 ***
-        if (has(item.money, 'auth') && !item.money.auth) {
+        // 没有金额查看权限时返回 ***
+        if (isMoneyHidden(item.money)) {
           return '***';
         }
 
@@ -177,6 +193,7 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
         if (item.money?.highlightNegativeAmounts) {
           return renderMoney({
             value: property,
+            highlightNegativeAmounts: true,
           });
         }
 

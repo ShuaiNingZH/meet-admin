@@ -98,6 +98,7 @@ hooks:
     index: 序号
     selection: 勾选
     expand: 展开
+    total: 合计
 theme:
   light: 浅色主题
   dark: 深色主题

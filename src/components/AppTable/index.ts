@@ -8,6 +8,8 @@ export const AppTable = withInstall<typeof Table, {
 export const AppBaseTable = withNoopInstall<typeof BaseTable>(BaseTable);
 export default AppTable;
 
+export * from './src/render.tsx';
 export * from './src/table.tsx';
 export * from './src/types.ts';
+export * from './src/useTable.tsx';
 export * from './src/utils.ts';
