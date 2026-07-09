@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from 'dayjs';
 import LayFooter from '@/layouts/components/LayFooter.vue';
 import LayHeader from '@/layouts/components/LayHeader/index.vue';
 import LayMenu from '@/layouts/components/LayMenu/index.vue';
@@ -6,6 +7,7 @@ import LayTabs from '@/layouts/components/LayTabs/index.vue';
 import { initRouter } from '@/router/utils.ts';
 import { useAppStore } from '@/stores/app';
 import { useRouteStore } from '@/stores/route';
+import { useUserStore } from '@/stores/user';
 
 defineOptions({ name: 'Layout' });
 
@@ -13,6 +15,7 @@ const { t } = useI18n();
 
 const appStore = useAppStore();
 const routeStore = useRouteStore();
+const userStore = useUserStore();
 
 const {
   transitionAnimation,
@@ -32,21 +35,21 @@ watch(locale, async () => {
   await router.replace(currentRoute.fullPath);
 });
 
-const watermarkConfig = reactive({
-  content: 'Meet you',
-  font: {
-    fontSize: 16,
-    color: 'rgba(0, 0, 0, .15)',
-  },
+// 水印内容
+const watermarkContent = computed(() => {
+  const { nickname, username } = userStore.userInfo;
+  return watermark.value ? `${nickname || username || import.meta.env.VITE_APP_NAME} ${dayjs().format('YYYY-MM-DD')}` : '';
 });
 
-watchEffect(() => {
-  watermarkConfig.font.color = isDark.value ? 'rgba(255, 255, 255, .15)' : 'rgba(0, 0, 0, .15)';
-});
+// 水印字体样式
+const watermarkFont = computed(() => ({
+  fontSize: 14,
+  color: isDark.value ? 'rgba(255, 255, 255, .15)' : 'rgba(0, 0, 0, .15)',
+}));
 </script>
 
 <template>
-  <el-watermark class="watermark wh-full" :content="watermark ? watermarkConfig.content : ''" :font="watermarkConfig.font">
+  <el-watermark class="wh-full" :content="watermarkContent" :font="watermarkFont" :z-index="9999">
     <el-container>
       <LayMenu />
       <el-container>
