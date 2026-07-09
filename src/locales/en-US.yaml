@@ -3,7 +3,6 @@ common:
   hide: Hide
   reset: Reset
   loading: Loading...
-  refresh: Refresh
   selectAll: Select all
   list: List
   query: Query
@@ -63,9 +62,9 @@ components:
   drawer:
     title: Drawer
   table:
-    columnSettings: Column settings
     pinToLeft: Pin to left
     pinToRight: Pin to right
+    unpin: Unpin
     more: More
   treeFilter:
     placeholder: Please enter keywords to filter

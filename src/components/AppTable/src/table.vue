@@ -56,8 +56,8 @@ defineExpose(createTableExpose(baseTableRef));
   <component :is="card ? AppCard : 'div'" v-loading="loading" :element-loading-text="loadingText" class="app-table">
     <!-- 表格头部 -->
     <TableHeader v-model="columnChecks" :title :loading :init-columns="initColumns" @refresh="handleRefresh">
-      <template v-if="$slots.title" #title>
-        <slot name="title" />
+      <template v-if="$slots['header-left']" #header-left>
+        <slot name="header-left" />
       </template>
       <template v-if="$slots.button" #button>
         <slot name="button" :data="data" />

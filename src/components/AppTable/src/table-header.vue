@@ -54,25 +54,29 @@ function handleRepossess() {
 }
 
 /**
- * @description 固定列
+ * 判断列是否已固定在指定侧
+ * @param item 当前列
+ * @param type 固定类型
+ */
+function isFixed(item: TableColumnCheck, type: 'left' | 'right') {
+  return type === 'left' ? item.fixed === true || item.fixed === 'left' : item.fixed === 'right';
+}
+
+/**
+ * 固定列，已固定在该侧时取消固定，否则固定到该侧
  * @param val 当前列
  * @param type 固定类型
  */
 function handleFixed(val: TableColumnCheck, type: 'left' | 'right') {
   columnChecks.value.forEach((item) => {
     if (item.prop === val.prop) {
-      if (item.fixed === type || item.fixed === true) {
-        item.fixed = false;
-      }
-      else {
-        item.fixed = type;
-      }
+      item.fixed = isFixed(item, type) ? false : type;
     }
   });
 }
 
 /**
- * @description 自定义拖拽排序
+ * 自定义拖拽排序
  * @param event 拖拽事件
  */
 function handleCustomUpdate(event: SortableEvent) {
@@ -108,7 +112,7 @@ function handleCustomUpdate(event: SortableEvent) {
 <template>
   <app-flex class="table-header" align="center" justify="space-between" :size="8" wrap>
     <app-flex :size="8" wrap>
-      <slot name="title">
+      <slot name="header-left">
         <div v-if="title" class="text-16 font-600">
           {{ title }}
         </div>
@@ -121,14 +125,11 @@ function handleCustomUpdate(event: SortableEvent) {
         <template #icon>
           <app-icon :class="loading ? 'is-loading' : ''" icon="Refresh" />
         </template>
-        {{ t('common.refresh') }}
       </el-button>
       <!-- 列设置 -->
       <el-popover trigger="click" width="200" popper-style="padding: 0;" popper-class="columnPopover">
         <template #reference>
-          <el-button :icon="renderIcon('Setting')">
-            {{ t('components.table.columnSettings') }}
-          </el-button>
+          <el-button :icon="renderIcon('Setting')" />
         </template>
         <div class="flex-y-center justify-between p-[2px_12px_0] border-b">
           <el-checkbox v-model="checkAll" :indeterminate="isIndeterminate">
@@ -140,7 +141,7 @@ function handleCustomUpdate(event: SortableEvent) {
         </div>
         <el-scrollbar max-height="36vh">
           <VueDraggable v-model="columnChecks" handle=".handle" :animation="300" draggable=".noFixed" :custom-update="handleCustomUpdate">
-            <div v-for="item in columnChecks" :key="item.prop" :class="item.fixed ? '' : 'noFixed'" class="p-[8px_12px]">
+            <div v-for="item in columnChecks" :key="item.prop" :class="item.fixed ? '' : 'noFixed'" class="p-[2px_12px]">
               <app-flex align="center" justify="space-between">
                 <app-flex class="overflow-hidden" align="center" :size="8">
                   <app-icon class="handle" :class="item.fixed ? 'cursor-not-allowed' : 'cursor-move'" icon="Rank" size="16" />
@@ -151,18 +152,18 @@ function handleCustomUpdate(event: SortableEvent) {
                   </el-checkbox>
                 </app-flex>
                 <app-flex :size="4">
-                  <el-tooltip :content="t('components.table.pinToLeft')">
+                  <el-tooltip placement="top-start" :content="isFixed(item, 'left') ? t('components.table.unpin') : t('components.table.pinToLeft')">
                     <app-icon
-                      class="cursor-pointer" icon="icon-park-outline:to-left"
-                      :color="item.fixed === true || item.fixed === 'left' ? 'var(--el-color-primary)' : ''" size="16"
+                      class="cursor-pointer" icon="clarity:pin-line"
+                      :color="isFixed(item, 'left') ? 'var(--el-color-primary)' : ''" size="16"
                       @click="handleFixed(item, 'left')"
                     />
                   </el-tooltip>
-                  <el-tooltip :content="t('components.table.pinToRight')">
+                  <el-tooltip placement="top-start" :content="isFixed(item, 'right') ? t('components.table.unpin') : t('components.table.pinToRight')">
                     <app-icon
-                      class="cursor-pointer" icon="icon-park-outline:to-right"
-                      :color="item.fixed === 'right' ? 'var(--el-color-primary)' : ''"
-                      size="16" @click="handleFixed(item, 'right')"
+                      class="scale-x--100 cursor-pointer" icon="clarity:pin-line"
+                      :color="isFixed(item, 'right') ? 'var(--el-color-primary)' : ''" size="16"
+                      @click="handleFixed(item, 'right')"
                     />
                   </el-tooltip>
                 </app-flex>
