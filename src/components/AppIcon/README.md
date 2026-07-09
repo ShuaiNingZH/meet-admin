@@ -42,6 +42,25 @@ import { AppIcon } from '@/components/AppIcon';
 </template>
 ```
 
+## 函数式用法
+
+某些 Element Plus 组件的 `icon`、`prefix-icon`、`separator-icon` 等属性接收的是组件而非插槽，
+此时可以使用组件导出的 `renderIcon` 生成一个渲染 AppIcon 的函数：
+
+```vue
+<script setup lang="ts">
+import { renderIcon } from '@/components/AppIcon';
+</script>
+
+<template>
+  <el-button :icon="renderIcon('CirclePlus')" />
+  <el-input :prefix-icon="renderIcon('bxs:lock')" />
+  <el-button :icon="renderIcon('Setting', { size: 18, color: '#409EFF' })" />
+</template>
+```
+
+`icon` 为空时返回空字符串，等同于不传图标。第二个参数为除 `icon` 外的其余 Props。
+
 ## 参数说明
 
 ### Props

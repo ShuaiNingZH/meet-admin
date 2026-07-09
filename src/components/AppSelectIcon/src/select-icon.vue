@@ -5,7 +5,7 @@ import type {
   APIv2CollectionsList,
   AppSelectIconProps,
 } from './select-icon.ts';
-import { renderIcon } from '@/utils/icon';
+import { renderIcon } from '@/components/AppIcon';
 import TabIconContent from './components/TabIconContent.vue';
 import { fetchAllIconCollections, fetchIconsByCollection } from './select-icon.ts';
 

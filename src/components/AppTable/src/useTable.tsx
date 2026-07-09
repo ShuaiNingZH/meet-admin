@@ -11,8 +11,7 @@ import { useReset } from '@/hooks/useReset';
 import { isPageData } from '@/utils/common';
 import { $t } from '@/utils/i18n';
 import { moneyThousand } from '@/utils/money';
-import { renderMoney } from '@/utils/render';
-import { isMoneyHidden } from './render.tsx';
+import { isMoneyHidden, renderMoney } from './render.tsx';
 import { useTableSpan } from './useTableSpan.ts';
 
 /** 分页参数字段名，导出数据时可用于 omit 过滤分页参数 */

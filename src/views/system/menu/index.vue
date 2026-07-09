@@ -1,8 +1,7 @@
 <script setup lang="tsx">
 import { deleteMenu, fetchMenuList, updateMenuStatus } from '@/api/system/menu';
-import { useTable } from '@/components/AppTable';
+import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
-import { renderIcon } from '@/utils/icon';
 import MenuForm from '@/views/system/menu/components/menuForm.vue';
 import { useState } from '@/views/system/menu/components/useState.ts';
 

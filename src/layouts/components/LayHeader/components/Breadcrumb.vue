@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { renderIcon } from '@/components';
 import { useAppStore } from '@/stores/app';
 import { useRouteStore } from '@/stores/route';
-import { renderIcon } from '@/utils/icon';
 
 defineOptions({ name: 'Breadcrumb' });
 

@@ -2,7 +2,7 @@
 import type { ScrollbarInstance } from 'element-plus';
 import type { APIv2CollectionResponse } from '../select-icon.ts';
 import { Icon } from '@iconify/vue';
-import { renderIcon } from '@/utils/icon';
+import { renderIcon } from '@/components/AppIcon';
 
 defineOptions({ name: 'TabIconContent' });
 const props = defineProps<Props>();

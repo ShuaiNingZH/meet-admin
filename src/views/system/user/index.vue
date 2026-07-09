@@ -1,8 +1,7 @@
 <script setup lang="tsx">
 import { deleteUser, fetchUserList, updateUserStatus } from '@/api/system/user';
-import { useTable } from '@/components/AppTable';
+import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
-import { renderIcon } from '@/utils/icon';
 import UserForm from '@/views/system/user/components/userForm.vue';
 import { useState } from '@/views/system/user/components/useState.ts';
 

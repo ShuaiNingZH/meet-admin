@@ -1,10 +1,38 @@
 import type { ImageToolbar, Money, OperationButton, RenderScope, TableColumn } from './types.ts';
 import { ElButton, ElImage, ElPopover } from 'element-plus';
 import { has, isArray } from 'lodash-es';
-import { AppFlex, AppIcon } from '@/components';
+import { AppFlex } from '@/components/AppFlex';
+import { AppIcon } from '@/components/AppIcon';
+import { AppText } from '@/components/AppText';
 import { downloadFile } from '@/utils/download';
 import { $t } from '@/utils/i18n';
-import { renderMoney } from '@/utils/render';
+import { moneyThousand } from '@/utils/money';
+
+interface RenderMoney {
+  value: number;
+  highlightNegativeAmounts?: boolean;
+  link?: boolean;
+  callBack?: () => void;
+}
+
+/**
+ * @description 渲染金额(负数为红色)
+ * @param options 参数对象
+ * @param options.value 金额
+ * @param options.highlightNegativeAmounts 突出显示负金额
+ * @param options.link 是否显示为链接
+ * @param options.callBack 点击回调
+ */
+export function renderMoney({ value, highlightNegativeAmounts = false, link = false, callBack }: RenderMoney) {
+  const isLink = value !== 0 && link;
+  const type = (highlightNegativeAmounts && value < 0) ? 'danger' : isLink ? 'primary' : undefined;
+
+  return (
+    <AppText type={type} link={isLink} onClick={isLink ? callBack : undefined}>
+      {moneyThousand(value)}
+    </AppText>
+  );
+}
 
 /**
  * 判断金额是否无查看权限（需要打码显示为 ***）

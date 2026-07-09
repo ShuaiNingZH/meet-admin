@@ -1,5 +1,5 @@
 import type { FormItemProps, FormProps } from 'element-plus';
-import type { GridProps } from '@/components';
+import type { GridProps } from '@/components/AppGrid';
 
 // FormProps
 export interface AppFormProps extends Partial<FormProps>, GridProps {

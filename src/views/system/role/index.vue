@@ -1,8 +1,7 @@
 <script setup lang="tsx">
 import { deleteRole, fetchRoleList, updateRoleStatus } from '@/api/system/role';
-import { useTable } from '@/components/AppTable';
+import { renderIcon, useTable } from '@/components';
 import { useConfirm } from '@/hooks/useConfirm';
-import { renderIcon } from '@/utils/icon';
 import RoleForm from '@/views/system/role/components/roleForm.vue';
 import { useState } from '@/views/system/role/components/useState.ts';
 
