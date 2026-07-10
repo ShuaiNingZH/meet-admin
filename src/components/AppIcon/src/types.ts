@@ -1,6 +1,6 @@
-export interface AppIconProps {
+import type { IconProps } from 'element-plus';
+import type { HTMLAttributes } from 'vue';
+
+export interface AppIconProps extends IconProps, /* @vue-ignore */ HTMLAttributes {
   icon: string;
-  color?: string;
-  size?: string | number;
-  onClick?: (e: MouseEvent) => void;
 }
