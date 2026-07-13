@@ -50,12 +50,12 @@ watchEffect(() => {
         <div class="wrapper" @click="handleSearchMenu">
           <app-icon icon="icon-park-outline:search" />
         </div>
-        <Locale />
         <div class="wrapper" @click="appStore.toggleFullScreen">
           <app-icon v-if="fullscreen" icon="icon-park-outline:off-screen-one" />
           <app-icon v-else icon="icon-park-outline:full-screen-one" />
         </div>
         <ThemeSwitch />
+        <Locale />
         <LaySettings />
       </template>
       <Avatar />
