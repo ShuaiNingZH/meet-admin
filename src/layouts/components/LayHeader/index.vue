@@ -2,6 +2,7 @@
 import Avatar from '@/layouts/components/LayHeader/components/Avatar.vue';
 import Breadcrumb from '@/layouts/components/LayHeader/components/Breadcrumb.vue';
 import Locale from '@/layouts/components/LayHeader/components/Locale.vue';
+import Notification from '@/layouts/components/LayHeader/components/Notification.vue';
 import ThemeSwitch from '@/layouts/components/LayHeader/components/ThemeSwitch.vue';
 import SearchMenu from '@/layouts/components/LayMenu/components/SearchMenu.vue';
 import LaySettings from '@/layouts/components/LaySettings/index.vue';
@@ -54,6 +55,7 @@ watchEffect(() => {
           <app-icon v-if="fullscreen" icon="icon-park-outline:off-screen-one" />
           <app-icon v-else icon="icon-park-outline:full-screen-one" />
         </div>
+        <Notification />
         <ThemeSwitch />
         <Locale />
         <LaySettings />
