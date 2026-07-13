@@ -5,8 +5,8 @@ export default {
   name: 'Error',
   redirect: '/error/404',
   meta: {
-    title: '错误展示',
-    icon: 'icon-park-outline:caution',
+    title: '异常页',
+    icon: 'icon-park-outline:attention',
   },
   children: [
     {
@@ -16,6 +16,24 @@ export default {
       meta: {
         title: '404',
         icon: 'icon-park-outline:caution',
+      },
+    },
+    {
+      path: '403',
+      name: '403',
+      component: () => import('@/views/error/403.vue'),
+      meta: {
+        title: '403',
+        icon: 'icon-park-outline:lock-one',
+      },
+    },
+    {
+      path: '500',
+      name: '500',
+      component: () => import('@/views/error/500.vue'),
+      meta: {
+        title: '500',
+        icon: 'icon-park-outline:bug',
       },
     },
   ],

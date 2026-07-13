@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 
-defineOptions({ name: '404' });
+defineOptions({ name: '403' });
 
 const { t } = useI18n();
 const router = useRouter();
@@ -31,42 +31,42 @@ function goBack() {
     </div>
 
     <div class="error-content">
-      <!-- 404 数字插画 -->
+      <!-- 403 数字插画 -->
       <div class="digits">
         <span class="digit">4</span>
         <div class="digit-icon">
-          <app-icon icon="tabler:zoom-question" />
+          <app-icon icon="tabler:shield-lock" />
         </div>
-        <span class="digit">4</span>
+        <span class="digit">3</span>
 
-        <app-icon class="float-icon icon-compass" icon="tabler:compass" />
-        <app-icon class="float-icon icon-alert" icon="tabler:alert-triangle" />
-        <app-icon class="float-icon icon-sad" icon="tabler:mood-sad-2" />
+        <app-icon class="float-icon icon-key" icon="tabler:key-off" />
+        <app-icon class="float-icon icon-ban" icon="tabler:ban" />
+        <app-icon class="float-icon icon-print" icon="tabler:fingerprint" />
       </div>
 
       <h1 class="title">
-        {{ t('page.404.title') }}
+        {{ t('page.403.title') }}
       </h1>
       <p class="description">
-        {{ t('page.404.content') }}
+        {{ t('page.403.content') }}
       </p>
       <p class="hint">
-        {{ t('page.404.info') }}
+        {{ t('page.403.info') }}
       </p>
 
       <div class="actions">
-        <el-button type="primary" round size="large" @click="backToHome">
+        <el-button type="warning" round size="large" @click="backToHome">
           <app-icon icon="tabler:home" />
-          {{ t('page.404.button') }}
+          {{ t('page.403.button') }}
         </el-button>
         <el-button round size="large" @click="goBack">
           <app-icon icon="tabler:arrow-left" />
-          {{ t('page.404.goBack') }}
+          {{ t('page.403.goBack') }}
         </el-button>
       </div>
 
       <div class="footer">
-        {{ t('page.404.subtitle') }} © {{ dayjs().year() }}
+        {{ t('page.403.subtitle') }} © {{ dayjs().year() }}
         <el-link type="primary" href="https://blog.wjp.plus" target="_blank" underline="never">
           {{ appName }}
         </el-link>
@@ -94,7 +94,7 @@ function goBack() {
 
     .pattern-circle {
       position: absolute;
-      border: 1px solid var(--el-color-primary-light-5);
+      border: 1px solid var(--el-color-warning-light-5);
       border-radius: 50%;
       animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
@@ -116,7 +116,7 @@ function goBack() {
 
     .pattern-square {
       position: absolute;
-      border: 1px solid var(--el-color-primary-light-5);
+      border: 1px solid var(--el-color-warning-light-5);
       border-radius: 8px;
       animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
@@ -153,7 +153,7 @@ function goBack() {
         font-size: 96px;
         font-weight: 700;
         line-height: 1;
-        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-5));
+        background: linear-gradient(135deg, var(--el-color-warning), var(--el-color-warning-light-5));
         background-clip: text;
         -webkit-text-fill-color: transparent;
       }
@@ -165,7 +165,7 @@ function goBack() {
         height: 88px;
         width: 88px;
         border-radius: 50%;
-        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-5));
+        background: linear-gradient(135deg, var(--el-color-warning), var(--el-color-warning-light-5));
         animation: float 3s ease-in-out infinite;
 
         :deep(.app-icon) {
@@ -176,25 +176,25 @@ function goBack() {
 
       .float-icon {
         position: absolute;
-        color: var(--el-color-primary-light-3);
+        color: var(--el-color-warning-light-3);
         animation: float 3s ease-in-out infinite;
 
-        &.icon-compass {
+        &.icon-key {
           left: -32px;
           top: -8px;
           font-size: 28px;
           animation-delay: 300ms;
         }
 
-        &.icon-alert {
+        &.icon-ban {
           right: -28px;
           top: 4px;
           font-size: 22px;
-          color: var(--el-color-warning);
+          color: var(--el-color-danger);
           animation-delay: 900ms;
         }
 
-        &.icon-sad {
+        &.icon-print {
           right: 8px;
           bottom: -28px;
           font-size: 24px;

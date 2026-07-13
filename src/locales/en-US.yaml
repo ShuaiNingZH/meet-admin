@@ -43,6 +43,21 @@ page:
     content: The webmaster said that you can not enter this page...
     info: Please check that the URL you entered is correct, or click the button below to return to the homepage.
     button: Back to home
+    goBack: Go back
+  403:
+    title: Access Denied
+    subtitle: All rights reserved
+    content: Sorry, you don't have permission to access this page...
+    info: Please contact your administrator for access, or click the button below to return to the homepage.
+    button: Back to home
+    goBack: Go back
+  500:
+    title: Server Error
+    subtitle: All rights reserved
+    content: Something went wrong on our end, please try again later...
+    info: If the problem persists, please contact technical support.
+    button: Back to home
+    goBack: Go back
 status:
   success: Success
 router:

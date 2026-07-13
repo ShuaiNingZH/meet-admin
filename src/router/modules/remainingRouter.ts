@@ -23,6 +23,28 @@ export default [
     },
   },
   {
+    // 全屏 403：无权限访问的兜底目标，不套后台布局、不进菜单
+    path: '/403',
+    name: 'Forbidden',
+    component: () => import('@/views/error/403.vue'),
+    meta: {
+      title: '403',
+      hideInMenu: true,
+      hideInTag: true,
+    },
+  },
+  {
+    // 全屏 500：服务端异常的兜底目标，不套后台布局、不进菜单
+    path: '/500',
+    name: 'ServerError',
+    component: () => import('@/views/error/500.vue'),
+    meta: {
+      title: '500',
+      hideInMenu: true,
+      hideInTag: true,
+    },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'PathMatch',
     redirect: '/404',

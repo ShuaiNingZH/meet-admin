@@ -43,6 +43,21 @@ page:
     content: 站长说你不能进入这个页面...
     info: 请检查您输入的网址是否正确，或点击下面的按钮返回首页。
     button: 回到首页
+    goBack: 返回上一页
+  403:
+    title: 无权访问
+    subtitle: 版权所有
+    content: 抱歉，你没有权限访问此页面...
+    info: 请联系管理员开通权限，或点击下面的按钮返回首页。
+    button: 回到首页
+    goBack: 返回上一页
+  500:
+    title: 服务异常
+    subtitle: 版权所有
+    content: 服务器开小差了，请稍后再试...
+    info: 如果问题持续存在，请联系技术支持人员。
+    button: 回到首页
+    goBack: 返回上一页
 status:
   success: 成功
 router:
