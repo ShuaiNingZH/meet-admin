@@ -17,19 +17,17 @@ const themeList = [
 ];
 
 function setThemeMode(mode: BasicColorSchema) {
-  colorMode.value = mode;
+  appStore.setColorMode(mode);
 }
 </script>
 
 <template>
   <el-dropdown class="theme-switch" trigger="click" @command="setThemeMode">
-    <span>
-      <div class="wrapper">
-        <app-icon v-if="colorMode === 'light'" icon="icon-park-outline:sun-one" />
-        <app-icon v-if="colorMode === 'dark'" icon="icon-park-outline:moon" />
-        <app-icon v-if="colorMode === 'auto'" icon="icon-park-outline:laptop-computer" />
-      </div>
-    </span>
+    <div class="wrapper">
+      <app-icon v-if="colorMode === 'light'" icon="icon-park-outline:sun-one" />
+      <app-icon v-if="colorMode === 'dark'" icon="icon-park-outline:moon" />
+      <app-icon v-if="colorMode === 'auto'" icon="icon-park-outline:laptop-computer" />
+    </div>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

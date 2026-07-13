@@ -1,3 +1,4 @@
+import type { BasicColorSchema } from '@vueuse/core';
 import type { AppConfig } from '@/config/settings.ts';
 import type { LocaleType } from '@/constants/locale';
 import { cloneDeep } from 'lodash-es';
@@ -25,6 +26,53 @@ export const useAppStore = defineStore('app-store', () => {
     return colorMode.value === 'auto' ? system.value : colorMode.value;
   });
   const isDark = computed(() => colorScheme.value === 'dark');
+
+  // 切换明暗模式时的圆形扩散动画（同 Element Plus 文档效果），扩散原点取最后一次点击位置
+  const { x: mouseX, y: mouseY } = useMouse({ type: 'client' });
+
+  function setColorMode(mode: BasicColorSchema) {
+    const targetScheme = mode === 'auto' ? system.value : mode;
+    // 浏览器不支持 / 用户偏好减少动画 / 实际配色不变时直接切换
+    if (
+      typeof document.startViewTransition !== 'function'
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      || targetScheme === colorScheme.value
+    ) {
+      colorMode.value = mode;
+      return;
+    }
+
+    const x = mouseX.value;
+    const y = mouseY.value;
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y),
+    );
+
+    const transition = document.startViewTransition(async () => {
+      colorMode.value = mode;
+      await nextTick();
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      const animation = document.documentElement.animate(
+        { clipPath: isDark.value ? [...clipPath].reverse() : clipPath },
+        {
+          duration: 400,
+          easing: 'ease-in',
+          fill: 'forwards',
+          pseudoElement: isDark.value ? '::view-transition-old(root)' : '::view-transition-new(root)',
+        },
+      );
+      // 过渡结束、伪元素移除后再释放动画，避免 forwards 填充的动画常驻
+      transition.finished.finally(() => animation.cancel());
+    });
+  }
 
   const { isFullscreen, toggle } = useFullscreen();
 
@@ -83,6 +131,7 @@ export const useAppStore = defineStore('app-store', () => {
     colorMode,
     colorScheme,
     isDark,
+    setColorMode,
     fullscreen: isFullscreen,
     toggleFullScreen: toggle,
     reloadPage,

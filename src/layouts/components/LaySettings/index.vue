@@ -27,6 +27,11 @@ const {
 
 const showSetting = ref(false);
 
+const colorModeProxy = computed({
+  get: () => colorMode.value,
+  set: mode => appStore.setColorMode(mode),
+});
+
 const colorModeOptions = [
   { label: 'light', value: 'light', icon: 'icon-park-outline:sun-one' },
   { label: 'dark', value: 'dark', icon: 'icon-park-outline:moon' },
@@ -86,7 +91,7 @@ function handleReset() {
       <el-divider>{{ t('systemSettings.themeMode.title') }}</el-divider>
       <app-flex vertical>
         <!-- 切换主题 -->
-        <el-segmented v-model="colorMode" :options="colorModeOptions" block>
+        <el-segmented v-model="colorModeProxy" :options="colorModeOptions" block>
           <template #default="{ item }">
             <app-flex justify="center">
               <app-icon :icon="(item as any).icon" />

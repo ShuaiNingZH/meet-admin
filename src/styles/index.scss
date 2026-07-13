@@ -44,3 +44,22 @@ body,
   }
 }
 /* 进度条样式-e */
+
+/* 明暗模式切换的圆形扩散动画-s */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+// 切换到暗色时新快照在下、旧快照收缩；切换到亮色时新快照在上、从点击处扩散
+::view-transition-old(root),
+.dark::view-transition-new(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root),
+.dark::view-transition-old(root) {
+  z-index: 9999;
+}
+/* 明暗模式切换的圆形扩散动画-e */
