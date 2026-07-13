@@ -41,17 +41,23 @@ const COMMIT_TYPES = TYPE_CONFIG.map(type => type.value);
 const SCOPE_CONFIG = [
   { value: 'pages', name: '📄 pages       - 页面相关' },
   { value: 'components', name: '🧩 components  - 公共组件' },
+  { value: 'layouts', name: '📐 layouts     - 布局系统' },
   { value: 'utils', name: '🔧 utils       - 工具函数' },
   { value: 'hooks', name: '🪝 hooks       - Vue组合式函数' },
+  { value: 'directives', name: '🎯 directives  - 自定义指令' },
   { value: 'stores', name: '📦 stores      - 状态管理' },
   { value: 'router', name: '🛣️router      - 路由配置' },
   { value: 'api', name: '🌐 api         - 接口层' },
   { value: 'types', name: '📝 types       - TypeScript类型' },
+  { value: 'constants', name: '📌 constants   - 常量定义' },
+  { value: 'enums', name: '🔢 enums       - 枚举定义' },
   { value: 'styles', name: '🎨 styles      - 样式文件' },
   { value: 'assets', name: '🖼️assets      - 静态资源' },
+  { value: 'locales', name: '🌍 locales     - 国际化语言包' },
   { value: 'config', name: '⚙️ config      - 配置文件' },
   { value: 'build', name: '🏗️build       - 构建配置' },
   { value: 'deps', name: '📋 deps        - 依赖管理' },
+  { value: 'docs', name: '📚 docs        - 文档' },
 ];
 
 /** 提取作用域值数组，用于 commitlint 规则校验 */
