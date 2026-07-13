@@ -104,7 +104,7 @@ const { tableProps, params, resetParams, getTableData } = useTable({
     </app-card>
     <app-table v-bind="tableProps" :data="tableProps.data" card @refresh="getTableData">
       <template #button>
-        <el-button type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
+        <el-button v-auth="'system:menu:add'" type="primary" :icon="renderIcon('CirclePlus')" plain @click="showForm = true">
           新增
         </el-button>
       </template>

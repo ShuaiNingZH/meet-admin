@@ -10,6 +10,7 @@ export interface OperationButton<T extends DefaultRow = DefaultRow> {
   icon?: string | ((scope: RenderScope<T>) => string);
   show?: boolean | ((scope: RenderScope<T>) => boolean);
   disabled?: boolean | ((scope: RenderScope<T>) => boolean);
+  auth?: string | string[];
   onClick?: (scope: RenderScope<T>) => void;
   render?: (scope: RenderScope<T>) => VNode | string;
 }

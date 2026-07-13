@@ -37,8 +37,8 @@ watch(locale, async () => {
 
 // 水印内容
 const watermarkContent = computed(() => {
-  const { nickname, username } = userStore.userInfo;
-  return watermark.value ? `${nickname || username || import.meta.env.VITE_APP_NAME} ${dayjs().format('YYYY-MM-DD')}` : '';
+  const { nickname } = userStore.userInfo;
+  return watermark.value ? `${nickname || import.meta.env.VITE_APP_NAME} ${dayjs().format('YYYY-MM-DD')}` : '';
 });
 
 // 水印字体样式

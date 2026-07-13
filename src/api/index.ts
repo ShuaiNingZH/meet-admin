@@ -13,7 +13,7 @@ export function login(data: AnyObj) {
 
 // 获取用户信息
 export function fetchUserInfo() {
-  return request({
+  return request<User.CurrentUser>({
     url: '/api/user',
   });
 }

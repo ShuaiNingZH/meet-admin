@@ -36,7 +36,7 @@ const today = computed(() => {
   return `${d.getFullYear()}-${`${d.getMonth() + 1}`.padStart(2, '0')}-${`${d.getDate()}`.padStart(2, '0')} ${weeks[d.getDay()]}`;
 });
 
-const userName = computed(() => userStore.userInfo.nickname || userStore.userInfo.username || t('user'));
+const userName = computed(() => userStore.userInfo.nickname || t('user'));
 </script>
 
 <template>

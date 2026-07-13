@@ -4,6 +4,7 @@ import { has, isArray } from 'lodash-es';
 import { AppFlex } from '@/components/AppFlex';
 import { AppIcon } from '@/components/AppIcon';
 import { AppText } from '@/components/AppText';
+import { hasAuth } from '@/utils/auth';
 import { downloadFile } from '@/utils/download';
 import { $t } from '@/utils/i18n';
 import { moneyThousand } from '@/utils/money';
@@ -167,7 +168,7 @@ function renderOperationButton(scope: RenderScope<AnyObj>, button: OperationButt
 /**
  * 处理操作列的渲染
  *
- * 渲染规则：先按 `show` 过滤掉无权限的按钮，再判断剩余数量——未超过
+ * 渲染规则：先按 `show`/`auth` 过滤掉无权限的按钮，再判断剩余数量——未超过
  * `maxButtons`（默认 3）时全部直接展示；超过时只直接展示前 `maxButtons` 个，
  * 其余收进「更多」下拉，鼠标悬浮三个点即可展开。由于过滤发生在截断之前，
  * 某个按钮因权限消失时，会自动由后面的按钮补位，始终展示满 `maxButtons` 个。
@@ -181,10 +182,10 @@ export function handleOperationRender(scope: RenderScope<AnyObj>, column: TableC
     ? column.buttons(scope)
     : column.buttons ?? []) as OperationButton<AnyObj>[];
 
-  // 权限过滤：show 显式为 false（或函数返回 false）的按钮不渲染
+  // 权限过滤：show 显式为 false（或函数返回 false），或未拥有 auth 指定的按钮权限，则不渲染
   const visibleButtons = rawButtons.filter((button) => {
     const show = typeof button.show === 'function' ? button.show(scope) : button.show;
-    return show !== false;
+    return show !== false && hasAuth(button.auth);
   });
 
   if (!visibleButtons.length)

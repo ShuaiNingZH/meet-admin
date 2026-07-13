@@ -4,7 +4,7 @@ import { useTabStore } from './tab';
 
 export const useUserStore = defineStore('user-store', () => {
   const [state, reset] = useReset(() => ({
-    userInfo: {} as AnyObj,
+    userInfo: {} as User.CurrentUser,
   }));
 
   const accessToken = useStorage('access-token', '');

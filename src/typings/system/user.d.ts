@@ -12,4 +12,13 @@ declare namespace User {
     status: boolean;
     remark: string;
   }
+
+  interface CurrentUser {
+    userId: number;
+    nickname: string;
+    phone: string;
+    email: string | null;
+    avatar: string;
+    buttons: string[];
+  }
 }
