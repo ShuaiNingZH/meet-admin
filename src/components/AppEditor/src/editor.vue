@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { AppEditorProps } from './editor.ts';
+import type { IDomEditor } from '@wangeditor-next/editor';
+import type { AppEditorProps, EditorConfig } from './editor.ts';
 import { Editor, Toolbar } from '@wangeditor-next/editor-for-vue';
 import { formContextKey, formItemContextKey, useZIndex } from 'element-plus';
 import { uploadFile, uploadImage } from '@/api';
 import '@wangeditor-next/editor/dist/css/style.css';
-import '@/config/wangEditor.ts';
 
 defineOptions({ name: 'AppEditor' });
 
@@ -26,16 +26,18 @@ const props = withDefaults(defineProps<AppEditorProps>(), {
   disabled: false,
 });
 
+const { VITE_BASE_URL } = import.meta.env;
+
 const valueHtml = defineModel({ type: String, default: '' });
 
 const { nextZIndex } = useZIndex();
 const zIndex = ref(0);
 
 // 编辑器实例，必须用 shallowRef
-const editorRef = shallowRef();
+const editorRef = shallowRef<IDomEditor>();
 
 // 实列化编辑器
-function handleCreated(editor: any) {
+function handleCreated(editor: IDomEditor) {
   editorRef.value = editor;
   zIndex.value = nextZIndex();
 }
@@ -47,15 +49,14 @@ const formContext = inject(formContextKey, void 0);
 const formItemContext = inject(formItemContextKey, void 0);
 
 // 判断是否禁用上传和删除
-const self_disabled = computed(() => {
-  const disabled = props.disabled || formContext?.disabled;
+const isDisabled = computed(() => props.disabled || formContext?.disabled);
+
+watch(isDisabled, (disabled) => {
   if (disabled)
     editorRef.value?.disable();
   else
     editorRef.value?.enable();
-
-  return disabled;
-});
+}, { immediate: true });
 
 // 编辑框获取焦点时触发
 function handleFocus() {
@@ -69,66 +70,57 @@ function handleBlur() {
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
 }
 
-/**
- * @description 图片自定义上传
- * @param file 上传的文件
- * @param insertFn 上传成功后的回调函数（插入到富文本编辑器中）
- */
 type InsertFnTypeImg = (url: string, alt?: string, href?: string) => void;
-props.editorConfig.MENU_CONF!.uploadImage = {
-  base64LimitSize: 0,
-  server: '',
-  metaWithUrl: false,
-  onSuccess() {},
-  onFailed() {},
-  onError() {},
-  // 自定义上传实现
-  async customUpload(file: File, insertFn: InsertFnTypeImg) {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const { VITE_FINANCE_URL } = import.meta.env;
-    try {
-      const res = await uploadImage(formData);
-      const data = res.data[0];
-      // 插入图片到编辑器
-      insertFn(`${VITE_FINANCE_URL}${data.savePath}`, data.alt || '', data.href || '');
-    }
-    catch (error: any) {
-      ElMessage.error(error);
-    }
-  },
-};
-
-/**
- * @description 视频自定义上传
- * @param file 上传的文件
- * @param insertFn 上传成功后的回调函数（插入到富文本编辑器中）
- */
 type InsertFnTypeVideo = (url: string, poster?: string) => void;
-props.editorConfig.MENU_CONF!.uploadVideo = {
-  server: '',
-  metaWithUrl: false,
-  onSuccess() {},
-  onFailed() {},
-  onError() {},
-  // 自定义上传实现
-  async customUpload(file: File, insertFn: InsertFnTypeVideo) {
-    const formData = new FormData();
-    formData.append('file', file);
 
-    const { VITE_FINANCE_URL } = import.meta.env;
-    try {
-      const res = await uploadFile(formData);
-      const data = res.data[0];
-      // 插入视频到编辑器
-      insertFn(`${VITE_FINANCE_URL}${data.savePath}`);
-    }
-    catch (error: any) {
-      ElMessage.error(error);
-    }
-  },
-};
+// 合并出最终的编辑器配置，避免直接修改 editorConfig prop
+const mergedEditorConfig = computed<EditorConfig>(() => {
+  return {
+    ...props.editorConfig,
+    MENU_CONF: {
+      ...props.editorConfig.MENU_CONF,
+      // 图片自定义上传
+      uploadImage: {
+        base64LimitSize: 0,
+        server: '',
+        metaWithUrl: false,
+        async customUpload(file: File, insertFn: InsertFnTypeImg) {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          try {
+            const res = await uploadImage(formData);
+            const data = res.data[0];
+            // 插入图片到编辑器
+            insertFn(`${VITE_BASE_URL}${data.savePath}`, data.alt || '', data.href || '');
+          }
+          catch (error: any) {
+            ElMessage.error(error.message);
+          }
+        },
+      },
+      // 视频自定义上传
+      uploadVideo: {
+        server: '',
+        metaWithUrl: false,
+        async customUpload(file: File, insertFn: InsertFnTypeVideo) {
+          const formData = new FormData();
+          formData.append('file', file);
+
+          try {
+            const res = await uploadFile(formData);
+            const data = res.data[0];
+            // 插入视频到编辑器
+            insertFn(`${VITE_BASE_URL}${data.savePath}`);
+          }
+          catch (error: any) {
+            ElMessage.error(error.message);
+          }
+        },
+      },
+    },
+  };
+});
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -140,13 +132,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="app-editor editor-box border" :class="[self_disabled ? 'app-editor-disabled' : '']">
+  <div class="app-editor editor-box border" :class="[isDisabled ? 'app-editor-disabled' : '']">
     <Toolbar
-      v-if="!hideToolBar" class="app-editor-toolbar" :editor="editorRef"
-      :default-config="toolbarConfig" :mode="mode"
+      v-if="!hideToolBar" class="app-editor-toolbar" :editor="editorRef" :default-config="toolbarConfig"
+      :mode="mode"
     />
     <Editor
-      v-model="valueHtml" class="app-editor-content" :default-config="editorConfig" :mode="mode"
+      v-model="valueHtml" class="app-editor-content" :default-config="mergedEditorConfig" :mode="mode"
       @on-created="handleCreated" @on-blur="handleBlur" @on-focus="handleFocus"
     />
   </div>
