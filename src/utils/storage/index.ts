@@ -13,9 +13,3 @@ export const storage = createStorage({
   description: '全局本地存储',
   ...createOptions,
 });
-
-export const tableStorage = createStorage({
-  name: 'tableStorage',
-  description: '表格本地存储',
-  ...createOptions,
-});
