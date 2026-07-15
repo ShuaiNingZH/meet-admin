@@ -144,3 +144,7 @@ export function renderDefault(scope: RenderScope<AnyObj>, column: TableColumn) {
     return handleOperationRender(scope, column);
   }
 }
+
+export function isPageData<T>(data: any): data is AppAxios.PageData<T> {
+  return data && typeof data === 'object' && 'list' in data;
+}
