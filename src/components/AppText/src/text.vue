@@ -39,10 +39,12 @@ function handleHover(event: MouseEvent) {
 </script>
 
 <template>
-  <el-tooltip :content="tooltipContent" :disabled="tooltipDisabled || tooltipHidden" :placement :offset :effect popper-class="app-text-popper">
+  <el-tooltip
+    :content="tooltipContent" :disabled="tooltipDisabled || tooltipHidden" :placement :offset :effect
+    popper-class="app-text-popper"
+  >
     <el-text
-      v-bind="$attrs" :type :size :truncated="!lineClamp" :line-clamp
-      :title @mouseenter="handleHover"
+      v-bind="attrs" :type :size :truncated="!lineClamp" :line-clamp :tag :title @mouseenter="handleHover"
     >
       <slot>
         {{ content }}

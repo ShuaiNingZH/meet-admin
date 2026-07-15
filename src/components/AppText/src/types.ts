@@ -1,12 +1,6 @@
-import type { Placement } from 'element-plus';
+import type { Placement, TextProps } from 'element-plus';
 
-export interface AppTextProps {
-  // 类型
-  type?: 'primary' | 'success' | 'warning' | 'danger' | 'info';
-  // 尺寸大小
-  size?: 'large' | 'default' | 'small';
-  // 最大行数，多行省略
-  lineClamp?: string | number;
+export interface AppTextProps extends Omit<TextProps, 'truncated'> {
   // 显示的内容
   content?: string;
   // 禁用 Tooltip

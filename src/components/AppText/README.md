@@ -80,6 +80,7 @@ function handleClick(e: MouseEvent) {
 | type            | 'primary' \| 'success' \| 'warning' \| 'danger' \| 'info' | -      | 否   | 文本类型                       |
 | size            | 'large' \| 'default' \| 'small'                           | -      | 否   | 文本尺寸                       |
 | lineClamp       | string \| number                                          | -      | 否   | 最大行数，设置后可实现多行省略 |
+| tag             | string                                                     | 'span' | 否   | 自定义元素标签                 |
 | content         | string                                                    | -      | 否   | 文本内容                       |
 | tooltipDisabled | boolean                                                   | -      | 否   | 是否禁用tooltip                |
 | placement       | Placement                                                 | 'top'  | 否   | tooltip出现的位置              |
