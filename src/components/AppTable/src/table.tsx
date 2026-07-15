@@ -77,6 +77,11 @@ function renderColumn(column: TableColumn) {
     props.formatter = (row: any, column: any) => dateFormatter(row, column, 'YYYY-MM-DD HH:mm:ss');
   }
 
+  if (column.type === 'operation') {
+    // 操作列不需要省略号截断，改为 overflow: visible，避免按钮 Tab 聚焦时的高亮边框被裁剪
+    props.className = [props.className, 'app-table-operation-column'].filter(Boolean).join(' ');
+  }
+
   const render = {
     header: (scope: any) => {
       if (column.renderHeader) {

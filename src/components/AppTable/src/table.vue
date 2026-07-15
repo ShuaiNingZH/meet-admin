@@ -87,6 +87,11 @@ defineExpose(createTableExpose(baseTableRef));
 </template>
 
 <style lang="scss">
+// 操作列不做文本截断，取消 overflow: hidden，避免按钮 Tab 聚焦高亮边框被裁剪
+.el-table .el-table__cell.app-table-operation-column .cell {
+  overflow: visible;
+}
+
 .app-table-operation-popper.el-popover.el-popper {
   min-width: auto;
   padding: var(--spacing-xs);
