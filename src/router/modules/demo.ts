@@ -36,5 +36,14 @@ export default {
         icon: 'icon-park-outline:text',
       },
     },
+    {
+      path: 'editor',
+      name: 'DemoEditor',
+      component: () => import('@/views/demo/editor/index.vue'),
+      meta: {
+        title: 'Editor 组件演示',
+        icon: 'icon-park-outline:editor',
+      },
+    },
   ],
 } satisfies RouteRecordRaw;
