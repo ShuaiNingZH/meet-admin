@@ -9,14 +9,6 @@ export interface AppTextProps {
   lineClamp?: string | number;
   // 显示的内容
   content?: string;
-  // link 标签
-  link?: boolean;
-  // 是否显示下划线
-  underline?: 'always' | 'hover' | 'never';
-  // 原生 href 属性
-  href?: string;
-  // 禁用 link
-  linkDisabled?: boolean;
   // 禁用 Tooltip
   tooltipDisabled?: boolean;
   // Tooltip 出现的位置
@@ -25,5 +17,4 @@ export interface AppTextProps {
   offset?: number;
   // Tooltip 主题，内置了 dark / light 两种
   effect?: 'dark' | 'light';
-  onClick?: (e: MouseEvent) => void;
 }

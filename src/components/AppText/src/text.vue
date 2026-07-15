@@ -1,57 +1,48 @@
 <script setup lang="ts">
 import type { AppTextProps } from './types.ts';
 
-defineOptions({ name: 'AppText' });
+defineOptions({ name: 'AppText', inheritAttrs: false });
 
 const props = withDefaults(defineProps<AppTextProps>(), {
-  link: false,
   placement: 'top',
   offset: 8,
-  underline: 'hover',
 });
 
-const textRef = useTemplateRef<AnyObj>('textRef');
+const attrs = useAttrs();
+
+// el-text 溢出时会自动设置原生 title，与 el-tooltip 重复；默认用空白 title 抑制，用户显式传入的 title 优先
+const title = computed(() => (attrs.title as string) ?? ' ');
 
 const tooltipContent = ref('');
 
-// 是否需要显示 tooltip
-const disabled = ref(true);
+// 文本未溢出时不显示 tooltip
+const tooltipHidden = ref(true);
 
-// 判断是否需要显示 tooltip
+// hover 时检测文本是否溢出，决定是否显示 tooltip
 function handleHover(event: MouseEvent) {
   if (props.tooltipDisabled)
     return;
 
-  const el = event.target as HTMLElement;
+  const el = event.currentTarget as HTMLElement;
 
   tooltipContent.value = el.textContent!;
 
   if (!props.lineClamp) {
     // 单行省略
-    disabled.value = el.scrollWidth <= el.clientWidth;
+    tooltipHidden.value = el.scrollWidth <= el.clientWidth;
   }
   else {
     // 多行省略
-    disabled.value = el.scrollHeight <= el.clientHeight;
+    tooltipHidden.value = el.scrollHeight <= el.clientHeight;
   }
 }
 </script>
 
 <template>
-  <el-tooltip :content="tooltipContent" :disabled :placement :offset :effect>
-    <el-link v-if="link" class="app-text" :type :underline :href :disabled="linkDisabled" @click="onClick">
-      <el-text
-        ref="textRef" v-bind="$attrs" :size :truncated="!lineClamp" :line-clamp
-        title=" " @mouseover.self="handleHover"
-      >
-        <slot>
-          {{ content }}
-        </slot>
-      </el-text>
-    </el-link>
+  <el-tooltip :content="tooltipContent" :disabled="tooltipDisabled || tooltipHidden" :placement :offset :effect popper-class="app-text-popper">
     <el-text
-      v-else ref="textRef" v-bind="$attrs" :type :size :truncated="!lineClamp" :line-clamp
-      title=" " @mouseover.self="handleHover" @click="onClick"
+      v-bind="$attrs" :type :size :truncated="!lineClamp" :line-clamp
+      :title @mouseenter="handleHover"
     >
       <slot>
         {{ content }}
@@ -60,10 +51,9 @@ function handleHover(event: MouseEvent) {
   </el-tooltip>
 </template>
 
-<style scoped lang="scss">
-.app-text {
-  :deep(.el-link__inner) {
-    display: inline-grid;
-  }
+<style lang="scss">
+// tooltip 装的是被截断的长文本，不限宽会以单行铺开，left/right 方向放不下时会溢出视口撑出滚动条
+.app-text-popper {
+  max-width: min(600px, 50vw);
 }
 </style>

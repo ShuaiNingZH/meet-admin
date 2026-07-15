@@ -1,9 +1,8 @@
 import type { ImageToolbar, Money, OperationButton, RenderScope, TableColumn } from './types.ts';
-import { ElButton, ElImage, ElPopover } from 'element-plus';
+import { ElButton, ElImage, ElLink, ElPopover, ElText } from 'element-plus';
 import { has, isArray } from 'lodash-es';
 import { AppFlex } from '@/components/AppFlex';
 import { AppIcon } from '@/components/AppIcon';
-import { AppText } from '@/components/AppText';
 import { hasAuth } from '@/utils/auth';
 import { downloadFile } from '@/utils/download';
 import { $t } from '@/utils/i18n';
@@ -26,12 +25,20 @@ interface RenderMoney {
  */
 export function renderMoney({ value, highlightNegativeAmounts = false, link = false, callBack }: RenderMoney) {
   const isLink = value !== 0 && link;
-  const type = (highlightNegativeAmounts && value < 0) ? 'danger' : isLink ? 'primary' : undefined;
+  const isNegativeHighlight = highlightNegativeAmounts && value < 0;
+
+  if (isLink) {
+    return (
+      <ElLink type={isNegativeHighlight ? 'danger' : 'primary'} onClick={callBack}>
+        {moneyThousand(value)}
+      </ElLink>
+    );
+  }
 
   return (
-    <AppText type={type} link={isLink} onClick={isLink ? callBack : undefined}>
+    <ElText type={isNegativeHighlight ? 'danger' : undefined}>
       {moneyThousand(value)}
-    </AppText>
+    </ElText>
   );
 }
 

@@ -5,8 +5,8 @@ import type {
   TableConfig,
   TableData,
 } from './types.ts';
+import { ElText } from 'element-plus';
 import { cloneDeep, isNumber } from 'lodash-es';
-import { AppText } from '@/components/AppText';
 import { useReset } from '@/hooks/useReset';
 import { isPageData } from '@/utils/common';
 import { $t } from '@/utils/i18n';
@@ -196,7 +196,7 @@ export function useTable<A extends ApiFunc>(config: TableConfig<A>) {
           });
         }
 
-        return <AppText>{moneyThousand(property)}</AppText>;
+        return <ElText>{moneyThousand(property)}</ElText>;
       }
 
       return property;
