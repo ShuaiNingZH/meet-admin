@@ -134,7 +134,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="app-editor editor-box border" :class="[isDisabled ? 'app-editor-disabled' : '']">
     <Toolbar
-      v-if="!hideToolBar" class="app-editor-toolbar" :editor="editorRef" :default-config="toolbarConfig"
+      v-show="!hideToolBar" class="app-editor-toolbar" :editor="editorRef" :default-config="toolbarConfig"
       :mode="mode"
     />
     <Editor
@@ -166,8 +166,30 @@ onBeforeUnmount(() => {
 
   &-content {
     height: v-bind(height) !important;
-    overflow-y: hidden;
-    border-radius: var(--el-border-radius-base);
+
+    :deep(.w-e-text-container) {
+      border-radius: var(--el-border-radius-base);
+    }
   }
+}
+
+// wangEditor 通过 CSS 变量控制配色，默认写死浅色值，这里在暗色模式下覆盖为项目主题变量
+:global(html.dark) .app-editor {
+  --w-e-textarea-bg-color: var(--el-bg-color);
+  --w-e-textarea-color: var(--el-text-color-primary);
+  --w-e-textarea-border-color: var(--el-border-color);
+  --w-e-textarea-slight-border-color: var(--el-border-color-lighter);
+  --w-e-textarea-slight-color: var(--el-text-color-secondary);
+  --w-e-textarea-slight-bg-color: var(--el-fill-color-light);
+  --w-e-textarea-selected-border-color: var(--el-color-primary-light-5);
+  --w-e-textarea-handler-bg-color: var(--el-color-primary);
+  --w-e-toolbar-color: var(--el-text-color-regular);
+  --w-e-toolbar-bg-color: var(--el-bg-color);
+  --w-e-toolbar-active-color: var(--el-color-primary);
+  --w-e-toolbar-active-bg-color: var(--el-fill-color-light);
+  --w-e-toolbar-disabled-color: var(--el-text-color-disabled);
+  --w-e-toolbar-border-color: var(--el-border-color);
+  --w-e-modal-button-bg-color: var(--el-fill-color-light);
+  --w-e-modal-button-border-color: var(--el-border-color);
 }
 </style>
