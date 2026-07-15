@@ -1,7 +1,5 @@
 import request from '@/utils/axios';
 
-const { VITE_COMMON_URL } = import.meta.env;
-
 // 登录
 export function login(data: AnyObj) {
   return request({
@@ -50,7 +48,6 @@ export function fetchAgentJsSdkParams(url: string) {
 // 上传文件
 export function uploadFile(params: FormData) {
   return request({
-    baseURL: VITE_COMMON_URL,
     url: '/common/acceptUpload',
     method: 'post',
     data: params,
@@ -66,7 +63,6 @@ export function uploadFile(params: FormData) {
 // 上传图片
 export function uploadImage(params: FormData) {
   return request({
-    baseURL: VITE_COMMON_URL,
     url: '/api/upload/image',
     method: 'post',
     data: params,
