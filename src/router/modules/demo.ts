@@ -27,5 +27,14 @@ export default {
         icon: 'icon-park-outline:browser',
       },
     },
+    {
+      path: 'text',
+      name: 'DemoText',
+      component: () => import('@/views/demo/text/index.vue'),
+      meta: {
+        title: 'Text 组件演示',
+        icon: 'icon-park-outline:text',
+      },
+    },
   ],
 } satisfies RouteRecordRaw;
