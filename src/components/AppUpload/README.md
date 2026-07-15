@@ -116,7 +116,6 @@ function customUploadApi(formData: FormData) {
 |----------|--------------------------------------|-----------------------------|----|--------------------------------------|
 | v-model  | array[] \| string                    | -                           | 是  | 绑定值，根据type不同类型不同                     |
 | type     | 'image' \| 'images' \| 'files'       | 'files'                     | 否  | 上传类型，单图/多图/文件                        |
-| baseUrl  | string                               | VITE_BASE_URL               | 否  | 上传文件的基础URL                           |
 | api      | (formData: FormData) => Promise<any> | -                           | 否  | 自定义上传API                             |
 | props    | object                               | { key: 'file', url: 'url' } | 否  | 上传配置，key为表单字段名，url为返回值中的URL字段        |
 | width    | string                               | '150px'/'300px'             | 否  | 上传区域宽度                               |

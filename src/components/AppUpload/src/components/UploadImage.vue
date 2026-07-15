@@ -14,7 +14,6 @@ const props = withDefaults(defineProps<AppUploadProps>(), {
     key: 'file',
     url: 'url',
   }),
-  baseUrl: import.meta.env.VITE_COMMON_URL,
 });
 
 const emit = defineEmits(['success']);

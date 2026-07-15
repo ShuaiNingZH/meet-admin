@@ -8,11 +8,6 @@ import { regex } from '@/utils/regex';
 
 export interface AppUploadProps {
   /**
-   * 上传文件的基础URL。
-   */
-  baseUrl?: string;
-
-  /**
    * API 请求方法，用于上传文件。
    * 参数为任意类型，返回一个 Promise。
    */

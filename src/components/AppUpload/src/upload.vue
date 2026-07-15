@@ -12,7 +12,6 @@ const props = withDefaults(defineProps<Partial<AppUploadProps>>(), {
   disabled: false,
   multiple: true,
   fileSize: 5,
-  baseUrl: import.meta.env.VITE_FINANCE_URL,
 });
 
 const emit = defineEmits(['success']);
