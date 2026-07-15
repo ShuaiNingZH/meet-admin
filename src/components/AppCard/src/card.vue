@@ -21,3 +21,9 @@ const classes = computed(() => {
     <slot />
   </div>
 </template>
+
+<style scoped lang="scss">
+.app-card {
+  overflow: unset;
+}
+</style>

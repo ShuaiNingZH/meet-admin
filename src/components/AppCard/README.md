@@ -49,7 +49,6 @@ import { AppCard } from '@/components/AppCard';
 ## 注意事项
 
 - 组件默认继承了 Element Plus 的 el-card 类，保留了基础样式
-- 组件的 overflow 属性设置为 unset，允许内容溢出
 - 在处理大量内容时，建议设置适当的 padding 值，以提供更好的视觉效果
 
 ## 使用场景
