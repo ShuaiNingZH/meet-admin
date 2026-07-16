@@ -45,5 +45,14 @@ export default {
         icon: 'icon-park-outline:editor',
       },
     },
+    {
+      path: 'upload',
+      name: 'DemoUpload',
+      component: () => import('@/views/demo/upload/index.vue'),
+      meta: {
+        title: 'Upload 组件演示',
+        icon: 'icon-park-outline:upload-one',
+      },
+    },
   ],
 } satisfies RouteRecordRaw;
