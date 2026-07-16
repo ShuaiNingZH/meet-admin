@@ -87,8 +87,11 @@ components:
     packUp: Collapse all
   searchMenu:
     placeholder: Search menu
-    noData: No data yet
+    noResult: No matching menu found
+    noHistory: No search history yet
     result: Search results
+    history: Recent searches
+    clearHistory: Clear
     ctrl-k: Toggle search panel
   upload:
     closeTip: Press delete to remove

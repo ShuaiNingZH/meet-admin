@@ -87,8 +87,11 @@ components:
     packUp: 收起全部
   searchMenu:
     placeholder: 搜索菜单
-    noData: 暂无数据
+    noResult: 未找到相关菜单
+    noHistory: 暂无搜索历史
     result: 搜索结果
+    history: 搜索历史
+    clearHistory: 清空
     ctrl-k: 切换搜索面板
   upload:
     closeTip: 按 delete 键可删除

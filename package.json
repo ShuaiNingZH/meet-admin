@@ -82,6 +82,7 @@
     "path-browserify": "^1.0.1",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
+    "pinyin-pro": "^3.28.1",
     "print-js": "^1.6.0",
     "qrcode": "^1.5.4",
     "qs": "^6.15.3",
