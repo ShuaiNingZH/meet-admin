@@ -50,7 +50,7 @@ defineExpose(new Proxy({}, {
 <template>
   <div class="upload-files">
     <el-upload
-      ref="UploadFiles" v-model:file-list="model" action="#"
+      ref="UploadFiles" v-model:file-list="model" action="#" class="upload"
       :drag="!isDisabled && drag" :disabled="isDisabled" :accept="fileType.join(',')"
       :class="isDisabled ? 'disabled' : ''"
       :multiple :limit
@@ -95,6 +95,16 @@ defineExpose(new Proxy({}, {
 </template>
 
 <style scoped lang="scss">
+.is-error {
+  .upload-files {
+    .upload {
+      :deep(.el-upload-dragger) {
+        border: 1px dashed var(--el-color-danger);
+      }
+    }
+  }
+}
+
 .upload-files {
   :deep(.disabled) {
     .el-upload {

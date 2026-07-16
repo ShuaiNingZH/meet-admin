@@ -93,6 +93,12 @@ components:
   upload:
     closeTip: 按 delete 键可删除
     clickToUpload: 点击上传
+    fileTypeInvalid: 【{name}】文件格式不符合要求！
+    fileSizeExceed: 【{name}】文件大小不能超过 {size}M！
+    uploadSuccess: 【{name}】文件上传成功！
+    uploadFailed: 【{name}】文件上传失败，请您重新上传！
+    exceedLimit: 当前最多只能上传 {limit} 个文件，请移除后上传！
+    uploading: 文件正在上传中，请稍后再试！
     filesTip:
       size: 可同时上传多个文件，每个文件大小不超过
       type: 支持的文件类型：

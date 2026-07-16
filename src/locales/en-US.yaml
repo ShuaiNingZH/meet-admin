@@ -93,6 +93,12 @@ components:
   upload:
     closeTip: Press delete to remove
     clickToUpload: click to upload
+    fileTypeInvalid: '[{name}] file format does not meet the requirements!'
+    fileSizeExceed: '[{name}] file size cannot exceed {size}MB!'
+    uploadSuccess: '[{name}] file uploaded successfully!'
+    uploadFailed: '[{name}] file upload failed, please upload it again!'
+    exceedLimit: 'You can upload up to {limit} files, please remove some before uploading!'
+    uploading: 'File is uploading, please try again later!'
     filesTip:
       size: Multiple files can be uploaded at the same time，and the size of each file does not exceed
       type: supported file types：

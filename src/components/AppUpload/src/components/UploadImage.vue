@@ -23,6 +23,7 @@ const { t } = useI18n();
 const model = defineModel<string>({ required: true });
 
 const uploadRef = useTemplateRef<UploadInstance>('UploadImage');
+const wrapperRef = useTemplateRef<HTMLDivElement>('wrapperRef');
 
 // 是否是圆形, 同时不能是拖拽上传
 const borderRadius = computed(() => !props.drag && props.circle ? '50%' : '6px');
@@ -32,7 +33,6 @@ const width = computed(() => props.width || (props.drag && !model.value ? '300px
 const height = computed(() => props.height || '150px');
 
 const {
-  id,
   isDisabled,
   isPreview,
   fileTypeTips,
@@ -44,13 +44,17 @@ const {
   handleRemove,
   handleExceed,
   handlePreview,
-  handleImageEdit,
   handleImagePreview,
-  handleImageRemove,
 } = useUpload(props, model, emit);
 
 // 是否隐藏上传按钮
 const isHider = computed(() => model.value ? 'none' : 'inline-flex');
+
+// 编辑图片（重新触发隐藏的文件选择框）
+function handleImageEdit() {
+  const input = wrapperRef.value?.querySelector<HTMLInputElement>('.el-upload__input');
+  input?.click();
+}
 
 defineExpose(new Proxy({}, {
   get(_target, key) {
@@ -63,9 +67,9 @@ defineExpose(new Proxy({}, {
 </script>
 
 <template>
-  <div class="upload-image">
+  <div ref="wrapperRef" class="upload-image">
     <el-upload
-      :id ref="UploadImage" :show-file-list="false" action="#" class="upload"
+      ref="UploadImage" :show-file-list="false" action="#" class="upload"
       :drag :disabled="isDisabled" :accept="fileType.join(',')"
       :before-upload="beforeUpload"
       :http-request="handleHttpUpload"
@@ -89,7 +93,7 @@ defineExpose(new Proxy({}, {
       <div v-if="model" class="el-upload-list--picture-card">
         <div
           class="el-upload-list__item" :class="model ? 'is-success' : ''" tabindex="0"
-          @keydown.delete="handleImageRemove"
+          @keydown.delete="handleRemove()"
         >
           <img :src="model" class="el-upload-list__item-thumbnail" alt="">
           <label class="el-upload-list__item-status-label">
@@ -97,7 +101,7 @@ defineExpose(new Proxy({}, {
           </label>
           <i v-if="!isPreview" class="el-icon--close-tip" :class="circle ? 'close-tip-circle' : ''">{{ t('components.upload.closeTip') }}</i>
           <div class="el-upload-list__item-actions">
-            <div class="el-upload-list__item-preview" @click="handleImagePreview">
+            <div class="el-upload-list__item-preview" @click="handleImagePreview()">
               <app-icon icon="ZoomIn" />
               <span>{{ t('common.preview') }}</span>
             </div>
@@ -105,7 +109,7 @@ defineExpose(new Proxy({}, {
               <app-icon icon="Edit" />
               <span>{{ t('common.edit') }}</span>
             </div>
-            <div v-if="!isPreview" class="el-upload-list__item-delete" @click="handleImageRemove">
+            <div v-if="!isPreview" class="el-upload-list__item-delete" @click="handleRemove()">
               <app-icon icon="Delete" />
               <span>{{ t('common.delete') }}</span>
             </div>
@@ -166,7 +170,7 @@ defineExpose(new Proxy({}, {
         width: v-bind(width);
         height: v-bind(height);
         border-radius: v-bind(borderRadius);
-        background-color: #ffffff;
+        background-color: var(--el-fill-color-lighter);
 
         &:hover {
           color: unset;
@@ -206,7 +210,7 @@ defineExpose(new Proxy({}, {
         transition: border-radius 0s;
 
         &:focus-visible {
-          outline: 2px solid #101010;
+          outline: 2px solid var(--el-text-color-primary);
           outline-offset: -1px;
           transition: outline 0s;
 

@@ -4,6 +4,7 @@ import { formContextKey, formItemContextKey } from 'element-plus';
 import { isArray } from 'lodash-es';
 import { uploadImage } from '@/api';
 import { downloadFile } from '@/utils/download';
+import { $t } from '@/utils/i18n';
 import { regex } from '@/utils/regex';
 
 export interface AppUploadProps {
@@ -127,8 +128,8 @@ export function useUpload(
     // 检查文件类型
     if (fileType.length && !fileType.includes(rawFile.type)) {
       ElNotification({
-        title: '温馨提示',
-        message: `【${rawFile.name}】文件格式不符合要求！`,
+        title: $t('common.kindTips'),
+        message: $t('components.upload.fileTypeInvalid', { name: rawFile.name }),
         type: 'warning',
       });
       return false;
@@ -138,8 +139,8 @@ export function useUpload(
     const isFileSizeValid = rawFile.size / 1024 / 1024 < fileSize;
     if (!isFileSizeValid) {
       ElNotification({
-        title: '温馨提示',
-        message: `【${rawFile.name}】文件大小不能超过 ${fileSize}M！`,
+        title: $t('common.kindTips'),
+        message: $t('components.upload.fileSizeExceed', { name: rawFile.name, size: fileSize }),
         type: 'warning',
       });
       return false;
@@ -168,6 +169,10 @@ export function useUpload(
     catch (error) {
       options.onError(error as any);
     }
+    finally {
+      // 无论成功、失败还是响应为空，都要结束上传中状态，避免 isUpLoad 卡死
+      isUpLoad.value = false;
+    }
   }
 
   /**
@@ -194,12 +199,10 @@ export function useUpload(
     if (typeof model.value === 'string')
       model.value = uploadFile.url || '';
 
-    isUpLoad.value = false;
-
     // 显示上传成功提示
     ElNotification({
-      title: '温馨提示',
-      message: `【${uploadFile.name}】文件上传成功！`,
+      title: $t('common.kindTips'),
+      message: $t('components.upload.uploadSuccess', { name: uploadFile.name }),
       type: 'success',
     });
 
@@ -207,16 +210,17 @@ export function useUpload(
   }
 
   /**
-   * @description 删除文件
-   * @param file 删除的文件
+   * @description 删除文件（禁用状态下不允许删除）
+   * @param file 删除的文件，单图/单文件模式下可不传
    */
-  function handleRemove(file: UploadFile) {
-    if (isArray(model.value)) {
-      model.value = model.value.filter(item => item.url !== file.url || item.name !== file.name);
-    }
-    else {
+  function handleRemove(file?: UploadFile) {
+    if (isDisabled.value)
+      return;
+
+    if (isArray(model.value))
+      model.value = model.value.filter(item => item.url !== file?.url || item.name !== file?.name);
+    else
       model.value = '';
-    }
   }
 
   /**
@@ -226,8 +230,8 @@ export function useUpload(
    */
   function uploadError(_response: any, uploadFile: UploadFile) {
     ElNotification({
-      title: '温馨提示',
-      message: `【${uploadFile.name}】文件上传失败，请您重新上传！`,
+      title: $t('common.kindTips'),
+      message: $t('components.upload.uploadFailed', { name: uploadFile.name }),
       type: 'error',
     });
   }
@@ -235,8 +239,8 @@ export function useUpload(
   // 文件数超出
   function handleExceed() {
     ElNotification({
-      title: '温馨提示',
-      message: `当前最多只能上传 ${props.limit} 个文件，请移除后上传！`,
+      title: $t('common.kindTips'),
+      message: $t('components.upload.exceedLimit', { limit: props.limit }),
       type: 'warning',
     });
   }
@@ -254,7 +258,7 @@ export function useUpload(
       return;
 
     if (isUpLoad.value)
-      return ElMessage.warning('文件正在上传中，请稍后再试！');
+      return ElMessage.warning($t('components.upload.uploading'));
 
     // 在查看时，只有图片路径信息，没有图片文件信息，所以使用正则判断是否是图片
     if (regex('Images', uploadFile.url || '')) {
@@ -268,52 +272,24 @@ export function useUpload(
     }
   }
 
-  // 生成唯一ID
-  const id = useId();
-
-  // 编辑图片
-  function handleImageEdit() {
-    const dom = document.querySelector(`#${id} .el-upload__input`);
-    dom && dom.dispatchEvent(new MouseEvent('click'));
-  }
-
   /**
    * @description 预览图片
-   * @param file 当前预览的图片
+   * @param file 当前预览的图片，单图模式下可不传
    */
-  function handleImagePreview(file?: any) {
+  function handleImagePreview(file?: UploadFile) {
     // 多选图片时
     if (isArray(model.value)) {
       const images = model.value.map(item => item.url || '');
       previewList.value = images;
-      previewIndex.value = images.findIndex(item => item === file.url);
+      previewIndex.value = images.findIndex(item => item === file?.url);
       previewVisible.value = true;
     }
     else {
       previewVisible.value = true;
-    }
-  }
-
-  /**
-   * @description 删除图片
-   * @param file 当前删除的图片
-   */
-  function handleImageRemove(file?: any) {
-    // 禁用状态下不允许删除
-    if (isDisabled.value)
-      return;
-
-    // 多选图片时
-    if (isArray(model.value)) {
-      model.value = model.value.filter(item => item.url !== file.url || item.name !== file.name);
-    }
-    else {
-      model.value = '';
     }
   }
 
   return {
-    id,
     isDisabled,
     isPreview,
     fileTypeTips,
@@ -327,8 +303,6 @@ export function useUpload(
     handleRemove,
     handleExceed,
     handlePreview,
-    handleImageEdit,
     handleImagePreview,
-    handleImageRemove,
   };
 }

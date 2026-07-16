@@ -10,6 +10,7 @@ const props = withDefaults(defineProps<AppUploadProps>(), {
   width: '',
   height: '',
   circle: false,
+  limit: 5,
   props: () => ({
     key: 'file',
     url: 'url',
@@ -47,7 +48,6 @@ const {
   handleExceed,
   handlePreview,
   handleImagePreview,
-  handleImageRemove,
 } = useUpload(props, model, emit);
 
 // 是否隐藏上传按钮
@@ -115,7 +115,7 @@ defineExpose(new Proxy({}, {
             <app-icon class="el-icon--upload" icon="ZoomIn" />
             <span>{{ t('common.preview') }}</span>
           </div>
-          <div v-if="!isPreview" class="el-upload-list__item-delete" @click="handleImageRemove(file)">
+          <div v-if="!isPreview" class="el-upload-list__item-delete" @click="handleRemove(file)">
             <app-icon class="el-icon--upload" icon="Delete" />
             <span>{{ t('common.delete') }}</span>
           </div>
@@ -184,7 +184,7 @@ defineExpose(new Proxy({}, {
         width: v-bind(dragWidth);
         height: v-bind(height);
         border-radius: v-bind(borderRadius);
-        background-color: #ffffff;
+        background-color: var(--el-fill-color-lighter);
         display: v-bind(isHider);
 
         &:hover {
