@@ -1,110 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="功能强大的后台管理系统，为企业高效运营保驾护航。基于 Vue3 打造，融合流行的 Element-plus 组件库，界面简洁美观、交互流畅。借助 Unocss 塑造独特样式体系，独具魅力。Vueuse 等工具提升开发效率，同时还封装了众多易用性组件，极大地简化操作流程，让管理更加便捷高效。精准掌控运营动态，助力企业迈向成功。"
+    />
+    <meta name="keywords" content="admin,meet-admin,element-plus,unocss,typescript,vue,vue3,vueuse" />
+    <title>%VITE_APP_NAME%</title>
+    <script>
+      // 在首屏渲染前设置主题模式，避免刷新时白色闪烁。
+      (function () {
+        const html = document.documentElement;
 
-<head>
-  <meta charset="UTF-8">
-  <link rel="icon" href="/favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description"
-        content="功能强大的后台管理系统，为企业高效运营保驾护航。基于 Vue3 打造，融合流行的 Element-plus 组件库，界面简洁美观、交互流畅。借助 Unocss 塑造独特样式体系，独具魅力。Vueuse 等工具提升开发效率，同时还封装了众多易用性组件，极大地简化操作流程，让管理更加便捷高效。精准掌控运营动态，助力企业迈向成功。">
-  <meta name="keywords" content="admin,meet-admin,element-plus,unocss,typescript,vue,vue3,vueuse">
-  <title>%VITE_APP_NAME%</title>
-</head>
+        // vueuse 以原始字符串持久化：'light' | 'dark' | 'auto'（缺省 auto，跟随系统）
+        const mode = localStorage.getItem('vueuse-color-scheme') || 'auto';
+        const isDark = mode === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : mode === 'dark';
 
-<body>
-<div id="app">
-  <style>
-    html, body, #app {
-      margin: 0;
-      height: 100%;
-    }
+        if (isDark) {
+          html.classList.add('dark');
+          html.classList.remove('light');
+          html.style.backgroundColor = '#141414';
+        } else {
+          html.classList.add('light');
+          html.classList.remove('dark');
+        }
+      })();
+    </script>
+  </head>
 
-    #loader {
-      height: 100px;
-      width: 100px;
-      position: relative;
-      top: calc(50% - 25px);
-      left: calc(50% - 25px);
-      perspective: 1000px;
-    }
+  <body>
+    <div id="app">
+      <style>
+        html,
+        body,
+        #app {
+          margin: 0;
+          height: 100%;
+        }
 
-    #loader .thing {
-      height: 50px;
-      width: 50px;
-      background-color: #E87722;
-      position: absolute;
-      box-sizing: border-box;
-      top: 0;
-      left: 0;
-    }
+        #loader {
+          height: 100px;
+          width: 100px;
+          position: relative;
+          top: calc(50% - 25px);
+          left: calc(50% - 25px);
+          perspective: 1000px;
+        }
 
-    #loader .thing:nth-of-type(1) {
-      animation: loader-bounce 0.5s ease-in-out infinite alternate, loader-move 4s -1s infinite;
-    }
+        #loader .thing {
+          height: 50px;
+          width: 50px;
+          background-color: #e87722;
+          position: absolute;
+          box-sizing: border-box;
+          top: 0;
+          left: 0;
+        }
 
-    #loader .thing:nth-of-type(2) {
-      animation: loader-bounce 0.5s ease-in-out infinite alternate, loader-move 4s -2s infinite;
-    }
+        #loader .thing:nth-of-type(1) {
+          animation:
+            loader-bounce 0.5s ease-in-out infinite alternate,
+            loader-move 4s -1s infinite;
+        }
 
-    #loader .thing:nth-of-type(3) {
-      animation: loader-bounce 0.5s ease-in-out infinite alternate, loader-move 4s -3s infinite;
-    }
+        #loader .thing:nth-of-type(2) {
+          animation:
+            loader-bounce 0.5s ease-in-out infinite alternate,
+            loader-move 4s -2s infinite;
+        }
 
-    #loader .thing:nth-of-type(4) {
-      animation: loader-bounce 0.5s ease-in-out infinite alternate, loader-move 4s -4s infinite;
-    }
+        #loader .thing:nth-of-type(3) {
+          animation:
+            loader-bounce 0.5s ease-in-out infinite alternate,
+            loader-move 4s -3s infinite;
+        }
 
-    @keyframes loader-bounce {
-      from {
-        transform: scale(1);
-      }
+        #loader .thing:nth-of-type(4) {
+          animation:
+            loader-bounce 0.5s ease-in-out infinite alternate,
+            loader-move 4s -4s infinite;
+        }
 
-      to {
-        transform: scale(0.8);
-      }
-    }
+        @keyframes loader-bounce {
+          from {
+            transform: scale(1);
+          }
 
-    @keyframes loader-move {
-      0% {
-        top: 0;
-        left: 0;
-        background-color: #E87722;
-      }
+          to {
+            transform: scale(0.8);
+          }
+        }
 
-      25% {
-        top: 0;
-        left: 50%;
-        background-color: #67C23A;
-      }
+        @keyframes loader-move {
+          0% {
+            top: 0;
+            left: 0;
+            background-color: #e87722;
+          }
 
-      50% {
-        top: 50%;
-        left: 50%;
-        background-color: #4A90E2;
-      }
+          25% {
+            top: 0;
+            left: 50%;
+            background-color: #67c23a;
+          }
 
-      75% {
-        top: 50%;
-        left: 0;
-        background-color: #E6A23C;
-      }
-    }
-  </style>
-  <div id="loader">
-    <div class="thing"></div>
-    <div class="thing"></div>
-    <div class="thing"></div>
-    <div class="thing"></div>
-  </div>
-</div>
-<script>
-  const globalState = JSON.parse(window.localStorage.getItem("app-store"));
-  if (globalState) {
-    const html = document.querySelector("html");
-    if (globalState.isDark) html.style.background = "#141414";
-  }
-</script>
-<script type="module" src="/src/main.ts"></script>
-</body>
+          50% {
+            top: 50%;
+            left: 50%;
+            background-color: #4a90e2;
+          }
 
+          75% {
+            top: 50%;
+            left: 0;
+            background-color: #e6a23c;
+          }
+        }
+      </style>
+      <div id="loader">
+        <div class="thing"></div>
+        <div class="thing"></div>
+        <div class="thing"></div>
+        <div class="thing"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

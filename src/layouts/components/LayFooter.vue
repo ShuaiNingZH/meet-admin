@@ -9,7 +9,7 @@ const appName = import.meta.env.VITE_APP_NAME;
 <template>
   <el-footer>
     Copyright © 2024-{{ dayjs().format('YYYY') }}
-    <el-link href="https://github.com/wjp980108/meet-admin" target="_blank" :underline="false">
+    <el-link href="https://github.com/wjp980108/meet-admin" target="_blank" underline="never">
       &nbsp;{{ appName }}
     </el-link>
   </el-footer>

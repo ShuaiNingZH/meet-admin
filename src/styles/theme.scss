@@ -1,0 +1,27 @@
+// 主题色变体：由基色 (--el-color-{type}) 通过 color-mix 自动派生，规则与 Element Plus 一致。
+// JS 运行时只需写入 5 个基色行内变量，其余 light-1~9 / dark-2 全部交给 CSS 计算。
+//
+// light-N：主色逐级"融入当前模式的背景色"，故混向 var(--el-bg-color)
+//          —— 亮色下它是 #fff、暗色下是 #141414，由 EP 自身定义，EP 改背景色我们自动跟随，不写死。
+// dark-2 ：亮色下加深(混黑 #000)、暗色下提亮(混白 #fff)，#000/#fff 为不变常量。
+// 经 EP theme-chalk index.css / dark/css-vars.css 反推校验，与 EP 预编译值逐字节一致。
+
+$theme-types: primary, success, warning, danger, info;
+
+@mixin gen-color-variants($dark2-mix) {
+  @each $type in $theme-types {
+    @for $i from 1 through 9 {
+      $pct: (10 - $i) * 10%;
+      --el-color-#{$type}-light-#{$i}: #{'color-mix(in srgb, var(--el-color-#{$type}) #{$pct}, var(--el-bg-color))'};
+    }
+    --el-color-#{$type}-dark-2: #{'color-mix(in srgb, var(--el-color-#{$type}) 80%, #{$dark2-mix})'};
+  }
+}
+
+html.light {
+  @include gen-color-variants('#000');
+}
+
+html.dark {
+  @include gen-color-variants('#fff');
+}

@@ -13,21 +13,12 @@ export default defineConfig(({ mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
     },
+    base: './',
     server: {
-      host: '0.0.0.0',
-      proxy: {
-        '/api': {
-          target: env.VITE_BASE_URL,
-          changeOrigin: true,
-        },
-      },
+      host: true,
     },
-    css: {
-      preprocessorOptions: {
-        scss: {
-          api: 'modern-compiler',
-        },
-      },
+    define: {
+      __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
     },
   };
 });

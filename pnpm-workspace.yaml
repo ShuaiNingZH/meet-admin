@@ -1,0 +1,12 @@
+shellEmulator: true
+
+trustPolicy: no-downgrade
+
+allowBuilds:
+  '@parcel/watcher': true
+  es5-ext: true
+  esbuild: true
+
+trustPolicyExclude:
+  - tinyexec@1.2.2
+  - semver@6.3.1

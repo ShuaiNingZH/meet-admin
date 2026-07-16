@@ -1,0 +1,24 @@
+# Editor configuration, see http://editorconfig.org
+
+# 针对所有文件类型的通用配置
+[*]
+# 设置文件编码为 UTF-8
+charset = utf-8
+
+# 设置缩进的空格数为 2 个
+indent_size = 2
+
+# 设置缩进样式为空格（而非制表符）
+indent_style = space
+
+# 在文件末尾自动插入一个新行
+insert_final_newline = true
+
+# 自动去除行尾的多余空白字符
+trim_trailing_whitespace = true
+
+# 设置行尾换行符为 LF（Unix 风格的换行符）
+end_of_line = lf
+
+# 设置最大行长度为 100 字符，超过此长度的行应当进行换行
+max_line_length = 100

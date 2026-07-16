@@ -3,16 +3,17 @@ common:
   hide: Hide
   reset: Reset
   loading: Loading...
-  refresh: Refresh
   selectAll: Select all
   list: List
   query: Query
   expand: Expand
+  packUp: Pack up
   merge: Merge
   cancel: Cancel
   save: Save
   sure: Sure
   kindTips: Kind tips
+  operating: Operating
   operationFailed: Operation failed
   saveLoading: Saving please wait...
   deleteLoading: Deleting please wait....
@@ -21,6 +22,9 @@ common:
   confirm: Confirm
   switch: Switch
   close: Close
+  edit: Edit
+  delete: Delete
+  preview: Preview
 page:
   login:
     title: Login
@@ -39,6 +43,21 @@ page:
     content: The webmaster said that you can not enter this page...
     info: Please check that the URL you entered is correct, or click the button below to return to the homepage.
     button: Back to home
+    goBack: Go back
+  403:
+    title: Access Denied
+    subtitle: All rights reserved
+    content: Sorry, you don't have permission to access this page...
+    info: Please contact your administrator for access, or click the button below to return to the homepage.
+    button: Back to home
+    goBack: Go back
+  500:
+    title: Server Error
+    subtitle: All rights reserved
+    content: Something went wrong on our end, please try again later...
+    info: If the problem persists, please contact technical support.
+    button: Back to home
+    goBack: Go back
 status:
   success: Success
 router:
@@ -53,33 +72,57 @@ components:
     common: Common
   popup:
     title: Popup
+    fullscreen: Switch to fullscreen mode
+    exitFullscreen: Exit fullscreen mode
+  drawer:
+    title: Drawer
   table:
-    columnSettings: Column settings
     pinToLeft: Pin to left
     pinToRight: Pin to right
+    unpin: Unpin
+    more: More
   treeFilter:
     placeholder: Please enter keywords to filter
     expand: Expand all
     packUp: Collapse all
   searchMenu:
     placeholder: Search menu
-    noData: No data yet
+    noResult: No matching menu found
+    noHistory: No search history yet
     result: Search results
+    history: Recent searches
+    clearHistory: Clear
     ctrl-k: Toggle search panel
+  upload:
+    closeTip: Press delete to remove
+    clickToUpload: click to upload
+    fileTypeInvalid: '[{name}] file format does not meet the requirements!'
+    fileSizeExceed: '[{name}] file size cannot exceed {size}MB!'
+    uploadSuccess: '[{name}] file uploaded successfully!'
+    uploadFailed: '[{name}] file upload failed, please upload it again!'
+    exceedLimit: 'You can upload up to {limit} files, please remove some before uploading!'
+    uploading: 'File is uploading, please try again later!'
+    filesTip:
+      size: Multiple files can be uploaded at the same time，and the size of each file does not exceed
+      type: supported file types：
+      format: any format
+      dragAndDropUpload: 'Drag and drop files here or '
+      clickToUpload: Click to upload
+    imageTip:
+      support: Support upload
+      format: format image
+      size: image size should not exceed
+      dragAndDropUpload: 'Drag and drop image here or '
+      clickToUpload: Please upload image
 hooks:
   confirm:
     whether: Whether
+    cancelled: Cancelled
   table:
     index: Index
     selection: Selection
     expand: Expand
-  theme:
-    reset: " has been reset to"
-tooltip:
-  refreshPage: Refresh Page
-  menuQuery: Menu Query
-  switchLocale: Switch Locale
-  toggleFullScreen: Toggle Full Screen
+    total: Total
 theme:
   light: Light Theme
   dark: Dark Theme
@@ -90,6 +133,7 @@ theme:
     warning: Warning color
     danger: Danger color
     info: Information color
+  reset: ' has been reset to'
 systemSettings:
   title: System settings
   layout:
@@ -126,7 +170,9 @@ systemSettings:
   watermark: Watermark
   isReset: Whether to reset system settings?
   footer: Footer
-  buttonTip: Button tip
+  download: Download config
+  downloadTip: Download the current settings, then replace src/config/defaultSettings.json to make them the system defaults
+  downloadSuccess: Config downloaded. Replace src/config/defaultSettings.json to apply it as the defaults
 tab:
   reload: Refresh
   close: Close

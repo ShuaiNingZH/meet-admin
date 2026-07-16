@@ -1,117 +1,258 @@
 <script setup lang="ts">
-import { $t } from '@/utils';
+import dayjs from 'dayjs';
 
 defineOptions({ name: '404' });
 
+const { t } = useI18n();
 const router = useRouter();
+const appName = import.meta.env.VITE_APP_NAME;
 
 // 跳转首页, 并清空历史记录
 function backToHome() {
   router.replace('/');
 }
+
+// 返回上一页, 无历史记录时兜底回首页
+function goBack() {
+  if (window.history.length > 1)
+    router.back();
+  else
+    router.replace('/');
+}
 </script>
 
 <template>
-  <div class="main-content">
-    <img alt="404" class="pic-404" src="@/assets/images/404-Error-amico.svg">
-    <div class="bullshit">
-      <div class="bullshit__oops">
-        {{ $t('page.404.title') }}
+  <div class="error-page">
+    <!-- 背景装饰图案 -->
+    <div class="background-pattern">
+      <div class="pattern-circle circle-1" />
+      <div class="pattern-circle circle-2" />
+      <div class="pattern-square square-1" />
+    </div>
+
+    <div class="error-content">
+      <!-- 404 数字插画 -->
+      <div class="digits">
+        <span class="digit">4</span>
+        <div class="digit-icon">
+          <app-icon icon="tabler:zoom-question" />
+        </div>
+        <span class="digit">4</span>
+
+        <app-icon class="float-icon icon-compass" icon="tabler:compass" />
+        <app-icon class="float-icon icon-alert" icon="tabler:alert-triangle" />
+        <app-icon class="float-icon icon-sad" icon="tabler:mood-sad-2" />
       </div>
-      <div class="bullshit__info">
-        {{ $t('page.404.subtitle') }}
-        <a style="color: #20a0ff" href="https://blog.wjp.plus" target="_blank">Meet you</a>
+
+      <h1 class="title">
+        {{ t('page.404.title') }}
+      </h1>
+      <p class="description">
+        {{ t('page.404.content') }}
+      </p>
+      <p class="hint">
+        {{ t('page.404.info') }}
+      </p>
+
+      <div class="actions">
+        <el-button type="primary" round size="large" @click="backToHome">
+          <app-icon icon="tabler:home" />
+          {{ t('page.404.button') }}
+        </el-button>
+        <el-button round size="large" @click="goBack">
+          <app-icon icon="tabler:arrow-left" />
+          {{ t('page.404.goBack') }}
+        </el-button>
       </div>
-      <div class="bullshit__headline">
-        {{ $t('page.404.content') }}
+
+      <div class="footer">
+        {{ t('page.404.subtitle') }} © {{ dayjs().year() }}
+        <el-link type="primary" href="https://blog.wjp.plus" target="_blank" underline="never">
+          {{ appName }}
+        </el-link>
       </div>
-      <div class="bullshit__info">
-        {{ $t('page.404.info') }}
-      </div>
-      <el-button type="primary" round @click="backToHome">
-        {{ $t('page.404.button') }}
-      </el-button>
     </div>
   </div>
 </template>
 
 <style scoped lang="scss">
-.main-content {
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
+.error-page {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  width: 100%;
+  display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
+  overflow: hidden;
 
-  .pic-404 {
-    max-width: 500px;
-    width: 60%;
-    min-width: 255px;
-    opacity: 0;
-    animation-name: slideUpImage;
-    animation-duration: 0.8s;
-    animation-fill-mode: forwards;
+  // 背景装饰图案
+  .background-pattern {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    .pattern-circle {
+      position: absolute;
+      border: 1px solid var(--el-color-primary-light-5);
+      border-radius: 50%;
+      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+      &.circle-1 {
+        left: 10%;
+        top: 15%;
+        height: 96px;
+        width: 96px;
+      }
+
+      &.circle-2 {
+        right: 12%;
+        bottom: 18%;
+        height: 64px;
+        width: 64px;
+        animation-delay: 1000ms;
+      }
+    }
+
+    .pattern-square {
+      position: absolute;
+      border: 1px solid var(--el-color-primary-light-5);
+      border-radius: 8px;
+      animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+      &.square-1 {
+        right: 18%;
+        top: 22%;
+        height: 40px;
+        width: 40px;
+        transform: rotate(20deg);
+        animation-delay: 600ms;
+      }
+    }
   }
 
-  .bullshit {
-    width: 300px;
+  .error-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 480px;
+    padding: var(--spacing-xl);
 
-    &__oops {
-      font-size: 32px;
-      font-weight: bold;
-      line-height: 40px;
-      color: var(--el-color-primary);
-      opacity: 0;
-      margin-bottom: 20px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-fill-mode: forwards;
+    .digits {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-lg);
+
+      .digit {
+        font-size: 96px;
+        font-weight: 700;
+        line-height: 1;
+        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-5));
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .digit-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 88px;
+        width: 88px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--el-color-primary), var(--el-color-primary-light-5));
+        animation: float 3s ease-in-out infinite;
+
+        :deep(.app-icon) {
+          font-size: 48px;
+          color: #fff;
+        }
+      }
+
+      .float-icon {
+        position: absolute;
+        color: var(--el-color-primary-light-3);
+        animation: float 3s ease-in-out infinite;
+
+        &.icon-compass {
+          left: -32px;
+          top: -8px;
+          font-size: 28px;
+          animation-delay: 300ms;
+        }
+
+        &.icon-alert {
+          right: -28px;
+          top: 4px;
+          font-size: 22px;
+          color: var(--el-color-warning);
+          animation-delay: 900ms;
+        }
+
+        &.icon-sad {
+          right: 8px;
+          bottom: -28px;
+          font-size: 24px;
+          animation-delay: 1500ms;
+        }
+      }
     }
 
-    &__headline {
-      font-size: 20px;
-      line-height: 24px;
-      font-weight: bold;
-      opacity: 0;
-      margin-bottom: 10px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.1s;
-      animation-fill-mode: forwards;
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 var(--spacing-md);
+      color: var(--el-text-color-primary);
     }
 
-    &__info {
+    .description {
+      font-size: 15px;
+      margin: 0 0 var(--spacing-xs);
+      color: var(--el-text-color-regular);
+    }
+
+    .hint {
+      font-size: 14px;
+      margin: 0 0 var(--spacing-xl);
+      color: var(--el-text-color-secondary);
+    }
+
+    .actions {
+      display: flex;
+      gap: var(--spacing-base);
+    }
+
+    .footer {
+      margin-top: var(--spacing-xxl);
       font-size: 13px;
-      line-height: 21px;
-      color: grey;
-      opacity: 0;
-      margin-bottom: 30px;
-      animation-name: slideUp;
-      animation-duration: 0.5s;
-      animation-delay: 0.2s;
-      animation-fill-mode: forwards;
-    }
-
-    @keyframes slideUp {
-      0% {
-        transform: translateY(60px);
-        opacity: 0;
-      }
-      100% {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      color: var(--el-text-color-secondary);
     }
   }
 
-  @keyframes slideUpImage {
-    0% {
-      transform: translateY(30px);  // 从下往上
-      opacity: 0;
-    }
+  @keyframes float {
+    0%,
     100% {
-      transform: translateY(0);  // 正常位置
-      opacity: 1;
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      opacity: 0.6;
+    }
+
+    50% {
+      opacity: 0.2;
     }
   }
 }

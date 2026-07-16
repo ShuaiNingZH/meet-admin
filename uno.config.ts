@@ -1,5 +1,5 @@
 import presetRemToPx from '@unocss/preset-rem-to-px';
-import { defineConfig, presetAttributify, presetUno, transformerVariantGroup } from 'unocss';
+import { defineConfig, presetAttributify, presetWind3, transformerVariantGroup } from 'unocss';
 // https://github.com/unocss/unocss
 const defaultColor = 'var(--el-border-color)';
 const directionMap: AnyObj = {
@@ -9,7 +9,7 @@ const directionMap: AnyObj = {
   l: 'border-left',
 };
 export default defineConfig({
-  presets: [presetUno({ dark: 'class' }), presetAttributify(), presetRemToPx({
+  presets: [presetWind3({ dark: 'class' }), presetAttributify(), presetRemToPx({
     baseFontSize: 4,
   })],
   shortcuts: {
@@ -17,9 +17,8 @@ export default defineConfig({
     'flex-center': 'flex justify-center items-center',
     'flex-x-center': 'flex justify-center',
     'flex-y-center': 'flex items-center',
-    'flex-box': 'flex flex-1 w-full',
     // 快捷按键的样式
-    'commands': 'h-22 w-22 m-r-5 flex-center b-rd-2 bg-[rgba(125,125,125,0.1)] text-10 color-#909399 shadow-commands',
+    'commands': 'h-22 w-22 m-r-8 flex-center b-rd-2 bg-[rgba(125,125,125,0.1)] text-10 color-#909399 shadow-commands',
   },
   rules: [
     ['shadow-commands', {
@@ -31,7 +30,7 @@ export default defineConfig({
       color = !color ? defaultColor : color.replace(/\[(.+)\]/, '$1');
       direction = !direction ? 'border' : directionMap[direction];
       return {
-        [direction]: `${width}px ${style} ${color}`,
+        [`${direction}`]: `${width}px ${style} ${color}`,
       };
     }],
     // 动态规则，匹配 'wrapper-{padding}'

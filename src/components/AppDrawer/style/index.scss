@@ -1,0 +1,37 @@
+.el-drawer.app-drawer {
+  --el-drawer-padding-primary: 0px;
+
+  .el-drawer__header {
+    margin-bottom: 0;
+    padding: var(--spacing-base);
+    border-bottom: 1px solid var(--el-border-color);
+    color: var(--el-text-color-primary);
+  }
+
+  .el-drawer__body {
+    .el-scrollbar {
+      .drawer-scrollbar-view {
+        padding: var(--spacing-base);
+      }
+    }
+  }
+
+  .el-drawer__footer {
+    padding: var(--spacing-base);
+    border-top: 1px solid var(--el-border-color);
+
+    .app-drawer__footer {
+      display: flex;
+      align-items: center;
+
+      .button-reverse {
+        order: 1;
+        margin-left: var(--spacing-md);
+
+        & + .el-button {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}

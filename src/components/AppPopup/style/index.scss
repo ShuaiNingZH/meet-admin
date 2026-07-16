@@ -1,0 +1,50 @@
+.el-dialog.app-popup {
+  padding: 0;
+
+  .el-dialog__header {
+    display: flex;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--el-border-color);
+
+    .el-dialog__headerbtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 24px;
+      height: 24px;
+      position: unset;
+
+      & + .el-dialog__headerbtn {
+        right: var(--spacing-md);
+      }
+    }
+  }
+
+  .el-dialog__body {
+    .el-scrollbar {
+      .dialog-scrollbar-view {
+        padding: var(--spacing-lg);
+      }
+    }
+  }
+
+  .el-dialog__footer {
+    padding: var(--spacing-md);
+    box-shadow: var(--el-box-shadow);
+
+    .app-popup__footer {
+      display: flex;
+      align-items: center;
+
+      .button-reverse {
+        order: 1;
+        margin-left: var(--spacing-md);
+
+        & + .el-button {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}

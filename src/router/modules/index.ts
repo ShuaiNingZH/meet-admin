@@ -1,0 +1,32 @@
+import type { RouteRecordRaw } from 'vue-router';
+import { LAYOUT_NAME } from '@/constants/router.ts';
+
+const homePage = import.meta.env.VITE_HOME_PATH;
+
+export default {
+  path: '/',
+  name: LAYOUT_NAME,
+  redirect: homePage,
+  component: () => import('@/layouts/index.vue'),
+  children: [
+    {
+      path: homePage,
+      name: 'Home',
+      component: () => import('@/views/home/index.vue'),
+      meta: {
+        title: '首页',
+        icon: 'icon-park-outline:home',
+      },
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: () => import('@/views/about/index.vue'),
+      meta: {
+        title: '关于',
+        icon: 'icon-park-outline:info',
+        sort: 90,
+      },
+    },
+  ],
+} satisfies RouteRecordRaw;

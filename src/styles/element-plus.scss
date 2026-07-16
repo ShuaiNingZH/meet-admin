@@ -1,0 +1,93 @@
+.el-container {
+  height: 100%;
+
+  .el-header {
+    --el-header-padding: 0;
+    --el-header-height: auto;
+  }
+
+  .el-scrollbar {
+    .el-scrollbar__bar {
+      z-index: 999;
+    }
+  }
+}
+
+.el-table {
+  .el-table__header-wrapper {
+    thead {
+      th.el-table__cell {
+        background-color: var(--el-fill-color-light);
+        color: var(--el-text-color-primary);
+      }
+    }
+  }
+
+  .el-table__body {
+    .el-table__row {
+      .el-table__cell {
+        // 处理表格单元格内的表单元素
+        &:has(.el-form-item) {
+          .el-form-item {
+            margin: var(--spacing-base) 0;
+          }
+        }
+
+        // 处理伪单元格合并
+        &:has(.row-span) {
+          padding: 0;
+        }
+
+        .cell {
+          &:has(.row-span) {
+            padding: 0;
+          }
+
+          .row-span {
+            &-item {
+              padding: var(--spacing-md);
+
+              & + .row-span-item {
+                border-top: var(--el-table-border);
+              }
+            }
+          }
+
+          .el-button {
+            & + .el-button {
+              margin-left: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.el-text {
+  --el-text-color: unset;
+
+  &.is-truncated {
+    vertical-align: middle;
+  }
+}
+
+.el-form,
+.el-form--inline {
+  .el-date-editor,
+  .app-upload,
+  .el-input-number,
+  .el-tree {
+    width: 100% !important;
+  }
+
+  .el-form-item {
+    &__label {
+      align-items: center;
+    }
+  }
+}
+
+.el-image {
+  vertical-align: top;
+}

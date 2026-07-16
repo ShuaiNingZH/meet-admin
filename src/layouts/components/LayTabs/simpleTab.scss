@@ -14,17 +14,17 @@
           .el-tabs__nav {
             .el-tabs__item {
               .is-icon-close {
-                margin-right: 5px;
+                margin-right: var(--spacing-sm);
               }
 
               &:hover {
                 .is-icon-close {
-                  margin-right: 10px;
+                  margin-right: var(--spacing-md);
                 }
               }
 
               .tabs-item {
-                padding-left: 10px;
+                padding-left: var(--spacing-md);
               }
 
               &.is-active {

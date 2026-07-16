@@ -1,6 +1,5 @@
 .idea
 .vscode
+.claude
 node_modules
 dist
-
-src/typings/components.d.ts

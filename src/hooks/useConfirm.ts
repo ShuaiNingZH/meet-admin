@@ -1,35 +1,56 @@
-import { $t } from '@/utils';
-import { ElMessage, ElMessageBox } from 'element-plus';
+import type { VNode } from 'vue';
+import { $t } from '@/utils/i18n';
 
 type MessageType = '' | 'success' | 'warning' | 'info' | 'error';
 
 /**
- * 操作单条数据信息 (二次确认【删除、禁用、启用、重置密码】)
+ * 二次确认对话框，确认后调用接口。成功 resolve，失败 reject，取消静默 resolve。
  *
- * @param  api 操作数据接口的api方法 (必传)
- * @param  params 携带的操作数据参数 {id,params} (必传)
- * @param  message 提示信息 (必传)
- * @param  confirmType icon类型 (不必传,默认为 warning)
- * @returns Promise
+ * message 为字符串时自动添加"是否"前缀；也可传入 VNode 或返回 VNode 的函数。
+ *
+ * @example
+ * useConfirm(deleteApi, { id: 123 }, '删除该条记录').then(() => refresh())
+ *
+ * @example
+ * useConfirm(deleteApi, { id: 456 }, h('p', {}, '确认删除？'))
  */
-export function useConfirm(api: (params: any) => Promise<any>, params: any = {}, message: string, confirmType: MessageType = 'warning') {
-  return new Promise((resolve, reject) => {
-    ElMessageBox.confirm(`${$t('hooks.confirm.whether')}${message}？`, $t('common.kindTips'), {
+export async function useConfirm<T extends ApiFunc>(
+  api: T,
+  params: ApiParams<T>,
+  message: string | VNode | (() => VNode),
+  confirmType: MessageType = 'warning',
+): Promise<void> {
+  let boxContent: string | VNode | (() => VNode);
+  let tipsForSuccess = $t('common.operating');
+
+  if (typeof message === 'string') {
+    boxContent = `${$t('hooks.confirm.whether')}${message}？`;
+    tipsForSuccess = message;
+  }
+  else {
+    boxContent = message;
+  }
+
+  try {
+    await ElMessageBox.confirm(boxContent, $t('common.kindTips'), {
       confirmButtonText: $t('common.sure'),
       cancelButtonText: $t('common.cancel'),
       type: confirmType,
       draggable: true,
-    })
-      .then(async () => {
-        const res = await api(params);
-        if (!res)
-          return reject(new Error($t('common.operationFailed')));
+    });
+  }
+  catch {
+    // 用户主动取消，静默 resolve，不产生控制台错误
+    ElMessage({ type: 'info', message: $t('hooks.confirm.cancelled') });
+    return;
+  }
 
-        ElMessage({
-          type: 'success',
-          message: `${message}${$t('status.success')}!`,
-        });
-        resolve(true);
-      });
+  const res = await api(params);
+  if (res?.code !== 200)
+    throw new Error(res?.message ?? $t('common.operationFailed'));
+
+  ElMessage({
+    type: 'success',
+    message: `${tipsForSuccess} ${$t('status.success')}!`,
   });
 }

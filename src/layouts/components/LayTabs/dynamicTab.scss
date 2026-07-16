@@ -3,7 +3,7 @@
     :deep(.el-tabs) {
       .el-tabs__header {
         &:not(:has(.is-scrollable)) {
-          padding: 0 5px;
+          padding: 0 var(--spacing-sm);
         }
 
         .el-tabs__nav-wrap {
@@ -12,7 +12,7 @@
 
           &.is-scrollable {
             width: 100%;
-            padding: 0 25px;
+            padding: 0 var(--spacing-lg);
           }
 
           .el-tabs__nav {
@@ -26,12 +26,12 @@
                 left: 0;
                 width: 0;
                 border-bottom: 2px solid var(--el-color-primary);
-                transition: width .2s ease;
+                transition: width 0.2s ease;
               }
 
               &:hover {
                 .is-icon-close {
-                  margin-right: 5px;
+                  margin-right: var(--spacing-sm);
                 }
 
                 &::before {
@@ -40,12 +40,12 @@
               }
 
               .tabs-item {
-                padding-left: 5px;
+                padding-left: var(--spacing-sm);
               }
 
               &.is-active {
                 .tabs-item {
-                  padding-left: 10px;
+                  padding-left: var(--spacing-md);
                 }
 
                 &::before {
@@ -61,21 +61,21 @@
 
   @keyframes schedule-in-width {
     0% {
-      width: 0
+      width: 0;
     }
 
     to {
-      width: 100%
+      width: 100%;
     }
   }
 
   @keyframes schedule-out-width {
     0% {
-      width: 100%
+      width: 100%;
     }
 
     to {
-      width: 0
+      width: 0;
     }
   }
 }

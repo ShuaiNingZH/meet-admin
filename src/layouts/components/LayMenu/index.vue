@@ -1,32 +1,40 @@
 <script setup lang="ts">
-import logo from '@/assets/images/logo.svg';
+import logo from '@/assets/images/logo.png';
 import SubMenu from '@/layouts/components/LayMenu/components/SubMenu.vue';
-import { useAppStore, useRouteStore } from '@/stores';
+import { useAppStore } from '@/stores/app';
+import { useRouteStore } from '@/stores/route';
 
 defineOptions({ name: 'LayMenu' });
 
-const routeStore = useRouteStore();
-const { activeMenu, menus } = storeToRefs(routeStore);
-
+const route = useRoute();
 const router = useRouter();
 
 const appStore = useAppStore();
 const { collapse } = storeToRefs(appStore);
 
 const name = import.meta.env.VITE_APP_NAME;
+const homePage = import.meta.env.VITE_HOME_PATH;
+
+const routeStore = useRouteStore();
+const { menus } = storeToRefs(routeStore);
+
+// 默认选中的菜单
+const defaultActive = computed<string>(() =>
+  route.meta?.activeMenu ? (route.meta.activeMenu) : route.path,
+);
 </script>
 
 <template>
   <el-aside :width="collapse ? '65px' : '210px'">
-    <div class="logo flex-center cursor-pointer" @click="router.push('/')">
-      <el-image class="w-28" :src="logo" alt="Logo" />
+    <div class="logo flex-center cursor-pointer" @click="router.push(homePage)">
+      <el-image class="w-50" :src="logo" alt="Logo" />
       <span v-show="!collapse" class="logo-text">{{ name }}</span>
     </div>
     <el-scrollbar>
       <el-menu
         class="!b-r-0"
         :collapse
-        :default-active="activeMenu"
+        :default-active="defaultActive"
         :collapse-transition="false"
         unique-opened
       >
@@ -48,13 +56,13 @@ const name = import.meta.env.VITE_APP_NAME;
   color: var(--el-menu-text-color);
   background-color: var(--el-menu-bg-color);
   border-right: 1px solid var(--el-border-color);
-  transition: width .3s ease;
+  transition: width 0.3s ease;
 
   .logo {
     height: 55px;
 
     .logo-text {
-      margin-left: 6px;
+      margin-left: var(--spacing-sm);
       font-size: 22px;
       font-weight: bold;
       white-space: nowrap;
@@ -66,6 +74,12 @@ const name = import.meta.env.VITE_APP_NAME;
 
     .el-menu {
       width: 100%;
+      --el-menu-item-height: 50px;
+      --el-menu-item-font-size: var(--el-font-size-medium);
+
+      :deep(.el-text) {
+        --el-text-font-size: var(--el-font-size-medium);
+      }
     }
   }
 
@@ -78,7 +92,8 @@ const name = import.meta.env.VITE_APP_NAME;
     right: -28px;
 
     &:hover {
-      .aside-toggle-bar-top,.aside-toggle-bar-bottom  {
+      .aside-toggle-bar-top,
+      .aside-toggle-bar-bottom {
         background-color: var(--app-toggle-bar-color-hover);
       }
 
@@ -90,13 +105,16 @@ const name = import.meta.env.VITE_APP_NAME;
       }
     }
 
-    &-top,&-bottom {
+    &-top,
+    &-bottom {
       position: absolute;
       width: 4px;
       border-radius: 2px;
       height: 38px;
       left: 14px;
-      transition: background-color .3s var(--app-bezier), transform .3s var(--app-bezier);
+      transition:
+        background-color 0.3s var(--app-bezier),
+        transform 0.3s var(--app-bezier);
       background-color: var(--app-toggle-bar-color);
     }
 

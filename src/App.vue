@@ -1,43 +1,19 @@
 <script setup lang="ts">
-import initVersionRocket from '@/config/versionRocket';
-import { Constant, elLocale } from '@/constants';
-import { useEventBus, useTheme } from '@/hooks';
-import { useAppStore, useRouteStore, useTabStore } from '@/stores';
-import { $t, setDocumentTitle } from '@/utils';
+import { elLocale } from '@/constants/locale';
+import { useAppStore } from '@/stores/app';
 
 const appStore = useAppStore();
 
+// 配置 Element Plus 国际化
 const locale = computed(() => {
   return elLocale[appStore.locale];
 });
-
-const { initTheme } = useTheme();
-onMounted(initTheme);
-
-const tabStore = useTabStore();
-const routeStore = useRouteStore();
-const router = useRouter();
-const route = useRoute();
-
-// 监听语言变化
-const { on } = useEventBus();
-on(Constant.LOCALE_EVENT, async () => {
-  if (route.path === '/login') {
-    setDocumentTitle($t('page.login.title'));
-  }
-  else {
-    await routeStore.initAuthRoute();
-    await router.replace(route.fullPath);
-    tabStore.tabLocale();
-  }
-});
-
-// 初始化版本检测
-initVersionRocket();
 </script>
 
 <template>
-  <el-config-provider :locale :size="appStore.size" :message="{ max: 1 }">
+  <el-config-provider :locale :size="appStore.size">
     <router-view />
+    <!-- 函数式弹窗宿主 -->
+    <app-popup-host />
   </el-config-provider>
 </template>
