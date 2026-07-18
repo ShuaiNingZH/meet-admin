@@ -47,6 +47,8 @@ function menuToRoutes(menus: Menu.Tree[]) {
         hideInMenu: menu.hideInMenu,
         hideInTag: menu.hideInTag,
         hideParent: menu.hideParent,
+        link: menu.link,
+        iframe: menu.iframe,
       },
     } as RouteRecordRaw;
 
@@ -54,9 +56,16 @@ function menuToRoutes(menus: Menu.Tree[]) {
     if (menu.type === 0)
       route.redirect = menu.children[0]?.path;
 
-    // 如果是菜单，解析页面组件
-    if (menu.type === 1)
-      route.component = resolveComponent(menu.componentPath);
+    /**
+     * 如果是菜单，解析页面组件
+     * 外链菜单（link 且非 iframe）由路由守卫拦截后新窗口打开，无需组件
+     */
+    if (menu.type === 1) {
+      if (menu.link && menu.iframe)
+        route.component = () => import('@/views/iframe/index.vue');
+      else if (!menu.link)
+        route.component = resolveComponent(menu.componentPath);
+    }
 
     // 如果有子级，转换子级数据
     if (menu.children.length)

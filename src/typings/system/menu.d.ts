@@ -11,6 +11,8 @@ declare namespace Menu {
     type: 0 | 1 | 2;
     perm: string;
     activeMenu: string;
+    link: string;
+    iframe: boolean;
     keepAlive: boolean;
     hideInMenu: boolean;
     hideInTag: boolean;

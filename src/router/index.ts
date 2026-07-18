@@ -30,6 +30,12 @@ export async function installRouter(app: App) {
   router.beforeEach(async (to) => {
     const userStore = useUserStore();
 
+    // 外链菜单：新窗口打开并取消本次导航
+    if (to.meta.link && !to.meta.iframe) {
+      window.open(to.meta.link, '_blank');
+      return false;
+    }
+
     NProgress.start();
 
     // 未登录，处理非登录页面重定向

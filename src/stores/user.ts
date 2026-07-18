@@ -1,4 +1,5 @@
 import { useReset } from '@/hooks/useReset';
+import { useIframeStore } from './iframe';
 import { useRouteStore } from './route';
 import { useTabStore } from './tab';
 
@@ -13,11 +14,13 @@ export const useUserStore = defineStore('user-store', () => {
   const handleLogout = () => {
     const tabStore = useTabStore();
     const routeStore = useRouteStore();
+    const iframeStore = useIframeStore();
 
     reset();
     accessToken.value = '';
     tabStore.handleReset();
     routeStore.handleReset();
+    iframeStore.handleReset();
   };
 
   return {

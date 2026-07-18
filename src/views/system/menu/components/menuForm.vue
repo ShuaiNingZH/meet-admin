@@ -91,7 +91,10 @@ async function handleConfirm() {
         </app-form-item>
       </template>
       <template v-if="state.type === 1">
-        <app-form-item label="组件路径" prop="componentPath" :span="2" help-info="例：system/menu/index">
+        <app-form-item label="外部链接" prop="link" :span="2" help-info="例：https://element-plus.org">
+          <el-input v-model="state.link" placeholder="非外部页面时留空" />
+        </app-form-item>
+        <app-form-item v-if="!state.link" label="组件路径" prop="componentPath" :span="2" help-info="例：system/menu/index">
           <el-input v-model="state.componentPath" placeholder="请输入组件路径" />
         </app-form-item>
         <app-form-item label="高亮菜单" prop="activeMenu" :span="2">
@@ -109,6 +112,12 @@ async function handleConfirm() {
           <el-radio label="启用" :value="true" />
           <el-radio label="禁用" :value="false" />
         </el-radio-group>
+      </app-form-item>
+      <app-form-item
+        v-if="state.type === 1 && state.link" label="内嵌显示" prop="iframe"
+        help-info="开启后以 iframe 内嵌在系统内展示，关闭则新窗口打开"
+      >
+        <el-switch v-model="state.iframe" />
       </app-form-item>
       <app-form-item v-if="state.type === 1" label="页面缓存" prop="keepAlive">
         <el-switch v-model="state.keepAlive" />

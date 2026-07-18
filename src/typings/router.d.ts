@@ -21,5 +21,9 @@ declare module 'vue-router' {
     hideParent?: boolean;
     // 菜单排序，值越高排的越后
     sort?: number;
+    // 外部链接地址（配合 iframe 使用：iframe 为 true 时在布局内嵌入展示，否则点击菜单新窗口打开）
+    link?: string;
+    // 是否以 iframe 形式内嵌 link 指向的页面（默认为 false）
+    iframe?: boolean;
   }
 }

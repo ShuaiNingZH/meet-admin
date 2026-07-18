@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 import LayFooter from '@/layouts/components/LayFooter.vue';
 import LayHeader from '@/layouts/components/LayHeader/index.vue';
+import LayIframe from '@/layouts/components/LayIframe.vue';
 import LayMenu from '@/layouts/components/LayMenu/index.vue';
 import LayTabs from '@/layouts/components/LayTabs/index.vue';
 import { initRouter } from '@/router/utils.ts';
@@ -57,7 +58,7 @@ const watermarkFont = computed(() => ({
           <LayHeader />
           <LayTabs />
         </el-header>
-        <el-main class="bg-[var(--el-bg-color-page)]" style="--el-main-padding: 0">
+        <el-main class="relative bg-[var(--el-bg-color-page)]" style="--el-main-padding: 0">
           <el-scrollbar class="main-scrollbar" view-class="main-scrollbar-view">
             <router-view v-slot="{ Component, route }">
               <transition :name="transitionAnimation" mode="out-in" appear>
@@ -67,6 +68,7 @@ const watermarkFont = computed(() => ({
               </transition>
             </router-view>
           </el-scrollbar>
+          <LayIframe />
         </el-main>
         <LayFooter v-if="footer" />
         <el-tooltip :content="t('common.backToTop')" placement="top">

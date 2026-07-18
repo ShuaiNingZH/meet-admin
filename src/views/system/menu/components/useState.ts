@@ -14,6 +14,8 @@ export const useState = createSharedComposable(() => {
     type: 0,
     perm: '',
     activeMenu: '',
+    link: '',
+    iframe: false,
     keepAlive: false,
     hideInMenu: false,
     hideInTag: false,
