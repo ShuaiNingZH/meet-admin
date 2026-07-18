@@ -16,8 +16,8 @@ export default {
       component: () => import('@/views/iframe/index.vue'),
       meta: {
         title: 'Element Plus 文档',
-        icon: 'icon-park-outline:browser',
-        link: 'https://element-plus.org/zh-CN/',
+        icon: 'logos:element',
+        link: 'https://element-plus.org/zh-CN',
         iframe: true,
         keepAlive: true,
       },
@@ -25,12 +25,67 @@ export default {
     {
       path: 'github',
       name: 'LinkGithub',
-      // 外链由路由守卫拦截后新窗口打开，组件不会真正渲染，仅作兜底
       component: () => import('@/views/iframe/index.vue'),
       meta: {
         title: 'GitHub 仓库',
         icon: 'icon-park-outline:github',
         link: 'https://github.com/wjp980108/meet-admin',
+      },
+    },
+    {
+      path: 'vue',
+      name: 'LinkVue',
+      component: () => import('@/views/iframe/index.vue'),
+      meta: {
+        title: 'Vue 文档',
+        icon: 'logos:vue',
+        link: 'https://cn.vuejs.org',
+        iframe: true,
+        keepAlive: true,
+      },
+    },
+    {
+      path: 'vite',
+      name: 'LinkVite',
+      component: () => import('@/views/iframe/index.vue'),
+      meta: {
+        title: 'Vite 文档',
+        icon: 'material-icon-theme:vite',
+        link: 'https://cn.vite.dev',
+        iframe: true,
+      },
+    },
+    {
+      path: 'vueuse',
+      name: 'LinkVueuse',
+      component: () => import('@/views/iframe/index.vue'),
+      meta: {
+        title: 'Vueuse 文档',
+        icon: 'logos:vueuse',
+        link: 'https://vueuse.org',
+        iframe: true,
+      },
+    },
+    {
+      path: 'unoCSS',
+      name: 'LinkUnoCSS',
+      component: () => import('@/views/iframe/index.vue'),
+      meta: {
+        title: 'UnoCSS 文档',
+        icon: 'logos:unocss',
+        link: 'https://unocss.dev',
+        iframe: true,
+      },
+    },
+    {
+      path: 'blog',
+      name: 'LinkBlog',
+      component: () => import('@/views/iframe/index.vue'),
+      meta: {
+        title: '个人博客',
+        icon: 'logos:blogger',
+        link: 'https://blog.wjp.plus',
+        iframe: true,
       },
     },
   ],
