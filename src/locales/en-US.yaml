@@ -37,6 +37,28 @@ page:
     login: Login
     loginSuccessful: Login successful
     welcomeBack: Welcome back
+  aiChat:
+    welcomeTitle: Hi, I'm your AI assistant
+    welcomeDescription: Feel free to ask me anything, and I'll do my best to help
+    senderPlaceholder: Type your question, Enter to send, Shift + Enter for a new line
+    uploadAttachment: Upload attachment
+    aiGeneratedHint: AI-generated content, please verify important information
+    newChat: New chat
+    defaultSessionName: New chat
+    mockReply: |
+      This is a demo reply from **{model}**. This page is not yet connected to a real model service; the content below previews the Markdown rendering:
+
+      ### Tips
+
+      1. Supports **bold**, *italic*, `inline code` and other basic syntax
+      2. Code blocks with syntax highlighting:
+
+      ```python
+      def greet(name):
+          return "Hello, " + name
+      ```
+
+      > Once the backend API is ready, replace this placeholder with the real streaming response.
   404:
     title: OOPS!
     subtitle: All rights reserved

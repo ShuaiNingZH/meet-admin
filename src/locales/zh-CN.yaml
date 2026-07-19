@@ -37,6 +37,28 @@ page:
     login: 登录
     loginSuccessful: 登录成功
     welcomeBack: 欢迎回来
+  aiChat:
+    welcomeTitle: 你好，我是 AI 助手
+    welcomeDescription: 有任何问题都可以问我，我会尽力帮你解答
+    senderPlaceholder: 输入你的问题，Enter 发送，Shift + Enter 换行
+    uploadAttachment: 上传附件
+    aiGeneratedHint: 内容由 AI 生成，请核查重要信息
+    newChat: 新建对话
+    defaultSessionName: 新对话
+    mockReply: |
+      这是一条来自 **{model}** 的演示回复。当前页面尚未接入真实模型服务，以下内容用于预览 Markdown 渲染效果：
+
+      ### 使用提示
+
+      1. 支持 **加粗**、*斜体*、`行内代码` 等基础语法
+      2. 代码块自动语法高亮：
+
+      ```python
+      def greet(name):
+          return "Hello, " + name
+      ```
+
+      > 接入后端接口后，把这段占位内容替换为真实的流式响应即可。
   404:
     title: 哎呀！
     subtitle: 版权所有

@@ -87,12 +87,16 @@
     "print-js": "^1.6.0",
     "qrcode": "^1.5.4",
     "qs": "^6.15.3",
+    "shiki": "^3.23.0",
+    "shiki-stream": "^0.1.5",
     "uuid": "^14.0.1",
     "version-rocket": "^1.7.4",
     "vue": "^3.5.39",
     "vue-draggable-plus": "^0.6.1",
+    "vue-element-plus-x": "^2.0.3",
     "vue-i18n": "^11.4.6",
-    "vue-router": "^5.2.0"
+    "vue-router": "^5.2.0",
+    "x-markdown-vue": "^0.0.201"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^9.1.0",
