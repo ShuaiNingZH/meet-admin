@@ -129,7 +129,7 @@ onUnmounted(stopAiReply);
           v-if="!messages.length" variant="borderless" :title="t('page.aiChat.welcomeTitle')"
           :description="t('page.aiChat.welcomeDescription')"
         />
-        <BubbleList v-else class="chat-messages" :list="messages" max-height="100%" item-key="id">
+        <BubbleList v-else class="w-full" :list="messages" max-height="100%" item-key="id">
           <template #header="{ item }">
             <div v-if="item.files?.length" class="chat-message-files">
               <FilesCard v-for="file in item.files" :key="file.uid" v-bind="file" :show-del-icon="false" />
@@ -166,7 +166,7 @@ onUnmounted(stopAiReply);
                   @click="fileInputRef?.click()"
                 />
               </el-tooltip>
-              <el-select v-model="currentModel" class="chat-sender-model">
+              <el-select v-model="currentModel" class="w-140">
                 <el-option v-for="model in models" :key="model.value" :label="model.label" :value="model.value" />
               </el-select>
             </div>
@@ -204,51 +204,31 @@ onUnmounted(stopAiReply);
         justify-content: center;
       }
 
+      :deep(.elx-bubble-list) {
+        .chat-message-text {
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+
+        .chat-message-markdown {
+          background: transparent !important;
+          padding: 0 !important;
+          color: inherit;
+        }
+
+        .chat-message-files {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: var(--spacing-sm);
+          margin-bottom: var(--spacing-xs);
+        }
+      }
+
       :deep(.elx-welcome) {
         --elx-welcome-filled-bg: transparent;
         --elx-welcome-title-color: var(--el-text-color-primary);
         --elx-welcome-description-color: var(--el-text-color-secondary);
-      }
-
-      .chat-messages {
-        width: 100%;
-        max-width: 800px;
-        margin: 0 auto;
-      }
-
-      :deep(.elx-bubble) {
-        --elx-bubble-bg: var(--el-fill-color);
-        --elx-bubble-text-color: var(--el-text-color-primary);
-
-        &.elx-bubble--end {
-          --elx-bubble-bg: var(--el-color-primary-light-9);
-        }
-      }
-
-      :deep(.chat-message-text) {
-        white-space: pre-wrap;
-        word-break: break-word;
-      }
-
-      :deep(.chat-message-markdown) {
-        background: transparent !important;
-        padding: 0 !important;
-        color: inherit;
-      }
-
-      :deep(.chat-message-files) {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-xs);
-
-        .elx-files-card {
-          --elx-files-card-bg: var(--el-fill-color-light);
-          --elx-files-card-border-color: var(--el-border-color);
-          --elx-text-color-primary: var(--el-text-color-primary);
-          --elx-text-color-secondary: var(--el-text-color-secondary);
-        }
       }
     }
 
@@ -256,31 +236,33 @@ onUnmounted(stopAiReply);
       width: 100%;
       max-width: 800px;
       align-self: center;
-      padding: 0 var(--spacing-lg) var(--spacing-lg);
+      padding: 0 var(--spacing-lg);
 
-      :deep(.elx-x-sender__header-container) {
-        border-bottom-color: transparent !important;
-      }
+      :deep(.elx-x-sender) {
+        .elx-x-sender__header-container {
+          border-bottom-color: transparent !important;
+        }
 
-      :deep(.elx-x-sender__send-button .el-button) {
-        --el-button-bg-color: var(--el-color-primary);
-        --el-button-border-color: var(--el-color-primary);
-        --el-button-text-color: var(--el-color-white);
-        --el-button-hover-bg-color: var(--el-color-primary-light-3);
-        --el-button-hover-border-color: var(--el-color-primary-light-3);
-        --el-button-hover-text-color: var(--el-color-white);
-        --el-button-active-bg-color: var(--el-color-primary-dark-2);
-        --el-button-active-border-color: var(--el-color-primary-dark-2);
+        .chat-rich-text {
+          color: var(--el-text-color-primary);
+        }
+
+        .elx-x-sender__send-button .el-button {
+          --el-button-bg-color: var(--el-color-primary);
+          --el-button-border-color: var(--el-color-primary);
+          --el-button-text-color: var(--el-color-white);
+          --el-button-hover-bg-color: var(--el-color-primary-light-3);
+          --el-button-hover-border-color: var(--el-color-primary-light-3);
+          --el-button-hover-text-color: var(--el-color-white);
+          --el-button-active-bg-color: var(--el-color-primary-dark-2);
+          --el-button-active-border-color: var(--el-color-primary-dark-2);
+        }
       }
 
       .chat-sender-prefix {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
-      }
-
-      .chat-sender-model {
-        width: 140px;
       }
 
       &-hint {
